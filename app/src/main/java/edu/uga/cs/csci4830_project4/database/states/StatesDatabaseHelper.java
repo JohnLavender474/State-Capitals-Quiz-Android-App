@@ -34,6 +34,7 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "states.db";
     private static final int DB_VERSION = 1;
+    private static final boolean DEBUG = true;
 
     @SuppressLint("StaticFieldLeak")
     private static StatesDatabaseHelper instance;
@@ -62,7 +63,8 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT, " + COLUMN_STATE_NAME + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT, " +
+                "AUTOINCREMENT, " + COLUMN_STATE_NAME + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT," +
+                " " +
                 COLUMN_SECOND_CITY + " TEXT, " + COLUMN_THIRD_CITY + " TEXT, " + COLUMN_STATEHOOD +
                 " TEXT, " + COLUMN_CAPITAL_SINCE + " TEXT, " + COLUMN_SIZE_RANK + " INTEGER)");
 
@@ -70,8 +72,15 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
             final InputStream data = context.getAssets().open(STATES_CSV);
             try (data) {
                 CSVReader reader = new CSVReader(new InputStreamReader(data));
+                // skip the first row that contains column titles
+                boolean pastFirstRow = false;
                 String[] nextRow;
                 while ((nextRow = reader.readNext()) != null) {
+                    if (!pastFirstRow) {
+                        pastFirstRow = true;
+                        continue;
+                    }
+
                     ContentValues values = new ContentValues();
 
                     values.put(COLUMN_STATE_NAME, nextRow[0]);

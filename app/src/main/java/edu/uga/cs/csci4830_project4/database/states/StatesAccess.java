@@ -1,7 +1,5 @@
 package edu.uga.cs.csci4830_project4.database.states;
 
-import static edu.uga.cs.csci4830_project4.database.utils.UtilMethods.getColumnIndex;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -47,11 +45,17 @@ public class StatesAccess {
 
     /**
      * Stores a state capital record in the database and returns the model with its assigned ID.
+     * Returns null if the database has not yet been initialized with {@link #open()}.
      *
      * @param model The StateModel representing the state capital to store.
-     * @return The stored StateModel with its assigned ID.
+     * @return The stored StateModel with its assigned ID. Returns null if the database has not
+     * yet been initialized with {@link #open()}.
      */
     public StateModel storeState(StateModel model) {
+        if (db == null) {
+            return null;
+        }
+
         ContentValues values = new ContentValues();
         values.put(StatesDatabaseHelper.COLUMN_STATE_NAME, model.getStateName());
         values.put(StatesDatabaseHelper.COLUMN_CAPITAL_CITY, model.getCapitalCity());
@@ -68,17 +72,23 @@ public class StatesAccess {
     }
 
     /**
-     * Retrieves from the database a list of all {@link StateModel} objects.
+     * Retrieves from the database a list of all {@link StateModel} objects. Returns null if the
+     * database has not yet been initialized with {@link #open()}.
      *
-     * @return A list of state capital model objects representing entries in the database.
+     * @return A list of state capital model objects representing entries in the database, or
+     * null if the database has not yet been initialized.
      */
     public List<StateModel> retrieveAllStates() {
+        if (db == null) {
+            return null;
+        }
+
         List<StateModel> models = new ArrayList<>();
 
         try (Cursor cursor = db.query(StatesDatabaseHelper.TABLE_NAME, null, null, null,
                 null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
-                do {
+                while (cursor.moveToNext()) {
                     long id = cursor.getLong(getColumnIndex(cursor,
                             StatesDatabaseHelper.COLUMN_ID));
                     String state = cursor.getString(getColumnIndex(cursor,
@@ -107,10 +117,68 @@ public class StatesAccess {
                     model.setSizeRank(sizeRank);
 
                     models.add(model);
-                } while (cursor.moveToNext());
+                }
             }
         }
 
         return models;
+    }
+
+    /**
+     * Updates an existing state capital record in the database. Returns the number of rows
+     * affected. Returns -1 if the database has not yet been initialized with {@link #open()}.
+     *
+     * @param model The StateModel representing the updated state capital.
+     * @return The number of rows affected. Should be 1 if successful. Returns -1 if the database
+     * has not yet been initialized with {@link #open()}.
+     */
+    public int updateState(StateModel model) {
+        if (db == null) {
+            return -1;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(StatesDatabaseHelper.COLUMN_STATE_NAME, model.getStateName());
+        values.put(StatesDatabaseHelper.COLUMN_CAPITAL_CITY, model.getCapitalCity());
+        values.put(StatesDatabaseHelper.COLUMN_SECOND_CITY, model.getSecondCity());
+        values.put(StatesDatabaseHelper.COLUMN_THIRD_CITY, model.getThirdCity());
+        values.put(StatesDatabaseHelper.COLUMN_STATEHOOD, model.getStatehood());
+        values.put(StatesDatabaseHelper.COLUMN_CAPITAL_SINCE, model.getCapitalSince());
+        values.put(StatesDatabaseHelper.COLUMN_SIZE_RANK, model.getSizeRank());
+
+        return db.update(StatesDatabaseHelper.TABLE_NAME, values, "id = ?",
+                new String[]{String.valueOf(model.getId())});
+    }
+
+    /**
+     * Deletes a state capital record from the database. Returns the number of rows affected.
+     * Returns -1 if the database has not yet been initialized with {@link #open()}.
+     *
+     * @param id The identifier of the state capital to delete.
+     * @return The number of rows affected. Should be 1 if successful. Returns -1 if the database
+     * has not yet been initialized with {@link #open()}.
+     */
+    public int deleteState(long id) {
+        if (db == null) {
+            return -1;
+        }
+        return db.delete(StatesDatabaseHelper.TABLE_NAME, "id = ?",
+                new String[]{String.valueOf(id)});
+    }
+
+    /**
+     * Clears the entire state_capitals table by deleting all records. Does nothing if
+     * the database has not yet been initialized with {@link #open()}.
+     */
+    public void clearAllStates() {
+        if (db == null) {
+            return;
+        }
+        db.delete(StatesDatabaseHelper.TABLE_NAME, null, null);
+    }
+
+
+    private int getColumnIndex(Cursor cursor, String column) {
+        return cursor.getColumnIndex(column);
     }
 }

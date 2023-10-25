@@ -1,5 +1,9 @@
 package edu.uga.cs.csci4830_project4.database.states;
 
+import androidx.annotation.NonNull;
+
+import java.util.Objects;
+
 /**
  * This class represents a row in the states table.
  */
@@ -185,5 +189,46 @@ public class StateModel {
      */
     public void setSizeRank(String sizeRank) {
         this.sizeRank = sizeRank;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                stateName,
+                capitalCity,
+                secondCity,
+                thirdCity,
+                statehood,
+                capitalSince,
+                sizeRank);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof StateModel that &&
+                id == that.id &&
+                Objects.equals(stateName, that.stateName) &&
+                Objects.equals(capitalCity, that.capitalCity) &&
+                Objects.equals(secondCity, that.secondCity) &&
+                Objects.equals(thirdCity, that.thirdCity) &&
+                Objects.equals(statehood, that.statehood) &&
+                Objects.equals(capitalSince, that.capitalSince) &&
+                Objects.equals(sizeRank, that.sizeRank);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "StateModel{" +
+                "id=" + id +
+                ", stateName='" + stateName + '\'' +
+                ", capitalCity='" + capitalCity + '\'' +
+                ", secondCity='" + secondCity + '\'' +
+                ", thirdCity='" + thirdCity + '\'' +
+                ", statehood='" + statehood + '\'' +
+                ", capitalSince='" + capitalSince + '\'' +
+                ", sizeRank='" + sizeRank + '\'' +
+                '}';
     }
 }
