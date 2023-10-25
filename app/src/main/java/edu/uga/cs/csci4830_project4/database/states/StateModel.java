@@ -1,44 +1,59 @@
 package edu.uga.cs.csci4830_project4.database.states;
 
 /**
- * This class represents a row in the state_capitals table.
+ * This class represents a row in the states table.
  */
 public class StateModel {
 
     private long id;
-    private String state;
+    private String stateName;
     private String capitalCity;
     private String secondCity;
     private String thirdCity;
     private String statehood;
     private String capitalSince;
-    private int sizeRank;
+    private String sizeRank;
 
     /**
      * Constructs a new StateModel with default values.
      */
     public StateModel() {
         id = -1;
-        state = null;
+        stateName = null;
         capitalCity = null;
         secondCity = null;
         thirdCity = null;
         statehood = null;
         capitalSince = null;
-        sizeRank = -1;
+        sizeRank = null;
     }
 
     /**
-     * Gets the identifier of the state-capital row.
+     * Constructs a new {@link StateModel} with the given values contained in the array.
      *
-     * @return The identifier (id) of the state-capital row.
+     * @param values the values
+     */
+    public StateModel(String[] values) {
+        stateName = values[0];
+        capitalCity = values[1];
+        secondCity = values[2];
+        thirdCity = values[3];
+        statehood = values[4];
+        capitalSince = values[5];
+        sizeRank = values[6];
+    }
+
+    /**
+     * Gets the identifier of the stateName-capital row.
+     *
+     * @return The identifier (id) of the stateName-capital row.
      */
     public long getId() {
         return id;
     }
 
     /**
-     * Sets the identifier of the state-capital row.
+     * Sets the identifier of the stateName-capital row.
      *
      * @param id The new identifier (id) to set.
      */
@@ -47,34 +62,34 @@ public class StateModel {
     }
 
     /**
-     * Gets the name of the state associated with the row.
+     * Gets the name of the stateName associated with the row.
      *
-     * @return The name of the state.
+     * @return The name of the stateName.
      */
-    public String getState() {
-        return state;
+    public String getStateName() {
+        return stateName;
     }
 
     /**
-     * Sets the name of the state associated with the row.
+     * Sets the name of the stateName associated with the row.
      *
-     * @param state The new state name to set.
+     * @param stateName The new stateName name to set.
      */
-    public void setState(String state) {
-        this.state = state;
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 
     /**
-     * Gets the capital city of the state.
+     * Gets the capital city of the stateName.
      *
-     * @return The capital city of the state.
+     * @return The capital city of the stateName.
      */
     public String getCapitalCity() {
         return capitalCity;
     }
 
     /**
-     * Sets the capital city of the state.
+     * Sets the capital city of the stateName.
      *
      * @param capitalCity The new capital city to set.
      */
@@ -83,16 +98,16 @@ public class StateModel {
     }
 
     /**
-     * Gets the second-largest city in the state.
+     * Gets the second-largest city in the stateName.
      *
-     * @return The second-largest city in the state.
+     * @return The second-largest city in the stateName.
      */
     public String getSecondCity() {
         return secondCity;
     }
 
     /**
-     * Sets the second-largest city in the state.
+     * Sets the second-largest city in the stateName.
      *
      * @param secondCity The new second-largest city to set.
      */
@@ -101,16 +116,16 @@ public class StateModel {
     }
 
     /**
-     * Gets the third-largest city in the state.
+     * Gets the third-largest city in the stateName.
      *
-     * @return The third-largest city in the state.
+     * @return The third-largest city in the stateName.
      */
     public String getThirdCity() {
         return thirdCity;
     }
 
     /**
-     * Sets the third-largest city in the state.
+     * Sets the third-largest city in the stateName.
      *
      * @param thirdCity The new third-largest city to set.
      */
@@ -119,16 +134,16 @@ public class StateModel {
     }
 
     /**
-     * Gets the statehood date of the state.
+     * Gets the statehood date of the stateName.
      *
-     * @return The statehood date of the state.
+     * @return The statehood date of the stateName.
      */
     public String getStatehood() {
         return statehood;
     }
 
     /**
-     * Sets the statehood date of the state.
+     * Sets the statehood date of the stateName.
      *
      * @param statehood The new statehood date to set.
      */
@@ -137,38 +152,38 @@ public class StateModel {
     }
 
     /**
-     * Gets the year in which the state's capital was established.
+     * Gets the year in which the stateName's capital was established.
      *
-     * @return The year in which the state's capital was established.
+     * @return The year in which the stateName's capital was established.
      */
     public String getCapitalSince() {
         return capitalSince;
     }
 
     /**
-     * Sets the year in which the state's capital was established.
+     * Sets the year in which the stateName's capital was established.
      *
-     * @param capitalSince The new year of the state's capital establishment to set.
+     * @param capitalSince The new year of the stateName's capital establishment to set.
      */
     public void setCapitalSince(String capitalSince) {
         this.capitalSince = capitalSince;
     }
 
     /**
-     * Gets the size rank of the state among all U.S. states.
+     * Gets the size rank of the stateName among all U.S. states.
      *
-     * @return The size rank of the state.
+     * @return The size rank of the stateName.
      */
-    public int getSizeRank() {
+    public String getSizeRank() {
         return sizeRank;
     }
 
     /**
-     * Sets the size rank of the state among all U.S. states.
+     * Sets the size rank of the stateName among all U.S. states.
      *
-     * @param sizeRank The new size rank of the state to set.
+     * @param sizeRank The new size rank of the stateName to set.
      */
-    public void setSizeRank(int sizeRank) {
+    public void setSizeRank(String sizeRank) {
         this.sizeRank = sizeRank;
     }
 }

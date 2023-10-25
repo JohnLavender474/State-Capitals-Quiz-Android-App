@@ -53,7 +53,7 @@ public class StatesAccess {
      */
     public StateModel storeState(StateModel model) {
         ContentValues values = new ContentValues();
-        values.put(StatesDatabaseHelper.COLUMN_STATE, model.getState());
+        values.put(StatesDatabaseHelper.COLUMN_STATE_NAME, model.getStateName());
         values.put(StatesDatabaseHelper.COLUMN_CAPITAL_CITY, model.getCapitalCity());
         values.put(StatesDatabaseHelper.COLUMN_SECOND_CITY, model.getSecondCity());
         values.put(StatesDatabaseHelper.COLUMN_THIRD_CITY, model.getThirdCity());
@@ -82,7 +82,7 @@ public class StatesAccess {
                     long id = cursor.getLong(getColumnIndex(cursor,
                             StatesDatabaseHelper.COLUMN_ID));
                     String state = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_STATE));
+                            StatesDatabaseHelper.COLUMN_STATE_NAME));
                     String capitalCity = cursor.getString(getColumnIndex(cursor,
                             StatesDatabaseHelper.COLUMN_CAPITAL_CITY));
                     String secondCity = cursor.getString(getColumnIndex(cursor,
@@ -93,12 +93,12 @@ public class StatesAccess {
                             StatesDatabaseHelper.COLUMN_STATEHOOD));
                     String capitalSince = cursor.getString(getColumnIndex(cursor,
                             StatesDatabaseHelper.COLUMN_CAPITAL_SINCE));
-                    int sizeRank = cursor.getInt(getColumnIndex(cursor,
+                    String sizeRank = cursor.getString(getColumnIndex(cursor,
                             StatesDatabaseHelper.COLUMN_SIZE_RANK));
 
                     StateModel model = new StateModel();
                     model.setId(id);
-                    model.setState(state);
+                    model.setStateName(state);
                     model.setCapitalCity(capitalCity);
                     model.setSecondCity(secondCity);
                     model.setThirdCity(thirdCity);

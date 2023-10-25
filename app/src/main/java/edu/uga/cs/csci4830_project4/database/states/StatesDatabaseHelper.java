@@ -1,8 +1,17 @@
 package edu.uga.cs.csci4830_project4.database.states;
 
+import static edu.uga.cs.csci4830_project4.database.utils.ConstVals.STATES_CSV;
+
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.opencsv.CSVReader;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * This class is a singleton that provides access to the database. It is a subclass
@@ -11,38 +20,29 @@ import android.database.sqlite.SQLiteOpenHelper;
  * anywhere in the application. This class should be initialized from the
  * Application class's onCreate() method.
  */
-public final class StatesDatabaseHelper extends SQLiteOpenHelper {
+final class StatesDatabaseHelper extends SQLiteOpenHelper {
 
-    /**
-     * Table name and column names
-     */
-    public static final String TABLE_NAME = "state_capitals";
-    /**
-     * COLUMN_ID is an auto-incrementing integer
-     */
-    public static final String COLUMN_ID = "_id";
-    /**
-     * COLUMN_STATE is a string
-     */
-    public static final String COLUMN_STATE = "state";
-    /**
-     * COLUMN_CHOICES is a string of the form "capital1,capital2,capital3" where
-     * "capital1" is the correct answer. In the frontend, this string should be
-     * split and shuffled into an array of strings.
-     */
-    public static final String COLUMN_CAPITAL_CITY = "capital_city";
-    public static final String COLUMN_SECOND_CITY = "second_city";
-    public static final String COLUMN_THIRD_CITY = "third_city";
-    public static final String COLUMN_STATEHOOD = "statehood";
-    public static final String COLUMN_CAPITAL_SINCE = "capital_since";
-    public static final String COLUMN_SIZE_RANK = "size_rank";
+    static final String TABLE_NAME = "states";
+    static final String COLUMN_ID = "_id";
+    static final String COLUMN_STATE_NAME = "state_name";
+    static final String COLUMN_CAPITAL_CITY = "capital_city";
+    static final String COLUMN_SECOND_CITY = "second_city";
+    static final String COLUMN_THIRD_CITY = "third_city";
+    static final String COLUMN_STATEHOOD = "statehood";
+    static final String COLUMN_CAPITAL_SINCE = "capital_since";
+    static final String COLUMN_SIZE_RANK = "size_rank";
 
-    private static final String DB_NAME = "StateCapitals.db";
+    private static final String DB_NAME = "states.db";
     private static final int DB_VERSION = 1;
+
+    @SuppressLint("StaticFieldLeak")
     private static StatesDatabaseHelper instance;
+
+    private final Context context;
 
     private StatesDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     /**
@@ -52,7 +52,7 @@ public final class StatesDatabaseHelper extends SQLiteOpenHelper {
      * @param context the application context, not used if this helper is already initialized
      * @return the singleton instance of the database helper
      */
-    public static synchronized StatesDatabaseHelper getInstance(Context context) {
+    static synchronized StatesDatabaseHelper getInstance(Context context) {
         if (instance == null) {
             instance = new StatesDatabaseHelper(context.getApplicationContext());
         }
@@ -62,9 +62,35 @@ public final class StatesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT, " + COLUMN_STATE + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT, " +
+                "AUTOINCREMENT, " + COLUMN_STATE_NAME + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT, " +
                 COLUMN_SECOND_CITY + " TEXT, " + COLUMN_THIRD_CITY + " TEXT, " + COLUMN_STATEHOOD +
                 " TEXT, " + COLUMN_CAPITAL_SINCE + " TEXT, " + COLUMN_SIZE_RANK + " INTEGER)");
+
+        try {
+            final InputStream data = context.getAssets().open(STATES_CSV);
+            try (data) {
+                CSVReader reader = new CSVReader(new InputStreamReader(data));
+                String[] nextRow;
+                while ((nextRow = reader.readNext()) != null) {
+                    ContentValues values = new ContentValues();
+
+                    values.put(COLUMN_STATE_NAME, nextRow[0]);
+                    values.put(COLUMN_CAPITAL_CITY, nextRow[1]);
+                    values.put(COLUMN_SECOND_CITY, nextRow[2]);
+                    values.put(COLUMN_THIRD_CITY, nextRow[3]);
+                    values.put(COLUMN_STATEHOOD, nextRow[4]);
+                    values.put(COLUMN_CAPITAL_SINCE, nextRow[5]);
+                    values.put(COLUMN_SIZE_RANK, nextRow[6]);
+
+                    if (db.insert(TABLE_NAME, null, values) == -1) {
+                        throw new RuntimeException("Error while inserting into table [" +
+                                TABLE_NAME + "]: " + values);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error while creating database", e);
+        }
     }
 
     @Override

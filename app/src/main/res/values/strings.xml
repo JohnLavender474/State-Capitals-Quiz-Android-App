@@ -4,4 +4,5 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_victory">VictoryActivity</string>
     <string name="play">Play\t\t\t\t\t\t</string>
+    <string name="what_is_the_capital_of_the_following_state">What is the capital of the following state?</string>
 </resources>

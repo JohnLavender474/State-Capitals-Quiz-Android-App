@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class provides access to the quiz_in_progress table in the database and encapsulates the
- * CRUD
- * (Create, Read, Update, Delete) operations for the quiz in progress data.
+ * This class provides access to the quizzes table in the database and encapsulates the
+ * CRUD (Create, Read, Update, Delete) operations for the quiz data.
  */
 public class QuizzesAccess {
 
@@ -50,11 +49,12 @@ public class QuizzesAccess {
     /**
      * Stores a quiz in progress record in the database and returns the model with its assigned ID.
      *
-     * @param model The {@link QuizModel} representing the quiz in progress to store.
+     * @param model The {@link QuizModel} representing the quiz to store.
      * @return The stored {@link QuizModel} with its assigned ID.
      */
     public QuizModel storeQuiz(QuizModel model) {
         ContentValues values = new ContentValues();
+
         String stateIds = arrayToString(model.getStateIds());
         values.put(QuizzesDatabaseHelper.COLUMN_STATE_IDS, stateIds);
         String responses = arrayToString(model.getResponses());
