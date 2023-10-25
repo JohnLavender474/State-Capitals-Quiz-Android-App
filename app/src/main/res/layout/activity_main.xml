@@ -1,15 +1,64 @@
+<!-- activity_initial.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".frontend.MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#F5F5F5">
 
-    <Button
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/play"
-        android:id="@+id/buttonPlay"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:text="@string/u_s_states_quiz"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+    />
+
+    <!-- Purpose Text -->
+    <TextView
+        android:id="@+id/textPurpose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_your_knowledge"
+        android:layout_below="@id/textTitle"
+        android:layout_centerInParent="true"
+        android:textSize="20sp"
+        android:textColor="#666"
+    />
+
+    <!-- Start New Quiz Button -->
+    <Button
+        android:id="@+id/buttonStartQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_new_quiz"
+        android:layout_below="@id/textPurpose"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:textColor="#FFF"
+        android:textSize="32sp"
+        android:padding="10dp"
+        android:background="#3498db"
+    />
+
+    <!-- View Past Results Button -->
+    <Button
+        android:id="@+id/buttonViewResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_past_results"
+        android:layout_below="@id/buttonStartQuiz"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:textColor="#FFF"
+        android:textSize="32sp"
+        android:padding="10dp"
+        android:background="#27ae60"
+    />
+
 </RelativeLayout>
+
