@@ -55,7 +55,8 @@ public class StateCapitalsAccess {
     public StateCapitalModel storeStateCapital(StateCapitalModel model) {
         ContentValues values = new ContentValues();
         values.put(StateCapitalsDatabaseHelper.COLUMN_STATE, model.getState());
-        values.put(StateCapitalsDatabaseHelper.COLUMN_CHOICES, model.getChoices());
+        values.put(StateCapitalsDatabaseHelper.COLUMN_CHOICES,
+                convertChoicesArrayToString(model.getChoices()));
 
         long id = db.insert(StateCapitalsDatabaseHelper.TABLE_NAME, null, values);
         model.setId(id);
@@ -85,7 +86,7 @@ public class StateCapitalsAccess {
                     StateCapitalModel model = new StateCapitalModel();
                     model.setId(id);
                     model.setState(state);
-                    model.setChoices(choices);
+                    model.setChoices(convertChoicesStringToArray(choices));
 
                     models.add(model);
                 } while (cursor.moveToNext());
@@ -93,6 +94,37 @@ public class StateCapitalsAccess {
         }
 
         return models;
+    }
+
+    /**
+     * Converts a string to an array of strings. This is used for converting from the database
+     * column {@link StateCapitalsDatabaseHelper#COLUMN_CHOICES} to the value of
+     * {@link StateCapitalModel#getChoices()}.
+     *
+     * @param choices The string to convert.
+     * @return An array of strings.
+     */
+    private String[] convertChoicesStringToArray(String choices) {
+        return choices.split(",");
+    }
+
+    /**
+     * Converts an array of strings to a string. This is used for converting for
+     * {@link StateCapitalModel#getChoices()} to the database column
+     * {@link StateCapitalsDatabaseHelper#COLUMN_CHOICES}.
+     *
+     * @param choices The array of strings to convert.
+     * @return The string representation of the array.
+     */
+    private String convertChoicesArrayToString(String[] choices) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < choices.length; i++) {
+            sb.append(choices[i]);
+            if (i < choices.length - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
     }
 
     /**

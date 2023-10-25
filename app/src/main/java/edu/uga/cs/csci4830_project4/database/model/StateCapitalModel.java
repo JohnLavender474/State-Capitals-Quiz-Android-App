@@ -12,7 +12,7 @@ public class StateCapitalModel {
 
     private long id;
     private String state;
-    private String choices;
+    private String[] choices;
 
     /**
      * Constructs a new StateCapitalModel with default values.
@@ -64,7 +64,7 @@ public class StateCapitalModel {
      *
      * @return The choices associated with the state.
      */
-    public String getChoices() {
+    public String[] getChoices() {
         return choices;
     }
 
@@ -73,7 +73,7 @@ public class StateCapitalModel {
      *
      * @param choices The new choices to set.
      */
-    public void setChoices(String choices) {
+    public void setChoices(String[] choices) {
         this.choices = choices;
     }
 }
