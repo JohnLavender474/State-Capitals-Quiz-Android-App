@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">State Capitals</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_victory">VictoryActivity</string>
+    <string name="play">Play\t\t\t\t\t\t</string>
+</resources>

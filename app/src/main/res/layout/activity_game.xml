@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.aaronistheman.statecapitals.GameActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="What is the capital of the following state?"
+        android:id="@+id/tvQuestion"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="23sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="STATE_NAME"
+        android:id="@+id/tvStateName"
+        android:layout_below="@+id/tvQuestion"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textSize="23sp" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/ivStateImage"
+        android:layout_below="@+id/tvStateName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="CHOICE_1"
+        android:id="@+id/bChoice1"
+        android:layout_below="@+id/ivStateImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textSize="15sp" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="CHOICE_2"
+        android:id="@+id/bChoice2"
+        android:layout_below="@+id/bChoice1"
+        android:layout_alignLeft="@+id/bChoice1"
+        android:layout_alignStart="@+id/bChoice1"
+        android:layout_marginTop="0dp"
+        android:textSize="15sp" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="CHOICE_3"
+        android:id="@+id/bChoice3"
+        android:layout_below="@+id/bChoice2"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="CHOICE_4"
+        android:id="@+id/bChoice4"
+        android:layout_below="@+id/bChoice3"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score:"
+        android:id="@+id/tvScoreLabel"
+        android:textSize="23sp"
+        android:layout_below="@+id/bChoice4"
+        android:layout_alignLeft="@+id/bChoice4"
+        android:layout_alignStart="@+id/bChoice4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="##"
+        android:id="@+id/tvScoreData"
+        android:textSize="23sp"
+        android:layout_alignTop="@+id/tvScoreLabel"
+        android:layout_alignRight="@+id/bChoice4"
+        android:layout_alignEnd="@+id/bChoice4" />
+</RelativeLayout>
