@@ -2,63 +2,91 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:padding="16dp">
 
     <!-- Title -->
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/u_s_states_quiz"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
-        android:textSize="48sp"
-        android:textStyle="bold"
+        android:text="@string/u_s_states_quiz"
         android:textColor="#333"
-    />
+        android:textSize="48sp"
+        android:textStyle="bold" />
 
     <!-- Purpose Text -->
     <TextView
         android:id="@+id/textPurpose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_your_knowledge"
+        android:layout_marginTop="16dp"
         android:layout_below="@id/textTitle"
         android:layout_centerInParent="true"
-        android:textSize="20sp"
+        android:text="@string/test_your_knowledge"
         android:textColor="#666"
-    />
+        android:textSize="20sp" />
 
-    <!-- Start New Quiz Button -->
-    <Button
-        android:id="@+id/buttonStartQuiz"
+    <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start_new_quiz"
         android:layout_below="@id/textPurpose"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:textColor="#FFF"
-        android:textSize="32sp"
-        android:padding="10dp"
-        android:background="#3498db"
-    />
+        android:layout_centerHorizontal="true">
 
-    <!-- View Past Results Button -->
-    <Button
-        android:id="@+id/buttonViewResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_past_results"
-        android:layout_below="@id/buttonStartQuiz"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:textColor="#FFF"
-        android:textSize="32sp"
-        android:padding="10dp"
-        android:background="#27ae60"
-    />
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Start New Game Button -->
+            <Button
+                android:id="@+id/buttonStartNewGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:background="#3498db"
+                android:padding="10dp"
+                android:text="@string/start_new_game"
+                android:textColor="#FFF"
+                android:textSize="32sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- Continue Game Button -->
+            <Button
+                android:id="@+id/buttonContinueGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:background="#A020F0"
+                android:padding="10dp"
+                android:text="@string/continue_game"
+                android:textColor="#FFF"
+                android:textSize="32sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- View Past Scores Button -->
+            <Button
+                android:id="@+id/buttonViewPastResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:background="#27ae60"
+                android:padding="10dp"
+                android:text="@string/view_past_scores"
+                android:textColor="#FFF"
+                android:textSize="32sp" />
+
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>
 

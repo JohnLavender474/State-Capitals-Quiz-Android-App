@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import edu.uga.cs.csci4830_project4.R;
 
-public class VictoryActivity extends Activity implements View.OnClickListener {
+public class old_VictoryActivity extends Activity implements View.OnClickListener {
 
     private Button mRestartButton;
 

@@ -9,6 +9,7 @@
     <string name="test_your_knowledge">Test your knowledge of U.S. states with this quiz app!
         Try to solve the questions correctly. Incomplete quizzes can be left and returned to.
         You can also view your scores of past quizzes.</string>
-    <string name="start_new_quiz">Start New Quiz</string>
-    <string name="view_past_results">View Past Results</string>
+    <string name="start_new_game">Start New Game</string>
+    <string name="continue_game">Continue Game</string>
+    <string name="view_past_scores">View Past Scores</string>
 </resources>

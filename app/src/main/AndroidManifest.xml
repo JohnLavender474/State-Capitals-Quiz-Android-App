@@ -18,11 +18,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".frontend.NewQuizActivity"
+            android:name=".frontend.GameActivity"
             android:label="@string/title_activity_game"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".frontend.VictoryActivity"
+            android:name=".frontend.old_VictoryActivity"
             android:label="@string/title_activity_victory"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>

@@ -15,17 +15,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button buttonStartQuiz = findViewById(R.id.buttonStartQuiz);
-        Button buttonViewResults = findViewById(R.id.buttonViewResults);
+        Button buttonStartGame = findViewById(R.id.buttonStartNewGame);
+        Button buttonViewScores = findViewById(R.id.buttonViewPastResults);
 
-        buttonStartQuiz.setOnClickListener(view -> {
+        buttonStartGame.setOnClickListener(view -> {
             // Start a new quiz (transition to the new quiz screen)
-            startActivity(new Intent(this, NewQuizActivity.class));
+            startActivity(new Intent(this, GameActivity.class));
         });
 
-        buttonViewResults.setOnClickListener(view -> {
+        buttonViewScores.setOnClickListener(view -> {
             // View past results (transition to the view results screen)
-            startActivity(new Intent(this, ViewResultsActivity.class));
+            startActivity(new Intent(this, ViewScoresActivity.class));
         });
     }
 }

@@ -128,7 +128,7 @@ public class old_GameActivity extends Activity implements View.OnClickListener {
     }
 
     public void respondToVictory() {
-        Intent intent = new Intent(this, VictoryActivity.class);
+        Intent intent = new Intent(this, old_VictoryActivity.class);
         startActivity(intent);
         finish();
     }
