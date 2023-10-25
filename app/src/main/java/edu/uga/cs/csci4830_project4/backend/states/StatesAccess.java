@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.database.states;
+package edu.uga.cs.csci4830_project4.backend.states;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,11 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
+
 /**
  * This class provides access to the state_capitals table in the database and
  * encapsulates the CRUD (Create, Read, Update, Delete) operations for state capital data.
  */
-public class StatesAccess {
+public class StatesAccess implements IAccess<StateModel> {
 
     private final SQLiteOpenHelper helper;
     private SQLiteDatabase db;
@@ -27,31 +29,20 @@ public class StatesAccess {
         helper = StatesDatabaseHelper.getInstance(context);
     }
 
-    /**
-     * Opens the database for write access.
-     */
+    @Override
     public void open() {
         db = helper.getWritableDatabase();
     }
 
-    /**
-     * Closes the database.
-     */
+    @Override
     public void close() {
         if (helper != null) {
             helper.close();
         }
     }
 
-    /**
-     * Stores a state capital record in the database and returns the model with its assigned ID.
-     * Returns null if the database has not yet been initialized with {@link #open()}.
-     *
-     * @param model The StateModel representing the state capital to store.
-     * @return The stored StateModel with its assigned ID. Returns null if the database has not
-     * yet been initialized with {@link #open()}.
-     */
-    public StateModel storeState(StateModel model) {
+    @Override
+    public StateModel store(StateModel model) {
         if (db == null) {
             return null;
         }
@@ -71,14 +62,8 @@ public class StatesAccess {
         return model;
     }
 
-    /**
-     * Retrieves from the database a list of all {@link StateModel} objects. Returns null if the
-     * database has not yet been initialized with {@link #open()}.
-     *
-     * @return A list of state capital model objects representing entries in the database, or
-     * null if the database has not yet been initialized.
-     */
-    public List<StateModel> retrieveAllStates() {
+    @Override
+    public List<StateModel> retrieveAll() {
         if (db == null) {
             return null;
         }
@@ -124,15 +109,8 @@ public class StatesAccess {
         return models;
     }
 
-    /**
-     * Updates an existing state capital record in the database. Returns the number of rows
-     * affected. Returns -1 if the database has not yet been initialized with {@link #open()}.
-     *
-     * @param model The StateModel representing the updated state capital.
-     * @return The number of rows affected. Should be 1 if successful. Returns -1 if the database
-     * has not yet been initialized with {@link #open()}.
-     */
-    public int updateState(StateModel model) {
+    @Override
+    public int update(StateModel model) {
         if (db == null) {
             return -1;
         }
@@ -150,15 +128,8 @@ public class StatesAccess {
                 new String[]{String.valueOf(model.getId())});
     }
 
-    /**
-     * Deletes a state capital record from the database. Returns the number of rows affected.
-     * Returns -1 if the database has not yet been initialized with {@link #open()}.
-     *
-     * @param id The identifier of the state capital to delete.
-     * @return The number of rows affected. Should be 1 if successful. Returns -1 if the database
-     * has not yet been initialized with {@link #open()}.
-     */
-    public int deleteState(long id) {
+    @Override
+    public int delete(long id) {
         if (db == null) {
             return -1;
         }
@@ -166,11 +137,8 @@ public class StatesAccess {
                 new String[]{String.valueOf(id)});
     }
 
-    /**
-     * Clears the entire state_capitals table by deleting all records. Does nothing if
-     * the database has not yet been initialized with {@link #open()}.
-     */
-    public void clearAllStates() {
+    @Override
+    public void deleteAll() {
         if (db == null) {
             return;
         }

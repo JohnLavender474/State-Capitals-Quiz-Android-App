@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.database.quizzes;
+package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

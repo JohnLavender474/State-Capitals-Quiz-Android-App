@@ -1,11 +1,13 @@
-package edu.uga.cs.csci4830_project4.database.quizzes;
+package edu.uga.cs.csci4830_project4.backend.quizzes;
+
+import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 
 /**
  * This class represents a row in the incomplete_quizzes table. It is used to store the state
  * capital quiz in progress. The stateIds and responses fields are comma-separated lists of
  * longs and strings respectively.
  */
-public class QuizModel {
+public class QuizModel implements IModel {
 
     private long id;
     private String[] stateIds;
@@ -26,6 +28,7 @@ public class QuizModel {
      *
      * @return The ID of the quiz in progress.
      */
+    @Override
     public long getId() {
         return id;
     }
@@ -35,6 +38,7 @@ public class QuizModel {
      *
      * @param id The new ID to set.
      */
+    @Override
     public void setId(long id) {
         this.id = id;
     }

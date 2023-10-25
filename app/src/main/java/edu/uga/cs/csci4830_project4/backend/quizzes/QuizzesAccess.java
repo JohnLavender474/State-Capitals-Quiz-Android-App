@@ -1,7 +1,7 @@
-package edu.uga.cs.csci4830_project4.database.quizzes;
+package edu.uga.cs.csci4830_project4.backend.quizzes;
 
-import static edu.uga.cs.csci4830_project4.database.utils.UtilMethods.arrayToString;
-import static edu.uga.cs.csci4830_project4.database.utils.UtilMethods.stringToArray;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.arrayToString;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.stringToArray;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,11 +12,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
+
 /**
  * This class provides access to the quizzes table in the database and encapsulates the
  * CRUD (Create, Read, Update, Delete) operations for the quiz data.
  */
-public class QuizzesAccess {
+public class QuizzesAccess implements IAccess<QuizModel> {
 
     private final SQLiteOpenHelper helper;
     private SQLiteDatabase db;
@@ -30,29 +32,20 @@ public class QuizzesAccess {
         helper = QuizzesDatabaseHelper.getInstance(context);
     }
 
-    /**
-     * Opens the database for write access.
-     */
+    @Override
     public void open() {
         db = helper.getWritableDatabase();
     }
 
-    /**
-     * Closes the database.
-     */
+    @Override
     public void close() {
         if (helper != null) {
             helper.close();
         }
     }
 
-    /**
-     * Stores a quiz in progress record in the database and returns the model with its assigned ID.
-     *
-     * @param model The {@link QuizModel} representing the quiz to store.
-     * @return The stored {@link QuizModel} with its assigned ID.
-     */
-    public QuizModel storeQuiz(QuizModel model) {
+    @Override
+    public QuizModel store(QuizModel model) {
         ContentValues values = new ContentValues();
 
         String stateIds = arrayToString(model.getStateIds());
@@ -68,13 +61,8 @@ public class QuizzesAccess {
         return model;
     }
 
-    /**
-     * Retrieves from the database a list of all {@link QuizModel} objects representing
-     * the quizzes in progress.
-     *
-     * @return A list of {@link QuizModel} objects representing entries in the database.
-     */
-    public List<QuizModel> retrieveAllQuizzes() {
+    @Override
+    public List<QuizModel> retrieveAll() {
         List<QuizModel> models = new ArrayList<>();
 
         try (Cursor cursor = db.query(QuizzesDatabaseHelper.TABLE_NAME, null, null, null, null,
@@ -105,6 +93,38 @@ public class QuizzesAccess {
         }
 
         return models;
+    }
+
+    @Override
+    public int update(QuizModel model) {
+        ContentValues values = new ContentValues();
+
+        String stateIds = arrayToString(model.getStateIds());
+        values.put(QuizzesDatabaseHelper.COLUMN_STATE_IDS, stateIds);
+        String responses = arrayToString(model.getResponses());
+        values.put(QuizzesDatabaseHelper.COLUMN_RESPONSES, responses);
+        values.put(QuizzesDatabaseHelper.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
+        values.put(QuizzesDatabaseHelper.COLUMN_SCORE, model.getScore());
+
+        return db.update(QuizzesDatabaseHelper.TABLE_NAME, values, "id = ?",
+                new String[]{String.valueOf(model.getId())});
+    }
+
+    @Override
+    public int delete(long id) {
+        if (db == null) {
+            return -1;
+        }
+        return db.delete(QuizzesDatabaseHelper.TABLE_NAME, "id = ?",
+                new String[]{String.valueOf(id)});
+    }
+
+    @Override
+    public void deleteAll() {
+        if (db == null) {
+            return;
+        }
+        db.delete(QuizzesDatabaseHelper.TABLE_NAME, null, null);
     }
 
     private int getColumnIndex(Cursor cursor, String column) {

@@ -1,13 +1,15 @@
-package edu.uga.cs.csci4830_project4.database.states;
+package edu.uga.cs.csci4830_project4.backend.states;
 
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
+import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
+
 /**
  * This class represents a row in the states table.
  */
-public class StateModel {
+public class StateModel implements IModel {
 
     private long id;
     private String stateName;
@@ -52,6 +54,7 @@ public class StateModel {
      *
      * @return The identifier (id) of the stateName-capital row.
      */
+    @Override
     public long getId() {
         return id;
     }
@@ -61,6 +64,7 @@ public class StateModel {
      *
      * @param id The new identifier (id) to set.
      */
+    @Override
     public void setId(long id) {
         this.id = id;
     }

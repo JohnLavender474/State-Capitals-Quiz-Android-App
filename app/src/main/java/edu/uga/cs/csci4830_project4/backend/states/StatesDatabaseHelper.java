@@ -1,6 +1,6 @@
-package edu.uga.cs.csci4830_project4.database.states;
+package edu.uga.cs.csci4830_project4.backend.states;
 
-import static edu.uga.cs.csci4830_project4.database.utils.ConstVals.STATES_CSV;
+import static edu.uga.cs.csci4830_project4.backend.utils.ConstVals.STATES_CSV;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -34,7 +34,6 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "states.db";
     private static final int DB_VERSION = 1;
-    private static final boolean DEBUG = true;
 
     @SuppressLint("StaticFieldLeak")
     private static StatesDatabaseHelper instance;

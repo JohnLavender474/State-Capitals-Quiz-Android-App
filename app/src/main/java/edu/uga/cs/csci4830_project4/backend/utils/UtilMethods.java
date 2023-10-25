@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.database.utils;
+package edu.uga.cs.csci4830_project4.backend.utils;
 
 import android.database.Cursor;
 
