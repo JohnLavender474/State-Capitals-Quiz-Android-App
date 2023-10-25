@@ -1,10 +1,12 @@
-package edu.uga.cs.csci4830_project4;
+package edu.uga.cs.csci4830_project4.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import edu.uga.cs.csci4830_project4.R;
 
 public class VictoryActivity extends Activity implements View.OnClickListener {
 
@@ -33,7 +35,7 @@ public class VictoryActivity extends Activity implements View.OnClickListener {
      * Restarts the game by launching the GameActivity.
      */
     private void restartGame() {
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, old_GameActivity.class);
         startActivity(intent);
         finish();
     }

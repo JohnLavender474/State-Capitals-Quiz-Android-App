@@ -55,8 +55,12 @@ public class StateCapitalsAccess {
     public StateCapitalModel storeStateCapital(StateCapitalModel model) {
         ContentValues values = new ContentValues();
         values.put(StateCapitalsDatabaseHelper.COLUMN_STATE, model.getState());
-        values.put(StateCapitalsDatabaseHelper.COLUMN_CHOICES,
-                convertChoicesArrayToString(model.getChoices()));
+        values.put(StateCapitalsDatabaseHelper.COLUMN_CAPITAL_CITY, model.getCapitalCity());
+        values.put(StateCapitalsDatabaseHelper.COLUMN_SECOND_CITY, model.getSecondCity());
+        values.put(StateCapitalsDatabaseHelper.COLUMN_THIRD_CITY, model.getThirdCity());
+        values.put(StateCapitalsDatabaseHelper.COLUMN_STATEHOOD, model.getStatehood());
+        values.put(StateCapitalsDatabaseHelper.COLUMN_CAPITAL_SINCE, model.getCapitalSince());
+        values.put(StateCapitalsDatabaseHelper.COLUMN_SIZE_RANK, model.getSizeRank());
 
         long id = db.insert(StateCapitalsDatabaseHelper.TABLE_NAME, null, values);
         model.setId(id);
@@ -80,13 +84,28 @@ public class StateCapitalsAccess {
                             StateCapitalsDatabaseHelper.COLUMN_ID));
                     String state = cursor.getString(getColumnIndex(cursor,
                             StateCapitalsDatabaseHelper.COLUMN_STATE));
-                    String choices = cursor.getString(getColumnIndex(cursor,
-                            StateCapitalsDatabaseHelper.COLUMN_CHOICES));
+                    String capitalCity = cursor.getString(getColumnIndex(cursor,
+                            StateCapitalsDatabaseHelper.COLUMN_CAPITAL_CITY));
+                    String secondCity = cursor.getString(getColumnIndex(cursor,
+                            StateCapitalsDatabaseHelper.COLUMN_SECOND_CITY));
+                    String thirdCity = cursor.getString(getColumnIndex(cursor,
+                            StateCapitalsDatabaseHelper.COLUMN_THIRD_CITY));
+                    String statehood = cursor.getString(getColumnIndex(cursor,
+                            StateCapitalsDatabaseHelper.COLUMN_STATEHOOD));
+                    String capitalSince = cursor.getString(getColumnIndex(cursor,
+                            StateCapitalsDatabaseHelper.COLUMN_CAPITAL_SINCE));
+                    int sizeRank = cursor.getInt(getColumnIndex(cursor,
+                            StateCapitalsDatabaseHelper.COLUMN_SIZE_RANK));
 
                     StateCapitalModel model = new StateCapitalModel();
                     model.setId(id);
                     model.setState(state);
-                    model.setChoices(convertChoicesStringToArray(choices));
+                    model.setCapitalCity(capitalCity);
+                    model.setSecondCity(secondCity);
+                    model.setThirdCity(thirdCity);
+                    model.setStatehood(statehood);
+                    model.setCapitalSince(capitalSince);
+                    model.setSizeRank(sizeRank);
 
                     models.add(model);
                 } while (cursor.moveToNext());
@@ -94,37 +113,6 @@ public class StateCapitalsAccess {
         }
 
         return models;
-    }
-
-    /**
-     * Converts a string to an array of strings. This is used for converting from the database
-     * column {@link StateCapitalsDatabaseHelper#COLUMN_CHOICES} to the value of
-     * {@link StateCapitalModel#getChoices()}.
-     *
-     * @param choices The string to convert.
-     * @return An array of strings.
-     */
-    private String[] convertChoicesStringToArray(String choices) {
-        return choices.split(",");
-    }
-
-    /**
-     * Converts an array of strings to a string. This is used for converting for
-     * {@link StateCapitalModel#getChoices()} to the database column
-     * {@link StateCapitalsDatabaseHelper#COLUMN_CHOICES}.
-     *
-     * @param choices The array of strings to convert.
-     * @return The string representation of the array.
-     */
-    private String convertChoicesArrayToString(String[] choices) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < choices.length; i++) {
-            sb.append(choices[i]);
-            if (i < choices.length - 1) {
-                sb.append(",");
-            }
-        }
-        return sb.toString();
     }
 
     /**

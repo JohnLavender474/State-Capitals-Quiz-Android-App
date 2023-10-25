@@ -30,7 +30,12 @@ public final class StateCapitalsDatabaseHelper extends SQLiteOpenHelper {
      * "capital1" is the correct answer. In the frontend, this string should be
      * split and shuffled into an array of strings.
      */
-    public static final String COLUMN_CHOICES = "choices";
+    public static final String COLUMN_CAPITAL_CITY = "capital_city";
+    public static final String COLUMN_SECOND_CITY = "second_city";
+    public static final String COLUMN_THIRD_CITY = "third_city";
+    public static final String COLUMN_STATEHOOD = "statehood";
+    public static final String COLUMN_CAPITAL_SINCE = "capital_since";
+    public static final String COLUMN_SIZE_RANK = "size_rank";
 
     private static final String DB_NAME = "StateCapitals.db";
     private static final int DB_VERSION = 1;
@@ -57,7 +62,9 @@ public final class StateCapitalsDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT, " + COLUMN_STATE + " TEXT, " + COLUMN_CHOICES + " TEXT)");
+                "AUTOINCREMENT, " + COLUMN_STATE + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT, " +
+                COLUMN_SECOND_CITY + " TEXT, " + COLUMN_THIRD_CITY + " TEXT, " + COLUMN_STATEHOOD +
+                " TEXT, " + COLUMN_CAPITAL_SINCE + " TEXT, " + COLUMN_SIZE_RANK + " INTEGER)");
     }
 
     @Override
