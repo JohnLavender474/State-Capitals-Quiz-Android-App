@@ -95,10 +95,8 @@ public class GameActivity extends Activity implements View.OnClickListener {
             mWaitingForAnswer = false;
             Button button = (Button) v;
 
-            if (button.getText().equals(mCorrectCapital))
-                respondToCorrectAnswer();
-            else
-                respondToWrongAnswer();
+            if (button.getText().equals(mCorrectCapital)) respondToCorrectAnswer();
+            else respondToWrongAnswer();
         }
     }
 
@@ -121,10 +119,8 @@ public class GameActivity extends Activity implements View.OnClickListener {
         int newScore = Integer.parseInt(mScore.getText().toString()) + 1;
         setScore(newScore);
 
-        if (newScore < NUMBER_OF_STATES)
-            presentNextState();
-        else
-            respondToVictory();
+        if (newScore < NUMBER_OF_STATES) presentNextState();
+        else respondToVictory();
     }
 
     public void respondToVictory() {
@@ -135,8 +131,8 @@ public class GameActivity extends Activity implements View.OnClickListener {
 
 
     public void respondToWrongAnswer() {
-        Toast.makeText(getApplicationContext(),
-                "Wrong! The game has restarted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Wrong! The game has restarted.",
+                Toast.LENGTH_SHORT).show();
         restartGame();
     }
 
