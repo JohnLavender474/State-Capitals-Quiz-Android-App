@@ -6,19 +6,19 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import edu.uga.cs.csci4830_project4.R;
-import edu.uga.cs.csci4830_project4.database.access.StateCapitalsAccess;
+import edu.uga.cs.csci4830_project4.database.states.StatesAccess;
 
 public class MainActivity extends Activity {
 
-    // TODO: example usage of StateCapitalsAccess, not actually needed to main activity
-    private StateCapitalsAccess stateCapitalsAccess;
+    // TODO: example usage of StatesAccess, not actually needed to main activity
+    private StatesAccess statesAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        stateCapitalsAccess = new StateCapitalsAccess(this);
+        statesAccess = new StatesAccess(this);
 
         Button buttonPlay = findViewById(R.id.buttonPlay);
 
@@ -32,12 +32,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        stateCapitalsAccess.open();
+        statesAccess.open();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stateCapitalsAccess.close();
+        statesAccess.close();
     }
 }

@@ -1,9 +1,9 @@
-package edu.uga.cs.csci4830_project4.database.model;
+package edu.uga.cs.csci4830_project4.database.states;
 
 /**
  * This class represents a row in the state_capitals table.
  */
-public class StateCapitalModel {
+public class StateModel {
 
     private long id;
     private String state;
@@ -15,9 +15,9 @@ public class StateCapitalModel {
     private int sizeRank;
 
     /**
-     * Constructs a new StateCapitalModel with default values.
+     * Constructs a new StateModel with default values.
      */
-    public StateCapitalModel() {
+    public StateModel() {
         id = -1;
         state = null;
         capitalCity = null;

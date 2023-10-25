@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.database;
+package edu.uga.cs.csci4830_project4.database.states;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * anywhere in the application. This class should be initialized from the
  * Application class's onCreate() method.
  */
-public final class StateCapitalsDatabaseHelper extends SQLiteOpenHelper {
+public final class StatesDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Table name and column names
@@ -39,9 +39,9 @@ public final class StateCapitalsDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "StateCapitals.db";
     private static final int DB_VERSION = 1;
-    private static StateCapitalsDatabaseHelper instance;
+    private static StatesDatabaseHelper instance;
 
-    private StateCapitalsDatabaseHelper(Context context) {
+    private StatesDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -52,9 +52,9 @@ public final class StateCapitalsDatabaseHelper extends SQLiteOpenHelper {
      * @param context the application context, not used if this helper is already initialized
      * @return the singleton instance of the database helper
      */
-    public static synchronized StateCapitalsDatabaseHelper getInstance(Context context) {
+    public static synchronized StatesDatabaseHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new StateCapitalsDatabaseHelper(context.getApplicationContext());
+            instance = new StatesDatabaseHelper(context.getApplicationContext());
         }
         return instance;
     }
