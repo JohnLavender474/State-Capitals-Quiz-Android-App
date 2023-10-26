@@ -8,8 +8,7 @@ public class UniqueRandomNumbers {
 
     /**
      * Returns a list of unique random numbers between min inclusive and max exclusive. The amount
-     * of numbers returned
-     * is equal to the amountToReturn parameter.
+     * of numbers returned is equal to the amountToReturn parameter.
      *
      * @param amountToReturn the amount of numbers to return.
      * @param min            the minimum number to return.
@@ -17,7 +16,7 @@ public class UniqueRandomNumbers {
      * @return a list of unique random numbers between min and max.
      * @throws IllegalArgumentException if max - min < amountToReturn.
      */
-    public static List<Integer> get(int amountToReturn, int min, int max) {
+    public static List<Integer> getUniqueRandomNumbers(int amountToReturn, int min, int max) {
         if (amountToReturn < 0) {
             throw new IllegalArgumentException("amountToReturn cannot be less than 0");
         }

@@ -25,7 +25,11 @@ public class CapitalsQuizLogic implements IQuizLogic {
         this.quizModel = quizModel;
         this.stateModels = stateModels;
 
-        if (quizModel.getResponses().size() != stateModels.size()) {
+        List<String> responses = quizModel.getResponses();
+        if (responses == null) {
+            throw new IllegalStateException("QuizModel responses is null");
+        }
+        if (responses.size() != stateModels.size()) {
             throw new IllegalStateException("QuizModel responses and stateModels size mismatch");
         }
         quizSize = stateModels.size();
@@ -100,6 +104,9 @@ public class CapitalsQuizLogic implements IQuizLogic {
         }
 
         List<String> responses = quizModel.getResponses();
+        if (responses == null) {
+            throw new IllegalStateException("QuizModel responses is null");
+        }
         if (userResponse.equals(responses.get(currentQuestionIndex))) {
             return;
         }
@@ -108,6 +115,9 @@ public class CapitalsQuizLogic implements IQuizLogic {
         // If the user's current response is the same as the correct response, then
         // the score will be incremented back to the prior score in the next if block.
         List<Boolean> answeredCorrectly = quizModel.getAnsweredCorrectly();
+        if (answeredCorrectly == null) {
+            throw new IllegalStateException("QuizModel answeredCorrectly is null");
+        }
         if (answeredCorrectly.get(currentQuestionIndex)) {
             answeredCorrectly.set(currentQuestionIndex, false);
             score--;

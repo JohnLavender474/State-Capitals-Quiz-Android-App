@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
@@ -51,11 +52,11 @@ public class QuizzesAccessTest {
 
     @Test
     public void testStore() {
-        QuizModel model = new QuizModel();
+        QuizModel model = new QuizModel(2);
         model.setQuizType(QuizType.CAPITAL_QUIZ);
-        model.setStateIds(new ArrayList<>());
-        model.setResponses(new ArrayList<>());
-        model.setAnsweredCorrectly(new ArrayList<>());
+        model.setStateIds(Arrays.asList(1L, 2L));
+        model.setResponses(Arrays.asList("Atlanta", null));
+        model.setAnsweredCorrectly(Arrays.asList(true, false));
         model.setFinished(true);
         model.setScore(100);
 
@@ -66,10 +67,11 @@ public class QuizzesAccessTest {
 
         assertNotNull(storedModel);
         assertEquals(expectedId, storedModel.getId());
+        assertEquals(2, storedModel.getNumberOfQuestions());
         assertEquals(QuizType.CAPITAL_QUIZ, storedModel.getQuizType());
-        assertTrue(storedModel.getStateIds().isEmpty());
-        assertTrue(storedModel.getResponses().isEmpty());
-        assertTrue(storedModel.getAnsweredCorrectly().isEmpty());
+        assertEquals(storedModel.getStateIds(), Arrays.asList(1L, 2L));
+        assertEquals(storedModel.getResponses(), Arrays.asList("Atlanta", null));
+        assertEquals(storedModel.getAnsweredCorrectly(), Arrays.asList(true, false));
         assertTrue(storedModel.isFinished());
         assertEquals(100, storedModel.getScore());
     }
@@ -89,7 +91,7 @@ public class QuizzesAccessTest {
             add(true);
             add(false);
         }};
-        QuizModel expectedModel = new QuizModel();
+        QuizModel expectedModel = new QuizModel(2);
         expectedModel.setId(quizId);
         expectedModel.setQuizType(QuizType.CAPITAL_QUIZ);
         expectedModel.setStateIds(stateIds);
@@ -124,6 +126,7 @@ public class QuizzesAccessTest {
                     case QuizTableValues.COLUMN_ANSWERED_CORRECTLY -> 4;
                     case QuizTableValues.COLUMN_FINISHED -> 5;
                     case QuizTableValues.COLUMN_SCORE -> 6;
+                    case QuizTableValues.COLUMN_NUMBER_QUESTIONS -> 7;
                     default -> throw new IllegalStateException("Unexpected value: " + column);
                 };
             }
@@ -152,6 +155,7 @@ public class QuizzesAccessTest {
                 return switch (columnIndex) {
                     case 5 -> 1;
                     case 6 -> 100;
+                    case 7 -> 2;
                     default -> throw new IllegalStateException("Unexpected value: " + columnIndex);
                 };
             }

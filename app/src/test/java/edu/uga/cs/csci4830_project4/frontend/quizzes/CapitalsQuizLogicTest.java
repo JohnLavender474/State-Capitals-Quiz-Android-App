@@ -27,7 +27,7 @@ public class CapitalsQuizLogicTest {
 
     @Before
     public void setUp() {
-        quizModel = new QuizModel();
+        quizModel = new QuizModel(3);
         quizModel.setQuizType(QuizType.CAPITAL_QUIZ);
         quizModel.setResponses(Arrays.asList(null, null, null));
         quizModel.setAnsweredCorrectly(Arrays.asList(false, false, false));

@@ -14,9 +14,13 @@ import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIn
 import android.content.Context;
 import android.database.Cursor;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
@@ -30,7 +34,7 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
 public class StatesAccess implements IAccess<StateModel> {
 
     private final IDatabaseHelper helper;
-    private IDatabase db;
+    private @Nullable IDatabase db;
 
     /**
      * Constructs a new StatesAccess instance with the provided context.
@@ -48,6 +52,32 @@ public class StatesAccess implements IAccess<StateModel> {
      */
     StatesAccess(IDatabaseHelper helper) {
         this.helper = helper;
+    }
+
+    /**
+     * Returns a list of unique random state ids from the database. The amount of ids returned
+     *
+     * @param amount the amount of ids to return.
+     * @return a list of unique random state ids from the database.
+     */
+    public List<Long> getRandomStateIds(int amount) {
+        List<StateModel> states = retrieveAll();
+        if (states == null || amount > states.size()) {
+            int size = states == null ? 0 : states.size();
+            String message = String.format(Locale.getDefault(), "Not enough states in the " +
+                    "database for specified amount %d. There are currently %d states in the " +
+                    "database.", amount, size);
+            throw new IllegalStateException(message);
+        }
+
+        Collections.shuffle(states);
+        List<StateModel> randomStates = states.subList(0, amount);
+
+        List<Long> ids = new ArrayList<>();
+        for (StateModel state : randomStates) {
+            ids.add(state.getId());
+        }
+        return ids;
     }
 
     @Override
@@ -84,15 +114,17 @@ public class StatesAccess implements IAccess<StateModel> {
     }
 
     @Override
-    public StateModel getById(long id) {
+    public @Nullable StateModel getById(long id) {
         List<StateModel> models = retrieve(null, "id = ?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
-        return models.isEmpty() ? null : models.get(0);
+        return models == null || models.isEmpty() ? null : models.get(0);
     }
 
     @Override
-    public List<StateModel> retrieve(String[] columns, String selection, String[] selectionArgs,
-                                     String groupBy, String having, String orderBy, String limit) {
+    public @Nullable List<StateModel> retrieve(String[] columns, String selection,
+                                               String[] selectionArgs,
+                                               String groupBy, String having, String orderBy,
+                                               String limit) {
         if (db == null) {
             return null;
         }
@@ -134,7 +166,7 @@ public class StatesAccess implements IAccess<StateModel> {
     }
 
     @Override
-    public List<StateModel> retrieveAll() {
+    public @Nullable List<StateModel> retrieveAll() {
         return retrieve(null, null, null, null, null, null, null);
     }
 

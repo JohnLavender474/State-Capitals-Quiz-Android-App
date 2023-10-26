@@ -1,6 +1,7 @@
 package edu.uga.cs.csci4830_project4.backend.states;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
@@ -12,12 +13,19 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 public class StateModel implements IModel {
 
     private long id;
+    @Nullable
     private String stateName;
+    @Nullable
     private String capitalCity;
+    @Nullable
     private String secondCity;
+    @Nullable
     private String thirdCity;
+    @Nullable
     private String statehood;
+    @Nullable
     private String capitalSince;
+    @Nullable
     private String sizeRank;
 
     /**
@@ -39,7 +47,7 @@ public class StateModel implements IModel {
      *
      * @param values the values
      */
-    public StateModel(String[] values) {
+    public StateModel(@NonNull String[] values) {
         stateName = values[0];
         capitalCity = values[1];
         secondCity = values[2];
@@ -74,6 +82,7 @@ public class StateModel implements IModel {
      *
      * @return The name of the stateName.
      */
+    @Nullable
     public String getStateName() {
         return stateName;
     }
@@ -83,7 +92,7 @@ public class StateModel implements IModel {
      *
      * @param stateName The new stateName name to set.
      */
-    public void setStateName(String stateName) {
+    public void setStateName(@Nullable String stateName) {
         this.stateName = stateName;
     }
 
@@ -92,6 +101,7 @@ public class StateModel implements IModel {
      *
      * @return The capital city of the stateName.
      */
+    @Nullable
     public String getCapitalCity() {
         return capitalCity;
     }
@@ -101,7 +111,7 @@ public class StateModel implements IModel {
      *
      * @param capitalCity The new capital city to set.
      */
-    public void setCapitalCity(String capitalCity) {
+    public void setCapitalCity(@Nullable String capitalCity) {
         this.capitalCity = capitalCity;
     }
 
@@ -110,6 +120,7 @@ public class StateModel implements IModel {
      *
      * @return The second-largest city in the stateName.
      */
+    @Nullable
     public String getSecondCity() {
         return secondCity;
     }
@@ -119,7 +130,7 @@ public class StateModel implements IModel {
      *
      * @param secondCity The new second-largest city to set.
      */
-    public void setSecondCity(String secondCity) {
+    public void setSecondCity(@Nullable String secondCity) {
         this.secondCity = secondCity;
     }
 
@@ -128,6 +139,7 @@ public class StateModel implements IModel {
      *
      * @return The third-largest city in the stateName.
      */
+    @Nullable
     public String getThirdCity() {
         return thirdCity;
     }
@@ -137,7 +149,7 @@ public class StateModel implements IModel {
      *
      * @param thirdCity The new third-largest city to set.
      */
-    public void setThirdCity(String thirdCity) {
+    public void setThirdCity(@Nullable String thirdCity) {
         this.thirdCity = thirdCity;
     }
 
@@ -146,6 +158,7 @@ public class StateModel implements IModel {
      *
      * @return The statehood date of the stateName.
      */
+    @Nullable
     public String getStatehood() {
         return statehood;
     }
@@ -155,7 +168,7 @@ public class StateModel implements IModel {
      *
      * @param statehood The new statehood date to set.
      */
-    public void setStatehood(String statehood) {
+    public void setStatehood(@Nullable String statehood) {
         this.statehood = statehood;
     }
 
@@ -164,6 +177,7 @@ public class StateModel implements IModel {
      *
      * @return The year in which the stateName's capital was established.
      */
+    @Nullable
     public String getCapitalSince() {
         return capitalSince;
     }
@@ -173,7 +187,7 @@ public class StateModel implements IModel {
      *
      * @param capitalSince The new year of the stateName's capital establishment to set.
      */
-    public void setCapitalSince(String capitalSince) {
+    public void setCapitalSince(@Nullable String capitalSince) {
         this.capitalSince = capitalSince;
     }
 
@@ -182,6 +196,7 @@ public class StateModel implements IModel {
      *
      * @return The size rank of the stateName.
      */
+    @Nullable
     public String getSizeRank() {
         return sizeRank;
     }
@@ -191,7 +206,7 @@ public class StateModel implements IModel {
      *
      * @param sizeRank The new size rank of the stateName to set.
      */
-    public void setSizeRank(String sizeRank) {
+    public void setSizeRank(@Nullable String sizeRank) {
         this.sizeRank = sizeRank;
     }
 

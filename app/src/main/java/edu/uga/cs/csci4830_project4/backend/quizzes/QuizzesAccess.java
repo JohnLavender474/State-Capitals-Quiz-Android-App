@@ -37,7 +37,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     /**
      * Package-private constructor meant only for testing, DO NOT USE IN PRODUCTION.
      *
-     * @param helper  the database helper.
+     * @param helper the database helper.
      */
     QuizzesAccess(IDatabaseHelper helper) {
         this.helper = helper;
@@ -58,6 +58,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     @Override
     public QuizModel store(QuizModel model) {
         Map<String, Object> values = new HashMap<>();
+
+        int numberQuestions = model.getNumberOfQuestions();
+        values.put(QuizTableValues.COLUMN_NUMBER_QUESTIONS, numberQuestions);
 
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
@@ -99,6 +102,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                 while (cursor.moveToNext()) {
                     long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
 
+                    int numberQuestions = cursor.getInt(getColumnIndex(
+                            cursor, QuizTableValues.COLUMN_NUMBER_QUESTIONS));
+
                     String quizType = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_QUIZ_TYPE));
 
@@ -116,7 +122,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
                     int score = cursor.getInt(getColumnIndex(cursor, QuizTableValues.COLUMN_SCORE));
 
-                    QuizModel model = new QuizModel();
+                    QuizModel model = new QuizModel(numberQuestions);
                     model.setId(id);
                     model.setQuizType(quizType == null ? null : QuizType.valueOf(quizType));
                     model.setStateIds(stringToList(stateIds, Long::parseLong));
@@ -142,6 +148,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     @Override
     public int update(QuizModel model) {
         Map<String, Object> values = new HashMap<>();
+
+        int numberQuestions = model.getNumberOfQuestions();
+        values.put(QuizTableValues.COLUMN_NUMBER_QUESTIONS, numberQuestions);
 
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);

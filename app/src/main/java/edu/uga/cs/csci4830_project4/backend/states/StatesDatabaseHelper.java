@@ -9,7 +9,7 @@ import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUM
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATE_NAME;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_THIRD_CITY;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.TABLE_NAME;
-import static edu.uga.cs.csci4830_project4.backend.utils.ConstVals.STATES_CSV;
+import static edu.uga.cs.csci4830_project4.backend.utils.DbConstVals.STATES_CSV;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

@@ -32,7 +32,7 @@ public class UniqueRandomNumbersTest {
             int[] test = tests[i];
             System.out.println("Test " + i + ": " + Arrays.toString(test));
 
-            List<Integer> result = UniqueRandomNumbers.get(test[0], test[1], test[2]);
+            List<Integer> result = UniqueRandomNumbers.getUniqueRandomNumbers(test[0], test[1], test[2]);
             // Check the number of generated elements
             assertEquals(test[0], result.size());
 
@@ -57,11 +57,11 @@ public class UniqueRandomNumbersTest {
     public void testInvalidRange() {
         // Test case 3: Attempt to generate more unique random numbers than the range allows
         assertThrows(IllegalArgumentException.class,
-                () -> UniqueRandomNumbers.get(10, 1, 5));
+                () -> UniqueRandomNumbers.getUniqueRandomNumbers(10, 1, 5));
 
         // Test case 4: Attempt to generate random numbers with an invalid range
         assertThrows(IllegalArgumentException.class,
-                () -> UniqueRandomNumbers.get(3, 10, 5));
+                () -> UniqueRandomNumbers.getUniqueRandomNumbers(3, 10, 5));
     }
 }
 
