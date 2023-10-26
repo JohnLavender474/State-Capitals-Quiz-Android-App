@@ -4,13 +4,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".frontend.GameActivity">
+    tools:context=".frontend.activities.QuizActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/what_is_the_capital_of_the_following_state"
+        android:text="@string/capital_question"
         android:id="@+id/tvQuestion"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="STATE"
+        android:text="@string/state"
         android:id="@+id/tvStateName"
         android:layout_below="@+id/tvQuestion"
         android:layout_centerHorizontal="true"
@@ -31,6 +31,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:id="@+id/ivStateImage"
+        android:contentDescription="@string/state_image"
         android:layout_below="@+id/tvStateName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp" />
@@ -38,7 +39,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="CHOICE_1"
+        android:text="@string/choice_1"
         android:id="@+id/bChoice1"
         android:layout_below="@+id/ivStateImage"
         android:layout_centerHorizontal="true"
@@ -48,10 +49,9 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="CHOICE_2"
+        android:text="@string/choice_2"
         android:id="@+id/bChoice2"
         android:layout_below="@+id/bChoice1"
-        android:layout_alignLeft="@+id/bChoice1"
         android:layout_alignStart="@+id/bChoice1"
         android:layout_marginTop="0dp"
         android:textSize="15sp" />
@@ -59,7 +59,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="CHOICE_3"
+        android:text="@string/choice_3"
         android:id="@+id/bChoice3"
         android:layout_below="@+id/bChoice2"
         android:layout_centerHorizontal="true"
@@ -68,7 +68,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="CHOICE_4"
+        android:text="@string/choice_4"
         android:id="@+id/bChoice4"
         android:layout_below="@+id/bChoice3"
         android:layout_centerHorizontal="true"
@@ -77,7 +77,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Score:"
+        android:text="@string/score"
         android:id="@+id/tvScoreLabel"
         android:textSize="23sp"
         android:layout_below="@+id/bChoice4"
@@ -87,10 +87,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="##"
+        android:text=""
         android:id="@+id/tvScoreData"
         android:textSize="23sp"
         android:layout_alignTop="@+id/tvScoreLabel"
-        android:layout_alignRight="@+id/bChoice4"
         android:layout_alignEnd="@+id/bChoice4" />
 </RelativeLayout>

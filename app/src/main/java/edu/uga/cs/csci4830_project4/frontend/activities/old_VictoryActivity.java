@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.frontend;
+package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.app.Activity;
 import android.content.Intent;

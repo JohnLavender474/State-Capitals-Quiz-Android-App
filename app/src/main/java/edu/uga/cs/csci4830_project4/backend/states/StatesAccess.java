@@ -1,5 +1,15 @@
 package edu.uga.cs.csci4830_project4.backend.states;
 
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_CAPITAL_CITY;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_CAPITAL_SINCE;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_ID;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_SECOND_CITY;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_SIZE_RANK;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATEHOOD;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATE_NAME;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_THIRD_CITY;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.TABLE_NAME;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -48,48 +58,51 @@ public class StatesAccess implements IAccess<StateModel> {
         }
 
         ContentValues values = new ContentValues();
-        values.put(StatesDatabaseHelper.COLUMN_STATE_NAME, model.getStateName());
-        values.put(StatesDatabaseHelper.COLUMN_CAPITAL_CITY, model.getCapitalCity());
-        values.put(StatesDatabaseHelper.COLUMN_SECOND_CITY, model.getSecondCity());
-        values.put(StatesDatabaseHelper.COLUMN_THIRD_CITY, model.getThirdCity());
-        values.put(StatesDatabaseHelper.COLUMN_STATEHOOD, model.getStatehood());
-        values.put(StatesDatabaseHelper.COLUMN_CAPITAL_SINCE, model.getCapitalSince());
-        values.put(StatesDatabaseHelper.COLUMN_SIZE_RANK, model.getSizeRank());
+        values.put(COLUMN_STATE_NAME, model.getStateName());
+        values.put(COLUMN_CAPITAL_CITY, model.getCapitalCity());
+        values.put(COLUMN_SECOND_CITY, model.getSecondCity());
+        values.put(COLUMN_THIRD_CITY, model.getThirdCity());
+        values.put(COLUMN_STATEHOOD, model.getStatehood());
+        values.put(COLUMN_CAPITAL_SINCE, model.getCapitalSince());
+        values.put(COLUMN_SIZE_RANK, model.getSizeRank());
 
-        long id = db.insert(StatesDatabaseHelper.TABLE_NAME, null, values);
+        long id = db.insert(TABLE_NAME, null, values);
         model.setId(id);
 
         return model;
     }
 
     @Override
-    public List<StateModel> retrieveAll() {
+    public StateModel getById(long id) {
+        List<StateModel> models = retrieve(null, "id = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        return models.isEmpty() ? null : models.get(0);
+    }
+
+    @Override
+    public List<StateModel> retrieve(String[] columns, String selection, String[] selectionArgs,
+                                     String groupBy, String having, String orderBy, String limit) {
         if (db == null) {
             return null;
         }
 
         List<StateModel> models = new ArrayList<>();
 
-        try (Cursor cursor = db.query(StatesDatabaseHelper.TABLE_NAME, null, null, null,
-                null, null, null)) {
+        try (Cursor cursor = db.query(TABLE_NAME, columns, selection, selectionArgs, groupBy,
+                having, orderBy, limit)) {
             if (cursor != null && cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
-                    long id = cursor.getLong(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_ID));
-                    String state = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_STATE_NAME));
+                    long id = cursor.getLong(getColumnIndex(cursor, COLUMN_ID));
+                    String state = cursor.getString(getColumnIndex(cursor, COLUMN_STATE_NAME));
                     String capitalCity = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_CAPITAL_CITY));
+                            COLUMN_CAPITAL_CITY));
                     String secondCity = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_SECOND_CITY));
-                    String thirdCity = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_THIRD_CITY));
-                    String statehood = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_STATEHOOD));
+                            COLUMN_SECOND_CITY));
+                    String thirdCity = cursor.getString(getColumnIndex(cursor, COLUMN_THIRD_CITY));
+                    String statehood = cursor.getString(getColumnIndex(cursor, COLUMN_STATEHOOD));
                     String capitalSince = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_CAPITAL_SINCE));
-                    String sizeRank = cursor.getString(getColumnIndex(cursor,
-                            StatesDatabaseHelper.COLUMN_SIZE_RANK));
+                            COLUMN_CAPITAL_SINCE));
+                    String sizeRank = cursor.getString(getColumnIndex(cursor, COLUMN_SIZE_RANK));
 
                     StateModel model = new StateModel();
                     model.setId(id);
@@ -110,22 +123,26 @@ public class StatesAccess implements IAccess<StateModel> {
     }
 
     @Override
+    public List<StateModel> retrieveAll() {
+        return retrieve(null, null, null, null, null, null, null);
+    }
+
+    @Override
     public int update(StateModel model) {
         if (db == null) {
             return -1;
         }
 
         ContentValues values = new ContentValues();
-        values.put(StatesDatabaseHelper.COLUMN_STATE_NAME, model.getStateName());
-        values.put(StatesDatabaseHelper.COLUMN_CAPITAL_CITY, model.getCapitalCity());
-        values.put(StatesDatabaseHelper.COLUMN_SECOND_CITY, model.getSecondCity());
-        values.put(StatesDatabaseHelper.COLUMN_THIRD_CITY, model.getThirdCity());
-        values.put(StatesDatabaseHelper.COLUMN_STATEHOOD, model.getStatehood());
-        values.put(StatesDatabaseHelper.COLUMN_CAPITAL_SINCE, model.getCapitalSince());
-        values.put(StatesDatabaseHelper.COLUMN_SIZE_RANK, model.getSizeRank());
+        values.put(COLUMN_STATE_NAME, model.getStateName());
+        values.put(COLUMN_CAPITAL_CITY, model.getCapitalCity());
+        values.put(COLUMN_SECOND_CITY, model.getSecondCity());
+        values.put(COLUMN_THIRD_CITY, model.getThirdCity());
+        values.put(COLUMN_STATEHOOD, model.getStatehood());
+        values.put(COLUMN_CAPITAL_SINCE, model.getCapitalSince());
+        values.put(COLUMN_SIZE_RANK, model.getSizeRank());
 
-        return db.update(StatesDatabaseHelper.TABLE_NAME, values, "id = ?",
-                new String[]{String.valueOf(model.getId())});
+        return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(model.getId())});
     }
 
     @Override
@@ -133,8 +150,7 @@ public class StatesAccess implements IAccess<StateModel> {
         if (db == null) {
             return -1;
         }
-        return db.delete(StatesDatabaseHelper.TABLE_NAME, "id = ?",
-                new String[]{String.valueOf(id)});
+        return db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
     }
 
     @Override
@@ -142,7 +158,7 @@ public class StatesAccess implements IAccess<StateModel> {
         if (db == null) {
             return;
         }
-        db.delete(StatesDatabaseHelper.TABLE_NAME, null, null);
+        db.delete(TABLE_NAME, null, null);
     }
 
 

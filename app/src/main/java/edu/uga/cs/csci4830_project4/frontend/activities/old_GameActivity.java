@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.frontend;
+package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -88,7 +88,7 @@ public class old_GameActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_play_game);
         setUpComponents();
         restartGame();
     }

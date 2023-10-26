@@ -10,6 +10,7 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 public class QuizModel implements IModel {
 
     private long id;
+    private QuizType quizType;
     private String[] stateIds;
     private String[] responses;
     private boolean finished;
@@ -115,5 +116,23 @@ public class QuizModel implements IModel {
      */
     public void setScore(String score) {
         this.score = score;
+    }
+
+    /**
+     * Gets the type of quiz.
+     *
+     * @return The type of quiz.
+     */
+    public QuizType getQuizType() {
+        return quizType;
+    }
+
+    /**
+     * Sets the type of quiz.
+     *
+     * @param quizType The type of quiz.
+     */
+    public void setQuizType(QuizType quizType) {
+        this.quizType = quizType;
     }
 }

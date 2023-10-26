@@ -1,5 +1,13 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_FINISHED;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_ID;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_QUIZ_TYPE;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_RESPONSES;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_SCORE;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_STATE_IDS;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.TABLE_NAME;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,16 +18,6 @@ import android.database.sqlite.SQLiteOpenHelper;
  * This class is a singleton, so it can be accessed from anywhere in the application.
  */
 final class QuizzesDatabaseHelper extends SQLiteOpenHelper {
-
-    /**
-     * Table name and column names
-     */
-    static final String TABLE_NAME = "quizzes";
-    static final String COLUMN_ID = "_id";
-    static final String COLUMN_STATE_IDS = "state_ids";
-    static final String COLUMN_RESPONSES = "responses";
-    static final String COLUMN_FINISHED = "finished";
-    static final String COLUMN_SCORE = "score";
 
     private static final String DB_NAME = "quizzes.db";
     private static final int DB_VERSION = 1;
@@ -45,8 +43,10 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT, " + COLUMN_STATE_IDS + " TEXT, " + COLUMN_RESPONSES + " TEXT, " + COLUMN_FINISHED + " INTEGER, " + COLUMN_SCORE + " TEXT)");
+        db.execSQL(String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
+                "TEXT, %s TEXT, %s TEXT, %s INTEGER, %s TEXT)", TABLE_NAME, COLUMN_ID,
+                COLUMN_QUIZ_TYPE, COLUMN_STATE_IDS, COLUMN_RESPONSES, COLUMN_FINISHED,
+                COLUMN_SCORE));
     }
 
     @Override

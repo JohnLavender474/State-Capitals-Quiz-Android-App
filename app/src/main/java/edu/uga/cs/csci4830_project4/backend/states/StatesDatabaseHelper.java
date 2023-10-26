@@ -1,5 +1,14 @@
 package edu.uga.cs.csci4830_project4.backend.states;
 
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.*;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_CAPITAL_CITY;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_CAPITAL_SINCE;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_SECOND_CITY;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_SIZE_RANK;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATEHOOD;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATE_NAME;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_THIRD_CITY;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.TABLE_NAME;
 import static edu.uga.cs.csci4830_project4.backend.utils.ConstVals.STATES_CSV;
 
 import android.annotation.SuppressLint;
@@ -21,16 +30,6 @@ import java.io.InputStreamReader;
  * Application class's onCreate() method.
  */
 final class StatesDatabaseHelper extends SQLiteOpenHelper {
-
-    static final String TABLE_NAME = "states";
-    static final String COLUMN_ID = "_id";
-    static final String COLUMN_STATE_NAME = "state_name";
-    static final String COLUMN_CAPITAL_CITY = "capital_city";
-    static final String COLUMN_SECOND_CITY = "second_city";
-    static final String COLUMN_THIRD_CITY = "third_city";
-    static final String COLUMN_STATEHOOD = "statehood";
-    static final String COLUMN_CAPITAL_SINCE = "capital_since";
-    static final String COLUMN_SIZE_RANK = "size_rank";
 
     private static final String DB_NAME = "states.db";
     private static final int DB_VERSION = 1;
@@ -62,10 +61,8 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT, " + COLUMN_STATE_NAME + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT," +
-                " " +
-                COLUMN_SECOND_CITY + " TEXT, " + COLUMN_THIRD_CITY + " TEXT, " + COLUMN_STATEHOOD +
-                " TEXT, " + COLUMN_CAPITAL_SINCE + " TEXT, " + COLUMN_SIZE_RANK + " INTEGER)");
+                "AUTOINCREMENT, " + COLUMN_STATE_NAME + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT,"
+                + " " + COLUMN_SECOND_CITY + " TEXT, " + COLUMN_THIRD_CITY + " TEXT, " + COLUMN_STATEHOOD + " TEXT, " + COLUMN_CAPITAL_SINCE + " TEXT, " + COLUMN_SIZE_RANK + " INTEGER)");
 
         try {
             final InputStream data = context.getAssets().open(STATES_CSV);
@@ -91,8 +88,7 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
                     values.put(COLUMN_SIZE_RANK, nextRow[6]);
 
                     if (db.insert(TABLE_NAME, null, values) == -1) {
-                        throw new RuntimeException("Error while inserting into table [" +
-                                TABLE_NAME + "]: " + values);
+                        throw new RuntimeException("Error while inserting into table [" + TABLE_NAME + "]: " + values);
                     }
                 }
             }

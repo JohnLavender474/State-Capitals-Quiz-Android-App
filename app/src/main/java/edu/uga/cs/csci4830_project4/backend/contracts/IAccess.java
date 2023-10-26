@@ -28,6 +28,29 @@ public interface IAccess<T extends IModel> {
     T store(T model);
 
     /**
+     * Retrieves the model with the given id from the database.
+     *
+     * @param id The id of the model to retrieve.
+     * @return The model with the given id.
+     */
+    T getById(long id);
+
+    /**
+     * Retrieves the models matching the given parameters from the database.
+     *
+     * @param columns       The columns to retrieve.
+     * @param selection     The selection criteria.
+     * @param selectionArgs The selection arguments.
+     * @param groupBy       The grouping criteria.
+     * @param having        The having criteria.
+     * @param orderBy       The ordering criteria.
+     * @param limit         The limit criteria.
+     * @return The model with the given id.
+     */
+    List<T> retrieve(String[] columns, String selection, String[] selectionArgs,
+                     String groupBy, String having, String orderBy, String limit);
+
+    /**
      * Retrieves all models from the database.
      *
      * @return A list of all models in the database.

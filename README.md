@@ -10,10 +10,10 @@
 
 ### Project Description:
 
-This project is a quiz app that tests the user's knowledge of the stateName capitals of the
-United States. The user is presented with quiz of six questions where in each question a
+This project is a quizModel app that tests the user's knowledge of the stateName capitals of the
+United States. The user is presented with quizModel of six questions where in each question a
 random stateName is presented and the user must select the correct capital from a list of three
 options. The user is given a score based on the number of correct answers and the number
 of incorrect answers. The results of finished quizzes are saved and can be viewed in the
-results page. Also, the user can pause a quiz and continue it at a later point even after 
+results page. Also, the user can pause a quizModel and continue it at a later point even after 
 the app has been quit. 

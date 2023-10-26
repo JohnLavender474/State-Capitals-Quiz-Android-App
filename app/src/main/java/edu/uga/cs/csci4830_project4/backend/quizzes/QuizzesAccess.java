@@ -1,6 +1,7 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.arrayToString;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIndex;
 import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.stringToArray;
 
 import android.content.ContentValues;
@@ -48,40 +49,61 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     public QuizModel store(QuizModel model) {
         ContentValues values = new ContentValues();
 
-        String stateIds = arrayToString(model.getStateIds());
-        values.put(QuizzesDatabaseHelper.COLUMN_STATE_IDS, stateIds);
-        String responses = arrayToString(model.getResponses());
-        values.put(QuizzesDatabaseHelper.COLUMN_RESPONSES, responses);
-        values.put(QuizzesDatabaseHelper.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
-        values.put(QuizzesDatabaseHelper.COLUMN_SCORE, model.getScore());
+        String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
+        values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
 
-        long id = db.insert(QuizzesDatabaseHelper.TABLE_NAME, null, values);
+        String stateIds = arrayToString(model.getStateIds());
+        values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
+
+        String responses = arrayToString(model.getResponses());
+        values.put(QuizTableValues.COLUMN_RESPONSES, responses);
+
+        values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
+
+        values.put(QuizTableValues.COLUMN_SCORE, model.getScore());
+
+        long id = db.insert(QuizTableValues.TABLE_NAME, null, values);
         model.setId(id);
 
         return model;
     }
 
     @Override
-    public List<QuizModel> retrieveAll() {
+    public QuizModel getById(long id) {
+        List<QuizModel> models = retrieve(null, "id = ?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        return models.isEmpty() ? null : models.get(0);
+    }
+
+    @Override
+    public List<QuizModel> retrieve(String[] columns, String selection, String[] selectionArgs,
+                                    String groupBy, String having, String orderBy, String limit) {
         List<QuizModel> models = new ArrayList<>();
 
-        try (Cursor cursor = db.query(QuizzesDatabaseHelper.TABLE_NAME, null, null, null, null,
-                null, null)) {
+        try (Cursor cursor = db.query(QuizTableValues.TABLE_NAME, columns, selection,
+                selectionArgs, groupBy, having, orderBy, limit)) {
             if (cursor != null && cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
-                    long id = cursor.getLong(getColumnIndex(cursor,
-                            QuizzesDatabaseHelper.COLUMN_ID));
+                    long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
+
+                    String quizType = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_QUIZ_TYPE));
+
                     String stateIds = cursor.getString(getColumnIndex(cursor,
-                            QuizzesDatabaseHelper.COLUMN_STATE_IDS));
+                            QuizTableValues.COLUMN_STATE_IDS));
+
                     String responses = cursor.getString(getColumnIndex(cursor,
-                            QuizzesDatabaseHelper.COLUMN_RESPONSES));
+                            QuizTableValues.COLUMN_RESPONSES));
+
                     boolean finished = cursor.getInt(getColumnIndex(cursor,
-                            QuizzesDatabaseHelper.COLUMN_FINISHED)) == 1;
+                            QuizTableValues.COLUMN_FINISHED)) == 1;
+
                     String score = cursor.getString(getColumnIndex(cursor,
-                            QuizzesDatabaseHelper.COLUMN_SCORE));
+                            QuizTableValues.COLUMN_SCORE));
 
                     QuizModel model = new QuizModel();
                     model.setId(id);
+                    model.setQuizType(quizType == null ? null : QuizType.valueOf(quizType));
                     model.setStateIds(stringToArray(stateIds));
                     model.setResponses(stringToArray(responses));
                     model.setFinished(finished);
@@ -96,17 +118,28 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     }
 
     @Override
+    public List<QuizModel> retrieveAll() {
+        return retrieve(null, null, null, null, null, null, null);
+    }
+
+    @Override
     public int update(QuizModel model) {
         ContentValues values = new ContentValues();
 
-        String stateIds = arrayToString(model.getStateIds());
-        values.put(QuizzesDatabaseHelper.COLUMN_STATE_IDS, stateIds);
-        String responses = arrayToString(model.getResponses());
-        values.put(QuizzesDatabaseHelper.COLUMN_RESPONSES, responses);
-        values.put(QuizzesDatabaseHelper.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
-        values.put(QuizzesDatabaseHelper.COLUMN_SCORE, model.getScore());
+        String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
+        values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
 
-        return db.update(QuizzesDatabaseHelper.TABLE_NAME, values, "id = ?",
+        String stateIds = arrayToString(model.getStateIds());
+        values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
+
+        String responses = arrayToString(model.getResponses());
+        values.put(QuizTableValues.COLUMN_RESPONSES, responses);
+
+        values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
+
+        values.put(QuizTableValues.COLUMN_SCORE, model.getScore());
+
+        return db.update(QuizTableValues.TABLE_NAME, values, "id = ?",
                 new String[]{String.valueOf(model.getId())});
     }
 
@@ -115,8 +148,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         if (db == null) {
             return -1;
         }
-        return db.delete(QuizzesDatabaseHelper.TABLE_NAME, "id = ?",
-                new String[]{String.valueOf(id)});
+        return db.delete(QuizTableValues.TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
     }
 
     @Override
@@ -124,10 +156,6 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         if (db == null) {
             return;
         }
-        db.delete(QuizzesDatabaseHelper.TABLE_NAME, null, null);
-    }
-
-    private int getColumnIndex(Cursor cursor, String column) {
-        return cursor.getColumnIndex(column);
+        db.delete(QuizTableValues.TABLE_NAME, null, null);
     }
 }
