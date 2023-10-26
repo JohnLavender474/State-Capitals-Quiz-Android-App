@@ -10,11 +10,6 @@ import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
 public interface IQuizLogic {
 
     /**
-     * Start the quiz. Initialize the quiz and present the first question.
-     */
-    void startQuiz();
-
-    /**
      * Get the current question and options for the quiz.
      *
      * @return A QuizQuestion object representing the current question.

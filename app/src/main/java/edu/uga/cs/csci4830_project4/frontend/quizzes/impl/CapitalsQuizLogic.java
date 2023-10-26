@@ -24,16 +24,8 @@ public class CapitalsQuizLogic implements IQuizLogic {
         this.quizModel = quizModel;
         this.stateModels = stateModels;
         this.quizAccess = quizAccess;
+        score = quizModel.getScore();
         currentQuestionIndex = 0;
-        score = 0;
-    }
-
-    @Override
-    public void startQuiz() {
-        // Load the quizModel progress from the database (if any).
-        // Initialize quizModel state based on the loaded quizModel model.
-        // Set the currentQuestionIndex, user responses, etc.
-
     }
 
     @Override
@@ -68,8 +60,8 @@ public class CapitalsQuizLogic implements IQuizLogic {
         }
 
         // Update the user's response in the quizModel model.
-        String[] responses = quizModel.getResponses();
-        responses[currentQuestionIndex] = userResponse;
+        List<String> responses = quizModel.getResponses();
+        responses.set(currentQuestionIndex, userResponse);
         quizModel.setResponses(responses);
 
         // TODO: do as async task
@@ -100,7 +92,7 @@ public class CapitalsQuizLogic implements IQuizLogic {
     @Override
     public void finishQuiz() {
         quizModel.setFinished(true);
-        quizModel.setScore(String.valueOf(score));
+        quizModel.setScore(score);
 
         // TODO: do as async task
         quizAccess.update(quizModel);

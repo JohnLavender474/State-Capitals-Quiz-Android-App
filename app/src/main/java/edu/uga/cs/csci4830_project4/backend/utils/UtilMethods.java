@@ -2,6 +2,9 @@ package edu.uga.cs.csci4830_project4.backend.utils;
 
 import android.database.Cursor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class provides utility methods for the database package.
  */
@@ -13,16 +16,16 @@ public class UtilMethods {
      * @param a The string array to convert.
      * @return The comma-separated string.
      */
-    public static String arrayToString(String[] a) {
+    public static <T> String listToString(List<T> a) {
         if (a == null) {
             return null;
         }
 
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        for (int i = 0; i < a.length; i++) {
-            sb.append(a[i]);
-            if (i < a.length - 1) {
+        for (int i = 0; i < a.size(); i++) {
+            sb.append(a.get(i));
+            if (i < a.size() - 1) {
                 sb.append(",");
             }
         }
@@ -36,12 +39,18 @@ public class UtilMethods {
      * @param s The string array to convert.
      * @return The comma-separated string.
      */
-    public static String[] stringToArray(String s) {
+    public static <T> List<T> stringToList(String s, Class<T> clazz) {
         if (s == null) {
             return null;
         }
 
-        return s.replace("[", "").replace("]", "").split(",");
+        String[] strArray = s.replace("[", "").replace("]", "").split(",");
+        List<T> list = new ArrayList<>();
+        for (String str : strArray) {
+            list.add(clazz.cast(str));
+        }
+
+        return list;
     }
 
     /**

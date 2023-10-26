@@ -1,8 +1,8 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.arrayToString;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.listToString;
 import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIndex;
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.stringToArray;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.stringToList;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,10 +52,10 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
 
-        String stateIds = arrayToString(model.getStateIds());
+        String stateIds = listToString(model.getStateIds());
         values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
 
-        String responses = arrayToString(model.getResponses());
+        String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
 
         values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
@@ -98,14 +98,14 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                     boolean finished = cursor.getInt(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_FINISHED)) == 1;
 
-                    String score = cursor.getString(getColumnIndex(cursor,
+                    int score = cursor.getInt(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_SCORE));
 
                     QuizModel model = new QuizModel();
                     model.setId(id);
                     model.setQuizType(quizType == null ? null : QuizType.valueOf(quizType));
-                    model.setStateIds(stringToArray(stateIds));
-                    model.setResponses(stringToArray(responses));
+                    model.setStateIds(stringToList(stateIds, Long.class));
+                    model.setResponses(stringToList(responses, String.class));
                     model.setFinished(finished);
                     model.setScore(score);
 
@@ -129,10 +129,10 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
 
-        String stateIds = arrayToString(model.getStateIds());
+        String stateIds = listToString(model.getStateIds());
         values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
 
-        String responses = arrayToString(model.getResponses());
+        String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
 
         values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);

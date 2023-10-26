@@ -11,12 +11,14 @@ import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizType;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
 import edu.uga.cs.csci4830_project4.backend.states.StateModel;
+import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuizLogic;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.impl.CapitalsQuizLogic;
 
 public class QuizActivity extends Activity {
 
     private QuizzesAccess quizzesAccess;
+    private StatesAccess statesAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class QuizActivity extends Activity {
         setContentView(R.layout.activity_play_game);
 
         quizzesAccess = new QuizzesAccess(this);
+        statesAccess = new StatesAccess(this);
 
         // Get the QuizModel from the intent
         QuizModel quiz = (QuizModel) getIntent().getSerializableExtra("quiz");
@@ -32,16 +35,13 @@ public class QuizActivity extends Activity {
         }
 
         // Determine the quiz type and fetch the states
-        List<StateModel> states = fetchStates();
+        List<StateModel> states = fetchStates(quiz);
 
         // Initialize the quiz logic based on the type
         IQuizLogic quizLogic = createQuizLogic(quiz, states);
         if (quizLogic == null) {
             throw new IllegalStateException("Logic not found for quiz type: " + quiz.getQuizType());
         }
-
-        // Start the quiz
-        quizLogic.startQuiz();
     }
 
     @Override
@@ -49,6 +49,9 @@ public class QuizActivity extends Activity {
         super.onResume();
         if (quizzesAccess != null) {
             quizzesAccess.open();
+        }
+        if (statesAccess != null) {
+            statesAccess.open();
         }
     }
 
@@ -58,14 +61,20 @@ public class QuizActivity extends Activity {
         if (quizzesAccess != null) {
             quizzesAccess.close();
         }
+        if (statesAccess != null) {
+            statesAccess.close();
+        }
     }
 
-    private List<StateModel> fetchStates() {
-        List<StateModel> fetchedStates = new ArrayList<>();
+    private List<StateModel> fetchStates(QuizModel quiz) {
+        // TODO: use async task for this
 
-        // TODO: fetch states from database
+        List<StateModel> states = new ArrayList<>();
 
-        return fetchedStates;
+        // Fetch the states for the quiz
+
+
+        return statesAccess.retrieveAll();
     }
 
     private IQuizLogic createQuizLogic(QuizModel quizModel, List<StateModel> states) {

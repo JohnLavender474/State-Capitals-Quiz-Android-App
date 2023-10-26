@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
+import java.util.List;
+
 import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 
 /**
@@ -11,17 +13,17 @@ public class QuizModel implements IModel {
 
     private long id;
     private QuizType quizType;
-    private String[] stateIds;
-    private String[] responses;
+    private List<Long> stateIds;
+    private List<String> responses;
     private boolean finished;
-    private String score;
+    private int score;
 
     public QuizModel() {
         id = -1;
         stateIds = null;
         responses = null;
         finished = false;
-        score = null;
+        score = 0;
     }
 
     /**
@@ -50,7 +52,7 @@ public class QuizModel implements IModel {
      *
      * @return The question IDs as a comma-separated string.
      */
-    public String[] getStateIds() {
+    public List<Long> getStateIds() {
         return stateIds;
     }
 
@@ -60,7 +62,7 @@ public class QuizModel implements IModel {
      *
      * @param stateIds The new question IDs as a comma-separated string to set.
      */
-    public void setStateIds(String[] stateIds) {
+    public void setStateIds(List<Long> stateIds) {
         this.stateIds = stateIds;
     }
 
@@ -69,7 +71,7 @@ public class QuizModel implements IModel {
      *
      * @return The question answers as a comma-separated string.
      */
-    public String[] getResponses() {
+    public List<String> getResponses() {
         return responses;
     }
 
@@ -78,7 +80,7 @@ public class QuizModel implements IModel {
      *
      * @param responses The new question answers as a comma-separated string to set.
      */
-    public void setResponses(String[] responses) {
+    public void setResponses(List<String> responses) {
         this.responses = responses;
     }
 
@@ -105,7 +107,7 @@ public class QuizModel implements IModel {
      *
      * @return The score of the quiz.
      */
-    public String getScore() {
+    public int getScore() {
         return score;
     }
 
@@ -114,7 +116,7 @@ public class QuizModel implements IModel {
      *
      * @param score The score of the quiz.
      */
-    public void setScore(String score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
