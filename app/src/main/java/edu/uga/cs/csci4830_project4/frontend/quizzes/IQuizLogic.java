@@ -17,16 +17,42 @@ public interface IQuizLogic {
     String getCurrentQuestion();
 
     /**
+     * Get the index of the current question in the quiz.
+     *
+     * @return The index of the current question.
+     */
+    int getCurrentQuestionIndex();
+
+    /**
+     * Get the size of the quiz.
+     *
+     * @return The size of the quiz.
+     */
+    int getSizeOfQuiz();
+
+    /**
+     * Check if the quiz is at the end.
+     *
+     * @return True if the quiz is at the end, false otherwise.
+     */
+    boolean atEndOfQuiz();
+
+    /**
+     * Check if the quiz is at the start.
+     *
+     * @return True if the quiz is at the start, false otherwise.
+     */
+    boolean atStartOfQuiz();
+
+    /**
      * Go to the next question in the quiz.
      */
     void goToNextQuestion();
 
     /**
-     * Check if the quiz has more questions.
-     *
-     * @return True if there are more questions, false otherwise.
+     * Go to the previous question in the quiz.
      */
-    boolean hasMoreQuestions();
+    void goToPreviousQuestion();
 
     /**
      * Submit a user response to the current question.

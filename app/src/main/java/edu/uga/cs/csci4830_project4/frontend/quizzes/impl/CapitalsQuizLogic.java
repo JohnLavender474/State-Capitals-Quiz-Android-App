@@ -14,6 +14,7 @@ public class CapitalsQuizLogic implements IQuizLogic {
     private final QuizModel quizModel;
     private final List<StateModel> stateModels;
     private final IAccess<QuizModel> quizAccess;
+    private final int quizSize;
 
     private int currentQuestionIndex;
     private int score;
@@ -23,6 +24,12 @@ public class CapitalsQuizLogic implements IQuizLogic {
                              @NonNull IAccess<QuizModel> quizAccess) {
         this.quizModel = quizModel;
         this.stateModels = stateModels;
+
+        if (quizModel.getResponses().size() != stateModels.size()) {
+            throw new IllegalStateException("QuizModel responses and stateModels size mismatch");
+        }
+        quizSize = stateModels.size();
+
         this.quizAccess = quizAccess;
         score = quizModel.getScore();
         currentQuestionIndex = 0;
@@ -30,29 +37,56 @@ public class CapitalsQuizLogic implements IQuizLogic {
 
     @Override
     public String getCurrentQuestion() {
-        // Return the current question (e.g., state capital question).
-        if (currentQuestionIndex < stateModels.size()) {
-            StateModel currentState = stateModels.get(currentQuestionIndex);
-            return "What is the capital of " + currentState.getStateName() + "?";
+        if (currentQuestionIndex < 0 || currentQuestionIndex >= stateModels.size()) {
+            throw new IllegalStateException("Invalid question index: " + currentQuestionIndex);
         }
-        return "Quiz Completed!";
+        StateModel currentState = stateModels.get(currentQuestionIndex);
+        return "What is the capital of " + currentState.getStateName() + "?";
+    }
+
+    @Override
+    public int getCurrentQuestionIndex() {
+        return currentQuestionIndex;
+    }
+
+    @Override
+    public int getSizeOfQuiz() {
+        return quizSize;
     }
 
     @Override
     public void goToNextQuestion() {
         currentQuestionIndex++;
-        if (currentQuestionIndex >= stateModels.size()) {
-            finishQuiz();
+        if (currentQuestionIndex >= quizSize) {
+            currentQuestionIndex = quizSize - 1;
         }
     }
 
     @Override
-    public boolean hasMoreQuestions() {
-        return currentQuestionIndex < stateModels.size();
+    public void goToPreviousQuestion() {
+        currentQuestionIndex--;
+        if (currentQuestionIndex < 0) {
+            currentQuestionIndex = 0;
+        }
+    }
+
+    @Override
+    public boolean atEndOfQuiz() {
+        return currentQuestionIndex == quizSize - 1;
+    }
+
+    @Override
+    public boolean atStartOfQuiz() {
+        return currentQuestionIndex == 0;
     }
 
     @Override
     public void submitResponse(String userResponse) {
+        List<String> responses = quizModel.getResponses();
+        if (userResponse.equals(responses.get(currentQuestionIndex))) {
+            return;
+        }
+
         // Compare the user's response to the correct answer and update the score.
         StateModel currentState = stateModels.get(currentQuestionIndex);
         if (userResponse.equalsIgnoreCase(currentState.getCapitalCity())) {
@@ -60,7 +94,6 @@ public class CapitalsQuizLogic implements IQuizLogic {
         }
 
         // Update the user's response in the quizModel model.
-        List<String> responses = quizModel.getResponses();
         responses.set(currentQuestionIndex, userResponse);
         quizModel.setResponses(responses);
 

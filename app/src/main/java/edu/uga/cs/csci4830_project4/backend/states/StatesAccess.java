@@ -9,17 +9,19 @@ import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUM
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATE_NAME;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_THIRD_CITY;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.TABLE_NAME;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIndex;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
+import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
+import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
 
 /**
  * This class provides access to the state_capitals table in the database and
@@ -27,8 +29,8 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
  */
 public class StatesAccess implements IAccess<StateModel> {
 
-    private final SQLiteOpenHelper helper;
-    private SQLiteDatabase db;
+    private final IDatabaseHelper helper;
+    private IDatabase db;
 
     /**
      * Constructs a new StatesAccess instance with the provided context.
@@ -39,9 +41,18 @@ public class StatesAccess implements IAccess<StateModel> {
         helper = StatesDatabaseHelper.getInstance(context);
     }
 
+    /**
+     * Package-private constructor meant only for testing, DO NOT USE IN PRODUCTION.
+     *
+     * @param helper the database helper.
+     */
+    StatesAccess(IDatabaseHelper helper) {
+        this.helper = helper;
+    }
+
     @Override
     public void open() {
-        db = helper.getWritableDatabase();
+        db = helper.getModifiableDatabase();
     }
 
     @Override
@@ -57,7 +68,7 @@ public class StatesAccess implements IAccess<StateModel> {
             return null;
         }
 
-        ContentValues values = new ContentValues();
+        Map<String, Object> values = new HashMap<>();
         values.put(COLUMN_STATE_NAME, model.getStateName());
         values.put(COLUMN_CAPITAL_CITY, model.getCapitalCity());
         values.put(COLUMN_SECOND_CITY, model.getSecondCity());
@@ -133,7 +144,7 @@ public class StatesAccess implements IAccess<StateModel> {
             return -1;
         }
 
-        ContentValues values = new ContentValues();
+        Map<String, Object> values = new HashMap<>();
         values.put(COLUMN_STATE_NAME, model.getStateName());
         values.put(COLUMN_CAPITAL_CITY, model.getCapitalCity());
         values.put(COLUMN_SECOND_CITY, model.getSecondCity());
@@ -159,10 +170,5 @@ public class StatesAccess implements IAccess<StateModel> {
             return;
         }
         db.delete(TABLE_NAME, null, null);
-    }
-
-
-    private int getColumnIndex(Cursor cursor, String column) {
-        return cursor.getColumnIndex(column);
     }
 }

@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * This class provides utility methods for the database package.
@@ -39,15 +40,18 @@ public class UtilMethods {
      * @param s The string array to convert.
      * @return The comma-separated string.
      */
-    public static <T> List<T> stringToList(String s, Class<T> clazz) {
+    public static <T> List<T> stringToList(String s, Function<String, T> function) {
         if (s == null) {
             return null;
+        }
+        if (s.isBlank() || s.equals("[]")) {
+            return new ArrayList<>();
         }
 
         String[] strArray = s.replace("[", "").replace("]", "").split(",");
         List<T> list = new ArrayList<>();
         for (String str : strArray) {
-            list.add(clazz.cast(str));
+            list.add(function.apply(str));
         }
 
         return list;

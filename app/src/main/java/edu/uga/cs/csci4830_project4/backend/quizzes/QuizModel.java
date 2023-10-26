@@ -1,6 +1,7 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import java.util.List;
+import java.util.Objects;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 
@@ -15,6 +16,7 @@ public class QuizModel implements IModel {
     private QuizType quizType;
     private List<Long> stateIds;
     private List<String> responses;
+    private List<Boolean> answeredCorrectly;
     private boolean finished;
     private int score;
 
@@ -136,5 +138,39 @@ public class QuizModel implements IModel {
      */
     public void setQuizType(QuizType quizType) {
         this.quizType = quizType;
+    }
+
+    /**
+     * Gets the list of whether the user answered each question correctly.
+     *
+     * @return The list of whether the user answered each question correctly.
+     */
+    public List<Boolean> getAnsweredCorrectly() {
+        return answeredCorrectly;
+    }
+
+    /**
+     * Sets the list of whether the user answered each question correctly.
+     *
+     * @param answeredCorrectly The list of whether the user answered each question correctly.
+     */
+    public void setAnsweredCorrectly(List<Boolean> answeredCorrectly) {
+        this.answeredCorrectly = answeredCorrectly;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuizModel quizModel = (QuizModel) o;
+        return id == quizModel.id && finished == quizModel.finished && score == quizModel.score
+                && quizType == quizModel.quizType && Objects.equals(stateIds, quizModel.stateIds) &&
+                Objects.equals(responses, quizModel.responses) &&
+                Objects.equals(answeredCorrectly, quizModel.answeredCorrectly);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, quizType, stateIds, responses, answeredCorrectly, finished, score);
     }
 }

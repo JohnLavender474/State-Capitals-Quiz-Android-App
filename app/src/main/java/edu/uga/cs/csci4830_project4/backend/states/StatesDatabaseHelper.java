@@ -22,6 +22,10 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
+import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
+import edu.uga.cs.csci4830_project4.backend.database.SQLiteDatabaseWrapper;
+
 /**
  * This class is a singleton that provides access to the database. It is a subclass
  * of SQLiteOpenHelper, which is a helper class to manage database creation and
@@ -29,7 +33,7 @@ import java.io.InputStreamReader;
  * anywhere in the application. This class should be initialized from the
  * Application class's onCreate() method.
  */
-final class StatesDatabaseHelper extends SQLiteOpenHelper {
+final class StatesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseHelper {
 
     private static final String DB_NAME = "states.db";
     private static final int DB_VERSION = 1;
@@ -60,9 +64,12 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY " +
-                "AUTOINCREMENT, " + COLUMN_STATE_NAME + " TEXT, " + COLUMN_CAPITAL_CITY + " TEXT,"
-                + " " + COLUMN_SECOND_CITY + " TEXT, " + COLUMN_THIRD_CITY + " TEXT, " + COLUMN_STATEHOOD + " TEXT, " + COLUMN_CAPITAL_SINCE + " TEXT, " + COLUMN_SIZE_RANK + " INTEGER)");
+        String createTableSQL = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY " +
+                        "AUTOINCREMENT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s " +
+                        "INTEGER)",
+                TABLE_NAME, COLUMN_ID, COLUMN_STATE_NAME, COLUMN_CAPITAL_CITY, COLUMN_SECOND_CITY,
+                COLUMN_THIRD_CITY, COLUMN_STATEHOOD, COLUMN_CAPITAL_SINCE, COLUMN_SIZE_RANK);
+        db.execSQL(createTableSQL);
 
         try {
             final InputStream data = context.getAssets().open(STATES_CSV);
@@ -101,6 +108,16 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
+    }
+
+    @Override
+    public IDatabase getViewOnlyDatabase() {
+        return new SQLiteDatabaseWrapper(getReadableDatabase());
+    }
+
+    @Override
+    public IDatabase getModifiableDatabase() {
+        return new SQLiteDatabaseWrapper(getWritableDatabase());
     }
 }
 

@@ -1,10 +1,12 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
@@ -13,14 +15,19 @@ import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
 
-public class ViewScoresActivity extends Activity {
+public class ViewScoresActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_scores);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // Access the completed quizzes and their scores from the database
+        // TODO: Use async task to fetch the completed quizzes
         QuizzesAccess quizzesAccess = new QuizzesAccess(this);
         quizzesAccess.open();
         List<QuizModel> completedQuizzes = quizzesAccess.retrieve(

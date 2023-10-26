@@ -1,19 +1,20 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.listToString;
 import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIndex;
+import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.listToString;
 import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.stringToList;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
+import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
+import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
 
 /**
  * This class provides access to the quizzes table in the database and encapsulates the
@@ -21,8 +22,8 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
  */
 public class QuizzesAccess implements IAccess<QuizModel> {
 
-    private final SQLiteOpenHelper helper;
-    private SQLiteDatabase db;
+    private final IDatabaseHelper helper;
+    private IDatabase db;
 
     /**
      * Constructs a new {@link QuizzesAccess} instance with the provided context.
@@ -33,9 +34,18 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         helper = QuizzesDatabaseHelper.getInstance(context);
     }
 
+    /**
+     * Package-private constructor meant only for testing, DO NOT USE IN PRODUCTION.
+     *
+     * @param helper  the database helper.
+     */
+    QuizzesAccess(IDatabaseHelper helper) {
+        this.helper = helper;
+    }
+
     @Override
     public void open() {
-        db = helper.getWritableDatabase();
+        db = helper.getModifiableDatabase();
     }
 
     @Override
@@ -47,7 +57,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
     @Override
     public QuizModel store(QuizModel model) {
-        ContentValues values = new ContentValues();
+        Map<String, Object> values = new HashMap<>();
 
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
@@ -57,6 +67,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
         String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
+
+        String answeredCorrectly = listToString(model.getAnsweredCorrectly());
+        values.put(QuizTableValues.COLUMN_ANSWERED_CORRECTLY, answeredCorrectly);
 
         values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
 
@@ -70,8 +83,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
     @Override
     public QuizModel getById(long id) {
-        List<QuizModel> models = retrieve(null, "id = ?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
+        List<QuizModel> models = retrieve(null, "id = ?", new String[]{String.valueOf(id)}, null,
+                null, null, null);
         return models.isEmpty() ? null : models.get(0);
     }
 
@@ -95,17 +108,21 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                     String responses = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_RESPONSES));
 
+                    String answeredCorrectly = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_ANSWERED_CORRECTLY));
+
                     boolean finished = cursor.getInt(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_FINISHED)) == 1;
 
-                    int score = cursor.getInt(getColumnIndex(cursor,
-                            QuizTableValues.COLUMN_SCORE));
+                    int score = cursor.getInt(getColumnIndex(cursor, QuizTableValues.COLUMN_SCORE));
 
                     QuizModel model = new QuizModel();
                     model.setId(id);
                     model.setQuizType(quizType == null ? null : QuizType.valueOf(quizType));
-                    model.setStateIds(stringToList(stateIds, Long.class));
-                    model.setResponses(stringToList(responses, String.class));
+                    model.setStateIds(stringToList(stateIds, Long::parseLong));
+                    model.setResponses(stringToList(responses, string -> string));
+                    model.setAnsweredCorrectly(stringToList(answeredCorrectly,
+                            Boolean::parseBoolean));
                     model.setFinished(finished);
                     model.setScore(score);
 
@@ -124,7 +141,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
     @Override
     public int update(QuizModel model) {
-        ContentValues values = new ContentValues();
+        Map<String, Object> values = new HashMap<>();
 
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
@@ -134,6 +151,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
         String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
+
+        String answeredCorrectly = listToString(model.getAnsweredCorrectly());
+        values.put(QuizTableValues.COLUMN_ANSWERED_CORRECTLY, answeredCorrectly);
 
         values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
 
