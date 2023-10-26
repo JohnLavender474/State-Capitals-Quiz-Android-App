@@ -35,7 +35,7 @@ public class QuizActivity extends Activity {
         }
 
         // Determine the quiz type and fetch the states
-        List<StateModel> states = fetchStates(quiz);
+        List<StateModel> states = fetchStatesForQuiz(quiz);
 
         // Initialize the quiz logic based on the type
         IQuizLogic quizLogic = createQuizLogic(quiz, states);
@@ -66,26 +66,28 @@ public class QuizActivity extends Activity {
         }
     }
 
-    private List<StateModel> fetchStates(QuizModel quiz) {
-        // TODO: use async task for this
-
+    // TODO: use async task for this
+    private List<StateModel> fetchStatesForQuiz(QuizModel quiz) {
         List<StateModel> states = new ArrayList<>();
 
         // Fetch the states for the quiz
+        quiz.getStateIds().forEach(id -> {
+            StateModel state = statesAccess.getById(id);
+            if (state != null) {
+                states.add(state);
+            }
+        });
 
-
-        return statesAccess.retrieveAll();
+        return states;
     }
 
     private IQuizLogic createQuizLogic(QuizModel quizModel, List<StateModel> states) {
         QuizType quizType = quizModel.getQuizType();
-
         // Initialize the quiz logic based on the quiz type
         if (quizType == QuizType.CAPITAL_QUIZ) {
             return new CapitalsQuizLogic(quizModel, states, quizzesAccess);
         }
         // Implement similar logic for other quiz types
-
         return null;
     }
 }
