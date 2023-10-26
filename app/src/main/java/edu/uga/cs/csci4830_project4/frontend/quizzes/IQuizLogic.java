@@ -24,6 +24,14 @@ public interface IQuizLogic {
     int getCurrentQuestionIndex();
 
     /**
+     * Set the index of the current question in the quiz.
+     *
+     * @param currentQuestionIndex The index of the current question.
+     * @return True if the index was set, false otherwise.
+     */
+    boolean setCurrentQuestionIndex(int currentQuestionIndex);
+
+    /**
      * Get the size of the quiz.
      *
      * @return The size of the quiz.
@@ -46,13 +54,17 @@ public interface IQuizLogic {
 
     /**
      * Go to the next question in the quiz.
+     *
+     * @return True if the next question was found, false otherwise.
      */
-    void goToNextQuestion();
+    boolean goToNextQuestion();
 
     /**
      * Go to the previous question in the quiz.
+     *
+     * @return True if the previous question was found, false otherwise.
      */
-    void goToPreviousQuestion();
+    boolean goToPreviousQuestion();
 
     /**
      * Submit a user response to the current question.
