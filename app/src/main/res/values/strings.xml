@@ -4,7 +4,6 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_victory">VictoryActivity</string>
     <string name="play">Play</string>
-    <string name="capital_question">What is the capital of the following state?</string>
     <string name="u_s_states_quiz">U.S. States Quiz</string>
     <string name="test_your_knowledge">Test your knowledge of U.S. states with this quizModel app!
         Try to solve the questions correctly. Incomplete quizzes can be left and returned to.
@@ -20,4 +19,5 @@
     <string name="choice_3">CHOICE_3</string>
     <string name="choice_4">CHOICE_4</string>
     <string name="score">Score:</string>
+    <string name="swipe_hint">SWIPE LEFT TO GO TO NEXT\nSWIPE RIGHT TO GO TO PREVIOUS</string>
 </resources>

@@ -55,6 +55,8 @@ public class QuizzesAccessTest {
         QuizModel model = new QuizModel(2);
         model.setQuizType(QuizType.CAPITAL_QUIZ);
         model.setStateIds(Arrays.asList(1L, 2L));
+        model.setCurrentQuestion(0);
+        model.setChoices(Arrays.asList("Atlanta,Montgomery,New York City", null));
         model.setResponses(Arrays.asList("Atlanta", null));
         model.setAnsweredCorrectly(Arrays.asList(true, false));
         model.setFinished(true);
@@ -67,6 +69,8 @@ public class QuizzesAccessTest {
 
         assertNotNull(storedModel);
         assertEquals(expectedId, storedModel.getId());
+        assertEquals(storedModel.getChoices(),
+                Arrays.asList("Atlanta,Montgomery,New York City", null));
         assertEquals(2, storedModel.getNumberOfQuestions());
         assertEquals(QuizType.CAPITAL_QUIZ, storedModel.getQuizType());
         assertEquals(storedModel.getStateIds(), Arrays.asList(1L, 2L));
@@ -83,6 +87,10 @@ public class QuizzesAccessTest {
             add(1L);
             add(2L);
         }};
+        List<String> choices = new ArrayList<>() {{
+            add("Atlanta,Montgomery,New York City");
+            add(null);
+        }};
         List<String> responses = new ArrayList<>() {{
             add("response1");
             add("response2");
@@ -94,6 +102,8 @@ public class QuizzesAccessTest {
         QuizModel expectedModel = new QuizModel(2);
         expectedModel.setId(quizId);
         expectedModel.setQuizType(QuizType.CAPITAL_QUIZ);
+        expectedModel.setCurrentQuestion(0);
+        expectedModel.setChoices(choices);
         expectedModel.setStateIds(stateIds);
         expectedModel.setResponses(responses);
         expectedModel.setAnsweredCorrectly(answeredCorrectly);
@@ -127,6 +137,8 @@ public class QuizzesAccessTest {
                     case QuizTableValues.COLUMN_FINISHED -> 5;
                     case QuizTableValues.COLUMN_SCORE -> 6;
                     case QuizTableValues.COLUMN_NUMBER_QUESTIONS -> 7;
+                    case QuizTableValues.COLUMN_CHOICES -> 8;
+                    case QuizTableValues.COLUMN_CURRENT_QUESTION -> 9;
                     default -> throw new IllegalStateException("Unexpected value: " + column);
                 };
             }
@@ -135,9 +147,10 @@ public class QuizzesAccessTest {
             public String getString(int columnIndex) {
                 return switch (columnIndex) {
                     case 1 -> QuizType.CAPITAL_QUIZ.name();
-                    case 2 -> "[1,2]";
-                    case 3 -> "[response1,response2]";
-                    case 4 -> "[true,false]";
+                    case 2 -> "[1;2]";
+                    case 3 -> "[response1;response2]";
+                    case 4 -> "[true;false]";
+                    case 8 -> "[Atlanta;null]";
                     default -> throw new IllegalStateException("Unexpected value: " + columnIndex);
                 };
             }
@@ -156,6 +169,7 @@ public class QuizzesAccessTest {
                     case 5 -> 1;
                     case 6 -> 100;
                     case 7 -> 2;
+                    case 9 -> 0;
                     default -> throw new IllegalStateException("Unexpected value: " + columnIndex);
                 };
             }

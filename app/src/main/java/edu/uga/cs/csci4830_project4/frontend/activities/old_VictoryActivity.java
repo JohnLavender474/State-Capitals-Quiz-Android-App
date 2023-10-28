@@ -1,7 +1,6 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,8 +34,10 @@ public class old_VictoryActivity extends Activity implements View.OnClickListene
      * Restarts the game by launching the GameActivity.
      */
     private void restartGame() {
+        /*
         Intent intent = new Intent(this, old_GameActivity.class);
         startActivity(intent);
         finish();
+         */
     }
 }

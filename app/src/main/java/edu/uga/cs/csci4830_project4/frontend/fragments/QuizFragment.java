@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,7 +36,7 @@ public class QuizFragment extends Fragment {
         TextView questionView = view.findViewById(R.id.tvQuestion);
         questionView.setText(quizLogic.getCurrentQuestion());
 
-        Button choice1Button = view.findViewById(R.id.bChoice1);
+        RadioButton choice1Button = view.findViewById(R.id.rbChoice1);
 
         // TODO:
         /*

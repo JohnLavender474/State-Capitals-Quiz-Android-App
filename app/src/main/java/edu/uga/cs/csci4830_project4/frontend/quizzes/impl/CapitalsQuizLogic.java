@@ -2,7 +2,11 @@ package edu.uga.cs.csci4830_project4.frontend.quizzes.impl;
 
 import androidx.annotation.NonNull;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
@@ -14,14 +18,14 @@ public class CapitalsQuizLogic implements IQuizLogic {
     private final QuizModel quizModel;
     private final List<StateModel> stateModels;
     private final IAccess<QuizModel> quizAccess;
+    private final Map<String, List<String>> choices;
     private final int quizSize;
-
-    private int currentQuestionIndex;
     private int score;
 
     public CapitalsQuizLogic(@NonNull QuizModel quizModel,
                              @NonNull List<StateModel> stateModels,
                              @NonNull IAccess<QuizModel> quizAccess) {
+        this.quizAccess = quizAccess;
         this.quizModel = quizModel;
         this.stateModels = stateModels;
 
@@ -32,20 +36,48 @@ public class CapitalsQuizLogic implements IQuizLogic {
         if (responses.size() != stateModels.size()) {
             throw new IllegalStateException("QuizModel responses and stateModels size mismatch");
         }
-        quizSize = stateModels.size();
 
-        this.quizAccess = quizAccess;
+        quizSize = stateModels.size();
         score = quizModel.getScore();
-        currentQuestionIndex = 0;
+
+        choices = new HashMap<>();
+        for (StateModel stateModel : stateModels) {
+            List<String> stateChoices = Arrays.asList(
+                    stateModel.getCapitalCity(),
+                    stateModel.getSecondCity(),
+                    stateModel.getThirdCity()
+            );
+            Collections.shuffle(stateChoices);
+            choices.put(stateModel.getStateName(), stateChoices);
+        }
+    }
+
+    @Override
+    public String getCurrentStateName() {
+        StateModel currentState = stateModels.get(quizModel.getCurrentQuestion());
+        return currentState.getStateName();
     }
 
     @Override
     public String getCurrentQuestion() {
-        if (currentQuestionIndex < 0 || currentQuestionIndex >= stateModels.size()) {
-            throw new IllegalStateException("Invalid question index: " + currentQuestionIndex);
+        if (quizModel.getCurrentQuestion() < 0 || quizModel.getCurrentQuestion() >= stateModels.size()) {
+            throw new IllegalStateException("Invalid question index: " + quizModel.getCurrentQuestion());
         }
-        StateModel currentState = stateModels.get(currentQuestionIndex);
-        return "What is the capital of " + currentState.getStateName() + "?";
+        return "What is the capital of " + getCurrentStateName() + "?";
+    }
+
+    @Override
+    public List<String> getCurrentChoices() {
+        return choices.get(getCurrentStateName());
+    }
+
+    @Override
+    public String getCurrentResponse() {
+        List<String> responses = quizModel.getResponses();
+        if (responses == null) {
+            throw new IllegalStateException("QuizModel responses is null");
+        }
+        return responses.get(quizModel.getCurrentQuestion());
     }
 
     @Override
@@ -53,13 +85,14 @@ public class CapitalsQuizLogic implements IQuizLogic {
         if (currentQuestionIndex >= quizSize || currentQuestionIndex < 0) {
             return false;
         }
-        this.currentQuestionIndex = currentQuestionIndex;
+        this.quizModel.setCurrentQuestion(currentQuestionIndex);
+        quizModel.setCurrentQuestion(quizModel.getCurrentQuestion());
         return true;
     }
 
     @Override
     public int getCurrentQuestionIndex() {
-        return currentQuestionIndex;
+        return quizModel.getCurrentQuestion();
     }
 
     @Override
@@ -69,45 +102,49 @@ public class CapitalsQuizLogic implements IQuizLogic {
 
     @Override
     public boolean goToNextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex >= quizSize) {
-            currentQuestionIndex = quizSize - 1;
+        int currentQuestion = quizModel.getCurrentQuestion();
+        currentQuestion++;
+        if (currentQuestion >= quizSize) {
+            quizModel.setCurrentQuestion(quizSize - 1);
             return false;
         }
+        quizModel.setCurrentQuestion(currentQuestion);
         return true;
     }
 
     @Override
     public boolean goToPreviousQuestion() {
-        currentQuestionIndex--;
-        if (currentQuestionIndex < 0) {
-            currentQuestionIndex = 0;
+        int currentQuestion = quizModel.getCurrentQuestion();
+        currentQuestion--;
+        if (currentQuestion < 0) {
+            quizModel.setCurrentQuestion(0);
             return false;
         }
+        quizModel.setCurrentQuestion(currentQuestion);
         return true;
     }
 
     @Override
     public boolean atEndOfQuiz() {
-        return currentQuestionIndex == quizSize - 1;
+        return quizModel.getCurrentQuestion() == quizSize - 1;
     }
 
     @Override
     public boolean atStartOfQuiz() {
-        return currentQuestionIndex == 0;
+        return quizModel.getCurrentQuestion() == 0;
     }
 
     @Override
     public void submitResponse(String userResponse) {
-        if (currentQuestionIndex >= quizSize || currentQuestionIndex < 0) {
-            throw new IllegalStateException("Invalid question index: " + currentQuestionIndex);
+        if (quizModel.getCurrentQuestion() >= quizSize || quizModel.getCurrentQuestion() < 0) {
+            throw new IllegalStateException("Invalid question index: " + quizModel.getCurrentQuestion());
         }
 
         List<String> responses = quizModel.getResponses();
         if (responses == null) {
             throw new IllegalStateException("QuizModel responses is null");
         }
-        if (userResponse.equals(responses.get(currentQuestionIndex))) {
+        if (userResponse.equals(responses.get(quizModel.getCurrentQuestion()))) {
             return;
         }
 
@@ -118,20 +155,20 @@ public class CapitalsQuizLogic implements IQuizLogic {
         if (answeredCorrectly == null) {
             throw new IllegalStateException("QuizModel answeredCorrectly is null");
         }
-        if (answeredCorrectly.get(currentQuestionIndex)) {
-            answeredCorrectly.set(currentQuestionIndex, false);
+        if (answeredCorrectly.get(quizModel.getCurrentQuestion())) {
+            answeredCorrectly.set(quizModel.getCurrentQuestion(), false);
             score--;
         }
 
         // Compare the user's response to the correct answer and update the score.
-        StateModel currentState = stateModels.get(currentQuestionIndex);
+        StateModel currentState = stateModels.get(quizModel.getCurrentQuestion());
         if (userResponse.equalsIgnoreCase(currentState.getCapitalCity())) {
-            answeredCorrectly.set(currentQuestionIndex, true);
+            answeredCorrectly.set(quizModel.getCurrentQuestion(), true);
             score++;
         }
 
         // Update the user's response in the quizModel model.
-        responses.set(currentQuestionIndex, userResponse);
+        responses.set(quizModel.getCurrentQuestion(), userResponse);
         quizModel.setResponses(responses);
 
         // TODO: do as async task

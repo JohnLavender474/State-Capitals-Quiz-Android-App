@@ -19,7 +19,7 @@ public class UtilMethodsTest {
         inputList.add("apple");
         inputList.add("banana");
         inputList.add("cherry");
-        String expected = "[apple,banana,cherry]";
+        String expected = "[apple;banana;cherry]";
         String result = UtilMethods.listToString(inputList);
         assertEquals(expected, result);
     }
@@ -34,7 +34,7 @@ public class UtilMethodsTest {
 
     @Test
     public void testStringToBooleanList() {
-        String inputString = "[true,false,true]";
+        String inputString = "[true;false;true]";
         List<Boolean> expected = new ArrayList<>();
         expected.add(true);
         expected.add(false);
@@ -53,7 +53,7 @@ public class UtilMethodsTest {
 
     @Test
     public void testStringToList() {
-        String inputString = "[10,20,30]";
+        String inputString = "[10;20;30]";
         List<Integer> expected = new ArrayList<>();
         expected.add(10);
         expected.add(20);

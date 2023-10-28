@@ -1,6 +1,7 @@
 package edu.uga.cs.csci4830_project4.frontend.quizzes;
 
 import java.io.Serializable;
+import java.util.List;
 
 import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
 
@@ -12,6 +13,13 @@ import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
 public interface IQuizLogic extends Serializable {
 
     /**
+     * Get the name of the current state in the quiz.
+     *
+     * @return The name of the current state.
+     */
+    String getCurrentStateName();
+
+    /**
      * Get the current question and options for the quiz.
      *
      * @return A QuizQuestion object representing the current question.
@@ -19,11 +27,25 @@ public interface IQuizLogic extends Serializable {
     String getCurrentQuestion();
 
     /**
+     * Get the current choices for the quiz.
+     *
+     * @return A list of the current choices.
+     */
+    List<String> getCurrentChoices();
+
+    /**
      * Get the index of the current question in the quiz.
      *
      * @return The index of the current question.
      */
     int getCurrentQuestionIndex();
+
+    /**
+     * Get the current response to the question.
+     *
+     * @return The current response.
+     */
+    String getCurrentResponse();
 
     /**
      * Set the index of the current question in the quiz.

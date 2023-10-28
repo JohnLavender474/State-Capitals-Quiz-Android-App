@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +14,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
@@ -34,15 +39,26 @@ import edu.uga.cs.csci4830_project4.utils.ConstVals;
  * to the quiz model. The quiz model should saved and updated to the database from within the
  * {@link IQuizLogic}. See the implementations of quiz logic in the frontend quizzes package.
  */
-public class QuizActivity extends AppCompatActivity implements OnGestureAdapter {
+public final class QuizActivity extends AppCompatActivity implements OnGestureAdapter {
 
     private static final String TAG = "QuizActivity";
     private static final int swipeThreshold = 100;
     private static final int swipeVelocityThreshold = 100;
 
+    private Map<String, String> stateNameToImageSource;
+
     private GestureDetector gestureDetector;
     private QuizzesAccess quizzesAccess;
     private StatesAccess statesAccess;
+
+    private IQuizLogic quizLogic;
+
+    private TextView questionTextView;
+    private ImageView stateImageView;
+    private RadioButton choice1RadioButton;
+    private RadioButton choice2RadioButton;
+    private RadioButton choice3RadioButton;
+    private RadioButton choice4RadioButton;
 
     /**
      * {@inheritDoc}
@@ -58,6 +74,16 @@ public class QuizActivity extends AppCompatActivity implements OnGestureAdapter 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_activity_quiz);
+
+        stateNameToImageSource = new HashMap<>();
+        // TODO: fill name-image map here
+
+        questionTextView = findViewById(R.id.tvQuestion);
+        stateImageView = findViewById(R.id.ivStateImage);
+        choice1RadioButton = findViewById(R.id.rbChoice1);
+        choice2RadioButton = findViewById(R.id.rbChoice2);
+        choice3RadioButton = findViewById(R.id.rbChoice3);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -82,7 +108,7 @@ public class QuizActivity extends AppCompatActivity implements OnGestureAdapter 
         List<StateModel> states = fetchStatesForQuiz(quiz);
 
         // Initialize the quiz logic based on the type
-        IQuizLogic quizLogic = createQuizLogic(quiz, states);
+        quizLogic = createQuizLogic(quiz, states);
         if (quizLogic == null) {
             throw new IllegalStateException("Logic not found for quiz type: " + quiz.getQuizType());
         }
@@ -96,6 +122,29 @@ public class QuizActivity extends AppCompatActivity implements OnGestureAdapter 
         //   finalizes the quiz, saves it to the database as a completed quiz, and transitions
         //   to the view score activity which shows the user's score and presents a button for
         //   the user to return to the main menu
+    }
+
+    private void displayQuizInfo() {
+        questionTextView.setText(quizLogic.getCurrentQuestion());
+        String stateName = quizLogic.getCurrentStateName();
+        String stateImageSource = stateNameToImageSource.get(stateName);
+        // TODO: set image here
+        // stateImageView.setImageResource(stateImageSource);
+
+        List<String> choices = quizLogic.getCurrentChoices();
+        String currentResponse = quizLogic.getCurrentResponse();
+
+        String choice1 = choices.get(0);
+        choice1RadioButton.setChecked(choice1.equals(currentResponse));
+        choice1RadioButton.setText(choice1);
+
+        String choice2 = choices.get(1);
+        choice2RadioButton.setChecked(choice2.equals(currentResponse));
+        choice2RadioButton.setText(choice2);
+
+        String choice3 = choices.get(2);
+        choice3RadioButton.setChecked(choice3.equals(currentResponse));
+        choice3RadioButton.setText(choice3);
     }
 
     /**
@@ -137,7 +186,6 @@ public class QuizActivity extends AppCompatActivity implements OnGestureAdapter 
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (Math.abs(diffX) > swipeThreshold && Math.abs(velocityX) > swipeVelocityThreshold) {
                     if (diffX > 0) {
-
                         Log.d(TAG, "onFling: Right to Left swipe gesture");
                     } else {
                         Log.d(TAG, "onFling: Left to Right swipe gesture");

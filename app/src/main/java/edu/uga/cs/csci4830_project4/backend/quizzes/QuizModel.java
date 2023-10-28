@@ -16,11 +16,15 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 public class QuizModel implements IModel {
 
     private long id;
+
     private int numberOfQuestions;
+    private int currentQuestion;
     @Nullable
     private QuizType quizType;
     @Nullable
     private List<Long> stateIds;
+    @Nullable
+    private List<String> choices;
     @Nullable
     private List<String> responses;
     @Nullable
@@ -37,11 +41,14 @@ public class QuizModel implements IModel {
         id = -1;
         score = 0;
         finished = false;
+        currentQuestion = 0;
         stateIds = new ArrayList<>();
         responses = new ArrayList<>();
+        choices = new ArrayList<>();
         answeredCorrectly = new ArrayList<>();
         for (int i = 0; i < numberOfQuestions; i++) {
             stateIds.add(null);
+            choices.add(null);
             responses.add(null);
             answeredCorrectly.add(false);
         }
@@ -78,16 +85,22 @@ public class QuizModel implements IModel {
     }
 
     /**
-     * Sets the number of questions in the quiz. Keep in mind that if this value is changed, then
-     * the lists for stateIds, responses, and answeredCorrectly should be changed. This will not
-     * be done automatically. If this is not done, then the lists will be out of sync with the
-     * number of questions in the quiz. This can lead to an exception and should be avoided. It is
-     * recommended that this method is only used when creating a new quiz. Use at your own risk.
+     * Gets the comma-separated list of choices for the current question in the quiz.
      *
-     * @param numberOfQuestions The new number of questions in the quiz.
+     * @return The choices for the current question as a comma-separated string.
      */
-    public void setNumberOfQuestions(int numberOfQuestions) {
-        this.numberOfQuestions = numberOfQuestions;
+    @Nullable
+    public List<String> getChoices() {
+        return choices;
+    }
+
+    /**
+     * Sets the comma-separated list of choices for the current question in the quiz.
+     *
+     * @param choices The new choices for the current question as a comma-separated string to set.
+     */
+    public void setChoices(@Nullable List<String> choices) {
+        this.choices = choices;
     }
 
     /**
@@ -230,5 +243,23 @@ public class QuizModel implements IModel {
     @Override
     public int hashCode() {
         return Objects.hash(id, quizType, stateIds, responses, answeredCorrectly, finished, score);
+    }
+
+    /**
+     * Gets the index of the current question in the quiz.
+     *
+     * @return The index of the current question.
+     */
+    public int getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    /**
+     * Set the index of the current question in the quiz.
+     *
+     * @param currentQuestion The index of the current question.
+     */
+    public void setCurrentQuestion(int currentQuestion) {
+        this.currentQuestion = currentQuestion;
     }
 }

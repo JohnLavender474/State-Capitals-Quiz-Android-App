@@ -18,6 +18,7 @@ import edu.uga.cs.csci4830_project4.R;
 
 // TODO: This isn't meant to be a complete solution, just a starting point
 // TODO: initialize, fetch, and update data using database instead of in code
+/*
 public class old_GameActivity extends Activity implements View.OnClickListener {
 
     private static final HashMap<String, Integer> stateImageMap = new HashMap<>();
@@ -264,9 +265,12 @@ public class old_GameActivity extends Activity implements View.OnClickListener {
         }
     }
 
+ */
+
     /**
      * Created by Aaron on 12/7/2015.
      */
+    /*
     public static class States {
         public static final String ALABAMA = "Alabama";
         public static final String ALASKA = "Alaska";
@@ -320,3 +324,6 @@ public class old_GameActivity extends Activity implements View.OnClickListener {
         public static final String WYOMING = "Wyoming";
     }
 }
+
+
+     */

@@ -65,6 +65,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
 
+        String choices = listToString(model.getChoices());
+        values.put(QuizTableValues.COLUMN_CHOICES, choices);
+
         String stateIds = listToString(model.getStateIds());
         values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
 
@@ -105,6 +108,12 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                     int numberQuestions = cursor.getInt(getColumnIndex(
                             cursor, QuizTableValues.COLUMN_NUMBER_QUESTIONS));
 
+                    int currentQuestion = cursor.getInt(getColumnIndex(
+                            cursor, QuizTableValues.COLUMN_CURRENT_QUESTION));
+
+                    String choices = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_CHOICES));
+
                     String quizType = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_QUIZ_TYPE));
 
@@ -124,6 +133,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
                     QuizModel model = new QuizModel(numberQuestions);
                     model.setId(id);
+                    model.setChoices(stringToList(choices, string -> string));
+                    model.setCurrentQuestion(currentQuestion);
                     model.setQuizType(quizType == null ? null : QuizType.valueOf(quizType));
                     model.setStateIds(stringToList(stateIds, Long::parseLong));
                     model.setResponses(stringToList(responses, string -> string));
@@ -151,6 +162,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
         int numberQuestions = model.getNumberOfQuestions();
         values.put(QuizTableValues.COLUMN_NUMBER_QUESTIONS, numberQuestions);
+
+        int currentQuestion = model.getCurrentQuestion();
+        values.put(QuizTableValues.COLUMN_CURRENT_QUESTION, currentQuestion);
 
         String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
         values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);

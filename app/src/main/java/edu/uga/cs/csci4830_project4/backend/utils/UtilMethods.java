@@ -27,7 +27,7 @@ public class UtilMethods {
         for (int i = 0; i < a.size(); i++) {
             sb.append(a.get(i));
             if (i < a.size() - 1) {
-                sb.append(",");
+                sb.append(";");
             }
         }
         sb.append("]");
@@ -48,7 +48,7 @@ public class UtilMethods {
             return new ArrayList<>();
         }
 
-        String[] strArray = s.replace("[", "").replace("]", "").split(",");
+        String[] strArray = s.replace("[", "").replace("]", "").split(";");
         List<T> list = new ArrayList<>();
         for (String str : strArray) {
             list.add(function.apply(str));
