@@ -1,7 +1,12 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +21,7 @@ import edu.uga.cs.csci4830_project4.backend.states.StateModel;
 import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuizLogic;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.impl.CapitalsQuizLogic;
+import edu.uga.cs.csci4830_project4.frontend.utils.OnGestureAdapter;
 import edu.uga.cs.csci4830_project4.utils.ConstVals;
 
 /**
@@ -28,8 +34,13 @@ import edu.uga.cs.csci4830_project4.utils.ConstVals;
  * to the quiz model. The quiz model should saved and updated to the database from within the
  * {@link IQuizLogic}. See the implementations of quiz logic in the frontend quizzes package.
  */
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity implements OnGestureAdapter {
 
+    private static final String TAG = "QuizActivity";
+    private static final int swipeThreshold = 100;
+    private static final int swipeVelocityThreshold = 100;
+
+    private GestureDetector gestureDetector;
     private QuizzesAccess quizzesAccess;
     private StatesAccess statesAccess;
 
@@ -46,11 +57,13 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game);
+        setContentView(R.layout.fragment_activity_quiz);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        gestureDetector = new GestureDetector(this);
 
         // initialize the database access objects
         quizzesAccess = new QuizzesAccess(this);
@@ -82,7 +95,60 @@ public class QuizActivity extends AppCompatActivity {
         // - When user swipes right on the final question, then present "Submit" button that
         //   finalizes the quiz, saves it to the database as a completed quiz, and transitions
         //   to the view score activity which shows the user's score and presents a button for
-        //   the user to return to the main menu=
+        //   the user to return to the main menu
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * In {@link QuizActivity}, this method is used to detect if the user swipes left.
+     *
+     * @param event The touch screen event being processed.
+     * @return True if the event was handled, false otherwise.
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * In {@link QuizActivity}, this method is used to detect if the user swipes left.
+     *
+     * @param e1        The first down motion event that started the fling. A {@code null} event
+     *                  indicates an incomplete event stream or error state.
+     * @param e2        The move motion event that triggered the current onFling.
+     * @param velocityX The velocity of this fling measured in pixels per second
+     *                  along the x axis.
+     * @param velocityY The velocity of this fling measured in pixels per second
+     *                  along the y axis.
+     * @return True if the event is consumed, false otherwise.
+     */
+    @Override
+    public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX,
+                           float velocityY) {
+        if (e1 == null) {
+            return true;
+        }
+        try {
+            float diffY = e2.getY() - e1.getY();
+            float diffX = e2.getX() - e1.getX();
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (Math.abs(diffX) > swipeThreshold && Math.abs(velocityX) > swipeVelocityThreshold) {
+                    if (diffX > 0) {
+
+                        Log.d(TAG, "onFling: Right to Left swipe gesture");
+                    } else {
+                        Log.d(TAG, "onFling: Left to Right swipe gesture");
+                    }
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return true;
+
     }
 
     @Override

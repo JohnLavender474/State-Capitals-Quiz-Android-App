@@ -88,7 +88,7 @@ public class old_GameActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game);
+        setContentView(R.layout.fragment_activity_quiz);
         setUpComponents();
         restartGame();
     }

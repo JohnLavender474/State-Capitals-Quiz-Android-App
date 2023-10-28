@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.frontend.quizzes;
 
+import java.io.Serializable;
+
 import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
 
 /**
@@ -7,7 +9,7 @@ import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
  * the quiz. The {@link QuizActivity} should not know the details of how the quiz works, only how
  * to interact with it.
  */
-public interface IQuizLogic {
+public interface IQuizLogic extends Serializable {
 
     /**
      * Get the current question and options for the quiz.
