@@ -2,7 +2,7 @@
     <string name="app_name">State Capitals</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_game">GameActivity</string>
-    <string name="title_activity_victory">VictoryActivity</string>
+    <string name="title_activity_score">ScoreActivity</string>
     <string name="play">Play</string>
     <string name="u_s_states_quiz">U.S. States Quiz</string>
     <string name="test_your_knowledge">Test your knowledge of U.S. stateNames with this quizModel app!
@@ -25,4 +25,7 @@
     <string name="question">Question</string>
     <string name="question_0_0">Question 0/0</string>
     <string name="submit_quiz">Submit Quiz</string>
+    <string name="capitals_quiz">Capitals Quiz</string>
+    <string name="choose_quiz_type_to_begin">Choose quiz type to begin</string>
+    <string name="go_back_home">Go Back Home</string>
 </resources>

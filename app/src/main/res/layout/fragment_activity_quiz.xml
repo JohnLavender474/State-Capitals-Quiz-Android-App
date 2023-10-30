@@ -52,6 +52,7 @@
             android:layout_height="50dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
+            android:background="#808080"
             android:text="@string/choice_1"
             android:textSize="24sp" />
 
@@ -61,6 +62,7 @@
             android:layout_height="50dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
+            android:background="#808080"
             android:text="@string/choice_2"
             android:textSize="24sp" />
 
@@ -70,6 +72,7 @@
             android:layout_height="50dp"
             android:textColor="@color/black"
             android:layout_marginTop="40dp"
+            android:background="#808080"
             android:text="@string/choice_3"
             android:textSize="24sp" />
     </RadioGroup>

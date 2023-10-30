@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.utils;
+package edu.uga.cs.csci4830_project4.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

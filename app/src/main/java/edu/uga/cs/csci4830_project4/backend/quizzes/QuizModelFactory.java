@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.uga.cs.csci4830_project4.backend.states.StateModel;
 import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 /**
  * Factory for creating new quiz models.
@@ -16,7 +17,8 @@ public class QuizModelFactory {
     private final StatesAccess statesAccess;
 
     /**
-     * Constructor for this factory.
+     * The factory's constructor. The {@link edu.uga.cs.csci4830_project4.backend.contracts.IAccess}
+     * objects passed in are NOT opened or closed by this factory instance.
      *
      * @param quizzesAccess the quizzes access object to use for storing the quiz model.
      * @param statesAccess  the states access object to use for retrieving random states.

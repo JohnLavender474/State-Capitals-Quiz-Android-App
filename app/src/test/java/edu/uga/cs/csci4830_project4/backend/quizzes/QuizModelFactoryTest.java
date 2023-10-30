@@ -13,6 +13,7 @@ import java.util.List;
 
 import edu.uga.cs.csci4830_project4.backend.states.StateModel;
 import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 public class QuizModelFactoryTest {
 

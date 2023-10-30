@@ -1,13 +1,15 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods.getColumnIndex;
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.listToString;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToList;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +17,15 @@ import java.util.Map;
 import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 /**
  * This class provides access to the quizzes table in the database and encapsulates the
  * CRUD (Create, Read, Update, Delete) operations for the quiz data.
  */
 public class QuizzesAccess implements IAccess<QuizModel> {
+
+    private static final String TAG = "QuizzesAccess";
 
     private final IDatabaseHelper helper;
     private IDatabase db;
@@ -45,11 +50,13 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
     @Override
     public void open() {
+        Log.d(TAG, "open()");
         db = helper.getModifiableDatabase();
     }
 
     @Override
     public void close() {
+        Log.d(TAG, "close()");
         if (helper != null) {
             helper.close();
         }
@@ -93,14 +100,26 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         Map<String, Object> values = getValues(model);
         long id = db.insert(QuizTableValues.TABLE_NAME, null, values);
         model.setId(id);
+
+        Log.d(TAG, "store(): model = " + model);
+
         return model;
     }
 
     @Override
     public QuizModel getById(long id) {
-        List<QuizModel> models = retrieve(null, "id = ?", new String[]{String.valueOf(id)}, null,
-                null, null, null);
-        return models.isEmpty() ? null : models.get(0);
+        String[] selectionCriteria = new String[]{String.valueOf(id)};
+
+        Log.d(TAG, "getById(): id = " + id + ", selection criteria = " +
+                Arrays.toString(selectionCriteria));
+
+        List<QuizModel> models = retrieve(null, "id = ?", selectionCriteria,
+                null, null, null, null);
+        QuizModel model = models.isEmpty() ? null : models.get(0);
+
+        Log.d(TAG, "getById(): fetched model = " + model);
+
+        return model;
     }
 
     @Override
@@ -143,6 +162,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
             }
         }
 
+        Log.d(TAG, "retrieve(): fetched models = " + models);
+
         return models;
     }
 
@@ -154,8 +175,12 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     @Override
     public int update(QuizModel model) {
         Map<String, Object> values = getValues(model);
-        return db.update(QuizTableValues.TABLE_NAME, values, "id = ?",
+        int numUpdated = db.update(QuizTableValues.TABLE_NAME, values, "_id = ?",
                 new String[]{String.valueOf(model.getId())});
+
+        Log.d(TAG, "update(): numUpdated = " + numUpdated);
+
+        return numUpdated;
     }
 
     @Override
@@ -163,7 +188,12 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         if (db == null) {
             return -1;
         }
-        return db.delete(QuizTableValues.TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+        int numDeleted = db.delete(QuizTableValues.TABLE_NAME, "_id = ?",
+                new String[]{String.valueOf(id)});
+
+        Log.d(TAG, "delete(): numDeleted = " + numDeleted);
+
+        return numDeleted;
     }
 
     @Override
@@ -171,6 +201,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         if (db == null) {
             return;
         }
+
+        Log.d(TAG, "deleteAll()");
+
         db.delete(QuizTableValues.TABLE_NAME, null, null);
     }
 }

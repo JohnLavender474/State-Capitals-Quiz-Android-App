@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.utils;
+package edu.uga.cs.csci4830_project4.common;
 
 import java.util.ArrayList;
 import java.util.Collections;

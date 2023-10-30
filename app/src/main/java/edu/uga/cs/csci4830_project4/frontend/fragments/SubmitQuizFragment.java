@@ -19,8 +19,9 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModel;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModelFactory;
-import edu.uga.cs.csci4830_project4.frontend.activities.MainActivity;
+import edu.uga.cs.csci4830_project4.frontend.activities.ScoreActivity;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
+import edu.uga.cs.csci4830_project4.frontend.dto.ScoreDTO;
 
 public class SubmitQuizFragment extends Fragment {
 
@@ -90,7 +91,7 @@ public class SubmitQuizFragment extends Fragment {
         }
         String score = points + "/" + responses.size();
         Log.d(TAG, "Score = " + score);
-        scoreModelFactory.createScoreModel(score);
+        ScoreModel scoreModel = scoreModelFactory.createScoreModel(score);
 
         // start main activity with toast message
         Activity activity = getActivity();
@@ -98,9 +99,9 @@ public class SubmitQuizFragment extends Fragment {
             Log.e(TAG, "Activity is null");
             throw new IllegalStateException("Activity is null");
         }
-        Log.d(TAG, "Finishing quiz activity, starting main activity");
-        Intent intent = new Intent(activity, MainActivity.class);
-        intent.putExtra("message", "Quit submitted!");
+        Log.d(TAG, "Finishing quiz activity, starting score activity");
+        Intent intent = new Intent(activity, ScoreActivity.class);
+        intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
         startActivity(intent);
 
         // finish the quiz activity

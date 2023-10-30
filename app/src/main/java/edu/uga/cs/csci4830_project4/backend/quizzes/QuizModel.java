@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 /**
  * This class represents a row in the incomplete_quizzes table. It is used to store the state

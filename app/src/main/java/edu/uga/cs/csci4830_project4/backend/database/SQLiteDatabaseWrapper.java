@@ -1,7 +1,5 @@
 package edu.uga.cs.csci4830_project4.backend.database;
 
-import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.TABLE_NAME;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -61,24 +59,24 @@ public class SQLiteDatabaseWrapper implements IDatabase {
 
     @Override
     public long insert(String table, String nullColumnHack, Map<String, Object> values) {
-        return database.insert(TABLE_NAME, null, mapToContentValues(values));
+        return database.insert(table, null, mapToContentValues(values));
     }
 
     @Override
     public Cursor query(String table, String[] columns, String selection, String[] selectionArgs,
                         String groupBy, String having, String orderBy, String limit) {
-        return database.query(TABLE_NAME, columns, selection, selectionArgs, groupBy,
+        return database.query(table, columns, selection, selectionArgs, groupBy,
                 having, orderBy, limit);
     }
 
     @Override
     public int update(String table, Map<String, Object> values, String whereClause,
                       String[] whereArgs) {
-        return database.update(TABLE_NAME, mapToContentValues(values), "id = ?", whereArgs);
+        return database.update(table, mapToContentValues(values), "id = ?", whereArgs);
     }
 
     @Override
     public int delete(String table, String whereClause, String[] whereArgs) {
-        return database.delete(TABLE_NAME, "id = ?", whereArgs);
+        return database.delete(table, "id = ?", whereArgs);
     }
 }

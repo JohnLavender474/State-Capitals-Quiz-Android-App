@@ -2,8 +2,8 @@ package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.listToString;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToList;
 
 import android.database.Cursor;
 
@@ -19,6 +19,7 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
 import edu.uga.cs.csci4830_project4.backend.mock.MockCursor;
 import edu.uga.cs.csci4830_project4.backend.mock.MockDatabase;
 import edu.uga.cs.csci4830_project4.backend.mock.MockDatabaseHelper;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QuizzesAccessTest {

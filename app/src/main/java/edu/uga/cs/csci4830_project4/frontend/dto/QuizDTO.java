@@ -18,10 +18,23 @@ public class QuizDTO implements Serializable {
     private List<String> answers;
     private List<String> stateNames;
 
+    /**
+     * Default constructor.
+     */
     public QuizDTO() {
         quizId = -1L;
     }
 
+    /**
+     * Constructor for this DTO.
+     *
+     * @param quizId     The ID of the quiz.
+     * @param questions  The questions.
+     * @param choices    The choices.
+     * @param responses  The responses.
+     * @param answers    The answers.
+     * @param stateNames The state names.
+     */
     public QuizDTO(long quizId, List<String> questions, List<List<String>> choices,
                    List<String> responses, List<String> answers, List<String> stateNames) {
         this.quizId = quizId;
@@ -113,16 +126,13 @@ public class QuizDTO implements Serializable {
     }
 
     /**
-     * Sets the response for the question at the given index. Returns true if the response is
-     * correct, false otherwise.
+     * Sets the response for the question at the given index.
      *
      * @param index    The index of the question to set the response for.
      * @param response The response to set.
-     * @return True if the response is correct, false otherwise.
      */
-    public boolean setResponse(int index, String response) {
+    public void setResponse(int index, String response) {
         responses.set(index, response);
-        return response.equals(answers.get(index));
     }
 }
 

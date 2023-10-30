@@ -1,10 +1,10 @@
-package edu.uga.cs.csci4830_project4.utils;
+package edu.uga.cs.csci4830_project4.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.listToString;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToList;
 
 import android.database.Cursor;
 

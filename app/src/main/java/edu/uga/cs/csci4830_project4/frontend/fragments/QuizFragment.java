@@ -1,5 +1,6 @@
 package edu.uga.cs.csci4830_project4.frontend.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,19 +58,24 @@ public class QuizFragment extends Fragment {
         stateImageView.setImageResource(imageSource);
 
         // collect radio choice buttons
-        List<RadioButton> choiceButtons = List.of(
-                view.findViewById(R.id.rbChoice1),
-                view.findViewById(R.id.rbChoice2),
-                view.findViewById(R.id.rbChoice3)
-        );
+        final List<RadioButton> choiceButtons = List.of(view.findViewById(R.id.rbChoice1),
+                view.findViewById(R.id.rbChoice2), view.findViewById(R.id.rbChoice3));
 
         // fill in choice buttons and add on click listener that sets the response for the quiz
         List<String> choices = quiz.getChoicesAt(questionIndex);
         for (int i = 0; i < choices.size(); i++) {
             String choice = choices.get(i);
-            RadioButton choiceButton = choiceButtons.get(i);
+            final RadioButton choiceButton = choiceButtons.get(i);
             choiceButton.setText(choice);
-            choiceButton.setOnClickListener(v -> quiz.setResponse(questionIndex, choice));
+            choiceButton.setOnClickListener(v -> {
+                // set all buttons to gray
+                choiceButtons.forEach(button -> button.setBackgroundColor(Color.parseColor(
+                        "#808080")));
+                // set selected button to green
+                choiceButton.setBackgroundColor(Color.parseColor("#008000"));
+                // set response for question
+                quiz.setResponse(questionIndex, choice);
+            });
         }
     }
 

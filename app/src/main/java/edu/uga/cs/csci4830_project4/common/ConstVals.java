@@ -1,4 +1,4 @@
-package edu.uga.cs.csci4830_project4.utils;
+package edu.uga.cs.csci4830_project4.common;
 
 /**
  * This class contains constant values used throughout the application.

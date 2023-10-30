@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E6E6FA"
+    android:padding="16dp"
+    tools:context=".frontend.activities.StartNewQuizActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_quiz_type_to_begin"
+        android:textSize="48sp" />
+
+    <Button
+        android:id="@+id/btnCapitalsQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#008000"
+        android:padding="5sp"
+        android:text="@string/capitals_quiz"
+        android:textSize="48sp" />
+
+    <!-- Add more buttons for other QuizTypes if needed -->
+
+</RelativeLayout>

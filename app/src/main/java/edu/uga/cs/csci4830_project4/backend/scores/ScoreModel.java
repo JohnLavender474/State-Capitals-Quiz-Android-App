@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.backend.scores;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
@@ -46,6 +48,7 @@ public class ScoreModel implements IModel {
         return Objects.hash(id, score);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ScoreModel{" + "id=" + id + ", score='" + score + '\'' + '}';

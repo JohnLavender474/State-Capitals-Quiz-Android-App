@@ -12,6 +12,7 @@ import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.TABLE
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
@@ -24,6 +25,7 @@ import edu.uga.cs.csci4830_project4.backend.database.SQLiteDatabaseWrapper;
  */
 final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseHelper {
 
+    private static final String TAG = "QuizzesDatabaseHelper";
     private static final String DB_NAME = "quizzes.db";
     private static final int DB_VERSION = 1;
     private static QuizzesDatabaseHelper instance;
@@ -40,6 +42,7 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseH
      */
     static synchronized QuizzesDatabaseHelper getInstance(Context context) {
         if (instance == null) {
+            Log.d(TAG, "getInstance()");
             instance = new QuizzesDatabaseHelper(context.getApplicationContext());
         }
         return instance;
@@ -47,15 +50,23 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseH
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
+        String sql = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
                         "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, COLUMN_ID,
                 COLUMN_QUIZ_TYPE, COLUMN_QUESTIONS, COLUMN_RESPONSES, COLUMN_CHOICES,
-                COLUMN_ANSWERS, COLUMN_STATE_NAMES));
+                COLUMN_ANSWERS, COLUMN_STATE_NAMES);
+
+        Log.d(TAG, "onCreate(): sql=" + sql);
+
+        db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        String sql = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+        Log.d(TAG, "onUpgrade(): sql=" + sql);
+
+        db.execSQL(sql);
         onCreate(db);
     }
 
