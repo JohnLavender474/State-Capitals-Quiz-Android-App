@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import java.util.List;
+import java.util.Locale;
 
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
@@ -48,6 +49,10 @@ public class QuizFragment extends Fragment {
         }
 
         super.onViewCreated(view, savedInstanceState);
+
+        TextView questionNumberView = view.findViewById(R.id.tvQuestionNumber);
+        questionNumberView.setText(String.format(Locale.getDefault(), "Question %d of %d",
+                questionIndex + 1, quiz.getQuizDTO().getQuestions().size()));
 
         // set text of question
         TextView questionTextView = view.findViewById(R.id.tvQuestion);

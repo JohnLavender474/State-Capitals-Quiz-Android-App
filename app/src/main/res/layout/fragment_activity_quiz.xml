@@ -14,7 +14,7 @@
         android:gravity="center"
         android:text="@string/question_0_0"
         android:background="#ffffff"
-        android:textSize="22sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tvQuestion"
@@ -27,15 +27,15 @@
         android:textColor="@color/black"
         android:layout_below="@+id/tvQuestionNumber"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="32sp" />
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/ivStateImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_below="@+id/tvQuestion"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:contentDescription="@string/state_image" />
 
     <RadioGroup
@@ -44,14 +44,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivStateImage"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="10dp">
 
         <RadioButton
             android:id="@+id/rbChoice1"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:textColor="@color/black"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:background="#808080"
             android:text="@string/choice_1"
             android:textSize="24sp" />
@@ -59,9 +59,9 @@
         <RadioButton
             android:id="@+id/rbChoice2"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:textColor="@color/black"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:background="#808080"
             android:text="@string/choice_2"
             android:textSize="24sp" />
@@ -69,9 +69,9 @@
         <RadioButton
             android:id="@+id/rbChoice3"
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:textColor="@color/black"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:background="#808080"
             android:text="@string/choice_3"
             android:textSize="24sp" />

@@ -92,6 +92,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String stateNames = listToString(model.getStateNames());
         values.put(QuizTableValues.COLUMN_STATE_NAMES, stateNames);
 
+        Log.d(TAG, "getValues(): values = " + values);
+
         return values;
     }
 

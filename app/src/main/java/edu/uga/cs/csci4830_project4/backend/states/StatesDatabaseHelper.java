@@ -16,6 +16,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.opencsv.CSVReader;
 
@@ -35,6 +36,7 @@ import edu.uga.cs.csci4830_project4.backend.database.SQLiteDatabaseWrapper;
  */
 final class StatesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseHelper {
 
+    private static final String TAG = "StatesDatabaseHelper";
     private static final String DB_NAME = "states.db";
     private static final int DB_VERSION = 1;
 
@@ -65,10 +67,13 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseHe
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableSQL = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY " +
-                        "AUTOINCREMENT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s " +
-                        "INTEGER)",
-                TABLE_NAME, COLUMN_ID, COLUMN_STATE_NAME, COLUMN_CAPITAL_CITY, COLUMN_SECOND_CITY,
-                COLUMN_THIRD_CITY, COLUMN_STATEHOOD, COLUMN_CAPITAL_SINCE, COLUMN_SIZE_RANK);
+                "AUTOINCREMENT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s " +
+                "INTEGER)", TABLE_NAME, COLUMN_ID, COLUMN_STATE_NAME, COLUMN_CAPITAL_CITY,
+                COLUMN_SECOND_CITY, COLUMN_THIRD_CITY, COLUMN_STATEHOOD, COLUMN_CAPITAL_SINCE,
+                COLUMN_SIZE_RANK);
+
+        Log.d(TAG, "onCreate(): sql = " + createTableSQL);
+
         db.execSQL(createTableSQL);
 
         try {
@@ -94,18 +99,23 @@ final class StatesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseHe
                     values.put(COLUMN_CAPITAL_SINCE, nextRow[5]);
                     values.put(COLUMN_SIZE_RANK, nextRow[6]);
 
+                    Log.d(TAG, "onCreate(): inserting values = " + values);
+
                     if (db.insert(TABLE_NAME, null, values) == -1) {
                         throw new RuntimeException("Error while inserting into table [" + TABLE_NAME + "]: " + values);
                     }
                 }
             }
         } catch (Exception e) {
+            Log.e(TAG, "onCreate(): Error while creating database", e);
             throw new RuntimeException("Error while creating database", e);
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(TAG, "onUpgrade(): oldVersion = " + oldVersion + ", newVersion = " + newVersion);
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }

@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +14,8 @@ import edu.uga.cs.csci4830_project4.common.QuizType;
  * Factory for creating new quiz models.
  */
 public class QuizModelFactory {
+
+    private static final String TAG = "QuizModelFactory";
 
     private final QuizzesAccess quizzesAccess;
     private final StatesAccess statesAccess;
@@ -86,7 +90,11 @@ public class QuizModelFactory {
         quiz.setChoices(choices);
         quiz.setResponses(responses);
 
+        Log.d(TAG, "createAndStore(): quiz before storing = " + quiz);
+
         // store and return the model
-        return quizzesAccess.store(quiz);
+        QuizModel quizModelAfterStore = quizzesAccess.store(quiz);
+        Log.d(TAG, "createAndStore(): quiz after storing = " + quizModelAfterStore);
+        return quizModelAfterStore;
     }
 }
