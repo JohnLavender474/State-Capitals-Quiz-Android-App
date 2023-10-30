@@ -55,9 +55,11 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         }
     }
 
-    @Override
-    public QuizModel store(QuizModel model) {
+    private Map<String, Object> getValues(QuizModel model) {
         Map<String, Object> values = new HashMap<>();
+
+        String quizType = model.getQuizType().name();
+        values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
 
         String questions = listToString(model.getQuestions());
         values.put(QuizTableValues.COLUMN_QUESTIONS, questions);
@@ -65,15 +67,32 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
 
-        String choices = listToString(model.getChoices());
+        String choices = listToString(model.getChoices(), list -> {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < list.size(); i++) {
+                builder.append(list.get(i));
+                if (i < list.size() - 1) {
+                    builder.append(",");
+                }
+            }
+            return builder.toString();
+        });
         values.put(QuizTableValues.COLUMN_CHOICES, choices);
 
         String answers = listToString(model.getAnswers());
         values.put(QuizTableValues.COLUMN_ANSWERS, answers);
 
+        String stateNames = listToString(model.getStateNames());
+        values.put(QuizTableValues.COLUMN_STATE_NAMES, stateNames);
+
+        return values;
+    }
+
+    @Override
+    public QuizModel store(QuizModel model) {
+        Map<String, Object> values = getValues(model);
         long id = db.insert(QuizTableValues.TABLE_NAME, null, values);
         model.setId(id);
-
         return model;
     }
 
@@ -94,6 +113,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
             if (cursor != null && cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
                     long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
+                    String quizType = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_QUIZ_TYPE));
                     String questions = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_QUESTIONS));
                     String responses = cursor.getString(getColumnIndex(cursor,
@@ -102,13 +123,20 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                             QuizTableValues.COLUMN_CHOICES));
                     String answers = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_ANSWERS));
+                    String stateNames = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_STATE_NAMES));
 
                     QuizModel model = new QuizModel();
                     model.setId(id);
+                    model.setQuizType(QuizType.valueOf(quizType));
                     model.setQuestions(stringToList(questions, string -> string));
                     model.setResponses(stringToList(responses, string -> string));
-                    model.setChoices(stringToList(choices, string -> string));
+                    model.setChoices(stringToList(choices, string -> {
+                        String[] stateChoices = string.split(",");
+                        return List.of(stateChoices);
+                    }));
                     model.setAnswers(stringToList(answers, string -> string));
+                    model.setStateNames(stringToList(stateNames, string -> string));
 
                     models.add(model);
                 }
@@ -125,20 +153,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
     @Override
     public int update(QuizModel model) {
-        Map<String, Object> values = new HashMap<>();
-
-        String questions = listToString(model.getQuestions());
-        values.put(QuizTableValues.COLUMN_QUESTIONS, questions);
-
-        String responses = listToString(model.getResponses());
-        values.put(QuizTableValues.COLUMN_RESPONSES, responses);
-
-        String choices = listToString(model.getChoices());
-        values.put(QuizTableValues.COLUMN_CHOICES, choices);
-
-        String answers = listToString(model.getAnswers());
-        values.put(QuizTableValues.COLUMN_ANSWERS, answers);
-
+        Map<String, Object> values = getValues(model);
         return db.update(QuizTableValues.TABLE_NAME, values, "id = ?",
                 new String[]{String.valueOf(model.getId())});
     }

@@ -2,6 +2,7 @@ package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
 import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
 
 import android.database.Cursor;
@@ -11,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.List;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
 import edu.uga.cs.csci4830_project4.backend.mock.MockCursor;
@@ -49,11 +52,16 @@ public class QuizzesAccessTest {
     @Test
     public void testStore() {
         QuizModel model = new QuizModel();
+        model.setQuizType(QuizType.CAPITALS_QUIZ);
         model.setQuestions(stringToList("Question 1;Question 2", s -> s));
         model.setResponses(stringToList("Response 1;Response 2", s -> s));
         model.setChoices(stringToList("Choice a1,Choice a2,Choice a3;Choice b1,Choice b2," +
-                "Choice b3", s -> s));
-        model.setAnswers(stringToList("Answer1,Answer2", s -> s));
+                "Choice b3", s -> {
+            String[] split = s.split(",");
+            return List.of(split);
+        }));
+        model.setAnswers(stringToList("Answer1;Answer2", s -> s));
+        model.setStateNames(stringToList("Georgia;New York", s -> s));
 
         long expectedId = 1L;
         mockDb.setMockIdToReturnOnInsert(1L);
@@ -61,12 +69,19 @@ public class QuizzesAccessTest {
         QuizModel storedModel = quizzesAccess.store(model);
 
         assertNotNull(storedModel);
+        assertEquals(QuizType.CAPITALS_QUIZ, storedModel.getQuizType());
         assertEquals(expectedId, storedModel.getId());
         assertEquals(stringToList("Question 1;Question 2", s -> s), storedModel.getQuestions());
         assertEquals(stringToList("Response 1;Response 2", s -> s), storedModel.getResponses());
         assertEquals(stringToList("Choice a1,Choice a2,Choice a3;Choice b1,Choice b2,Choice b3",
-                s -> s), storedModel.getChoices());
-        assertEquals(stringToList("Answer1,Answer2", s -> s), storedModel.getAnswers());
+                s -> {
+            String[] split = s.split(",");
+            return List.of(split);
+        }), storedModel.getChoices());
+        assertEquals(stringToList("Answer1;Answer2", s -> s), storedModel.getAnswers());
+        assertEquals(stringToList("Georgia;New York", s -> s), storedModel.getStateNames());
+
+        System.out.println("Test store: model = " + model);
     }
 
     @Test
@@ -74,11 +89,16 @@ public class QuizzesAccessTest {
         long quizId = 1L;
         QuizModel expectedModel = new QuizModel();
         expectedModel.setId(quizId);
+        expectedModel.setQuizType(QuizType.CAPITALS_QUIZ);
         expectedModel.setQuestions(stringToList("Question 1;Question 2", s -> s));
         expectedModel.setResponses(stringToList("Response 1;Response 2", s -> s));
         expectedModel.setChoices(stringToList("Choice a1,Choice a2,Choice a3;Choice b1,Choice b2,"
-                + "Choice b3", s -> s));
-        expectedModel.setAnswers(stringToList("Answer1,Answer2", s -> s));
+                + "Choice b3", s -> {
+            String[] split = s.split(",");
+            return List.of(split);
+        }));
+        expectedModel.setAnswers(stringToList("Answer1;Answer2", s -> s));
+        expectedModel.setStateNames(stringToList("1;2", s -> s));
 
         Cursor mockCursor = new MockCursor() {
 
@@ -104,6 +124,8 @@ public class QuizzesAccessTest {
                     case QuizTableValues.COLUMN_RESPONSES -> 2;
                     case QuizTableValues.COLUMN_CHOICES -> 3;
                     case QuizTableValues.COLUMN_ANSWERS -> 4;
+                    case QuizTableValues.COLUMN_STATE_NAMES -> 5;
+                    case QuizTableValues.COLUMN_QUIZ_TYPE -> 6;
                     default -> -1;
                 };
             }
@@ -111,10 +133,14 @@ public class QuizzesAccessTest {
             @Override
             public String getString(int columnIndex) {
                 return switch (columnIndex) {
-                    case 1 -> "Question 1;Question 2";
-                    case 2 -> "Response 1;Response 2";
-                    case 3 -> "Choice a1,Choice a2,Choice a3;Choice b1,Choice b2,Choice b3";
-                    case 4 -> "Answer1,Answer2";
+                    case 1 -> listToString(List.of("Question 1", "Question 2"));
+                    case 2 -> listToString(List.of("Response 1", "Response 2"));
+                    case 3 ->
+                            listToString(List.of("Choice a1,Choice a2,Choice a3", "Choice " +
+                                    "b1,Choice b2,Choice b3"));
+                    case 4 -> listToString(List.of("Answer1", "Answer2"));
+                    case 5 -> listToString(List.of("Georgia", "New York"));
+                    case 6 -> "CAPITALS_QUIZ";
                     default -> null;
                 };
             }
@@ -132,6 +158,9 @@ public class QuizzesAccessTest {
         QuizModel retrievedModel = quizzesAccess.getById(quizId);
         assertNotNull(retrievedModel);
         assertEquals(expectedModel, retrievedModel);
+
+        System.out.println("Test get by id: expected model = " + expectedModel);
+        System.out.println("Test get by id: retrieved model = " + retrievedModel);
     }
 }
 

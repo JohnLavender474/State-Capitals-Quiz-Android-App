@@ -73,6 +73,79 @@ public class StatesAccessTest {
     }
 
     @Test
+    public void testGetByStateName() {
+        long stateId = 1L;
+        StateModel expectedModel = new StateModel();
+        expectedModel.setId(stateId);
+        expectedModel.setStateName("Georgia");
+        expectedModel.setCapitalCity("Atlanta");
+        expectedModel.setSecondCity("Savannah");
+        expectedModel.setThirdCity("Macon");
+        expectedModel.setStatehood("January 2, 1788");
+        expectedModel.setCapitalSince("1868");
+        expectedModel.setSizeRank("24");
+
+        Cursor mockCursor = new MockCursor() {
+
+            int position = 0;
+
+            @Override
+            public boolean moveToFirst() {
+                position = 0;
+                return true;
+            }
+
+            @Override
+            public boolean moveToNext() {
+                position++;
+                return position < 2;
+            }
+
+            @Override
+            public int getColumnIndex(String column) {
+                return switch (column) {
+                    case StateTableValues.COLUMN_ID -> 0;
+                    case StateTableValues.COLUMN_STATE_NAME -> 1;
+                    case StateTableValues.COLUMN_CAPITAL_CITY -> 2;
+                    case StateTableValues.COLUMN_SECOND_CITY -> 3;
+                    case StateTableValues.COLUMN_THIRD_CITY -> 4;
+                    case StateTableValues.COLUMN_STATEHOOD -> 5;
+                    case StateTableValues.COLUMN_CAPITAL_SINCE -> 6;
+                    case StateTableValues.COLUMN_SIZE_RANK -> 7;
+                    default -> -1;
+                };
+            }
+
+            @Override
+            public String getString(int columnIndex) {
+                return switch (columnIndex) {
+                    case 1 -> "Georgia";
+                    case 2 -> "Atlanta";
+                    case 3 -> "Savannah";
+                    case 4 -> "Macon";
+                    case 5 -> "January 2, 1788";
+                    case 6 -> "1868";
+                    case 7 -> "24";
+                    default -> null;
+                };
+            }
+
+            @Override
+            public long getLong(int columnIndex) {
+                if (columnIndex == 0) {
+                    return stateId;
+                }
+                return -1;
+            }
+        };
+        mockDb.setMockCursor(mockCursor);
+
+        StateModel retrievedModel = statesAccess.getByStateName("Georgia");
+        assertNotNull(retrievedModel);
+        assertEquals(expectedModel, retrievedModel);
+    }
+
+    @Test
     public void testGetById() {
         long stateId = 1L;
         StateModel expectedModel = new StateModel();

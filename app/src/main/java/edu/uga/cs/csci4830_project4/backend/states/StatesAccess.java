@@ -113,6 +113,18 @@ public class StatesAccess implements IAccess<StateModel> {
         return models == null || models.isEmpty() ? null : models.get(0);
     }
 
+    /**
+     * Returns the first found state model with the specified state name.
+     *
+     * @param stateName the state name.
+     * @return the first found state model with the specified state name.
+     */
+    public StateModel getByStateName(String stateName) {
+        List<StateModel> models = retrieve(null, "state_name = ?",
+                new String[]{stateName}, null, null, null, null);
+        return models == null || models.isEmpty() ? null : models.get(0);
+    }
+
     @Override
     public @Nullable List<StateModel> retrieve(String[] columns, String selection,
                                                String[] selectionArgs, String groupBy,

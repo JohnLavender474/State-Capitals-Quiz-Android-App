@@ -1,22 +1,14 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import androidx.viewpager2.widget.ViewPager2;
 
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
-import edu.uga.cs.csci4830_project4.backend.states.StateModel;
 import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
@@ -35,23 +27,9 @@ import edu.uga.cs.csci4830_project4.utils.ConstVals;
  */
 public final class QuizActivity extends AppCompatActivity {
 
-    private static final String TAG = "QuizActivity";
-    private static final int swipeThreshold = 100;
-    private static final int swipeVelocityThreshold = 100;
-
-    private Map<String, String> stateNameToImageSource;
-
     private QuizzesAccess quizzesAccess;
     private StatesAccess statesAccess;
-
     private IQuiz quiz;
-
-    private TextView questionTextView;
-    private ImageView stateImageView;
-    private RadioButton choice1RadioButton;
-    private RadioButton choice2RadioButton;
-    private RadioButton choice3RadioButton;
-    private RadioButton choice4RadioButton;
 
     /**
      * {@inheritDoc}
@@ -66,17 +44,7 @@ public final class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_activity_quiz);
-
-        stateNameToImageSource = new HashMap<>();
-        // TODO: fill name-image map here
-
-        questionTextView = findViewById(R.id.tvQuestion);
-        stateImageView = findViewById(R.id.ivStateImage);
-        choice1RadioButton = findViewById(R.id.rbChoice1);
-        choice2RadioButton = findViewById(R.id.rbChoice2);
-        choice3RadioButton = findViewById(R.id.rbChoice3);
-
+        setContentView(R.layout.activity_quiz);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -90,18 +58,13 @@ public final class QuizActivity extends AppCompatActivity {
         if (quizModel == null) {
             throw new IllegalStateException("Quiz model not found in intent");
         }
-
         QuizDTO quizDTO = QuizDTO.fromModel(quizModel);
         quiz = new Quiz(quizDTO);
 
-        // Initialize the quizModel logic based on the type
-        /*
-        quizLogic = createQuizLogic(quizModel, states);
-        if (quizLogic == null) {
-            throw new IllegalStateException("Logic not found for quizModel type: " + quizModel
-            .getQuizType());
-        }
-        */
+        //
+
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        // TODO: QuizPagerAdapter adapter = new QuizPagerAdapter(quiz, );
 
         // TODO:
         // - Display the quizModel information to the user
@@ -113,31 +76,6 @@ public final class QuizActivity extends AppCompatActivity {
         //   transitions
         //   to the view score activity which shows the user's score and presents a button for
         //   the user to return to the main menu
-    }
-
-    private void displayQuizInfo() {
-        /*
-        // questionTextView.setText(quizLogic.getCurrentQuestion());
-        // String stateName = quizLogic.getCurrentStateName();
-        String stateImageSource = stateNameToImageSource.get(stateName);
-        // TODO: set image here
-        // stateImageView.setImageResource(stateImageSource);
-
-        // List<String> choices = quizLogic.getCurrentChoices();
-        // String currentResponse = quizLogic.getCurrentResponse();
-
-        String choice1 = choices.get(0);
-        choice1RadioButton.setChecked(choice1.equals(currentResponse));
-        choice1RadioButton.setText(choice1);
-
-        String choice2 = choices.get(1);
-        choice2RadioButton.setChecked(choice2.equals(currentResponse));
-        choice2RadioButton.setText(choice2);
-
-        String choice3 = choices.get(2);
-        choice3RadioButton.setChecked(choice3.equals(currentResponse));
-        choice3RadioButton.setText(choice3);
-         */
     }
 
     @Override
@@ -161,39 +99,5 @@ public final class QuizActivity extends AppCompatActivity {
             statesAccess.close();
         }
     }
-
-    // TODO: use async task for this
-    private List<StateModel> fetchStatesForQuiz(QuizModel quiz) {
-        List<StateModel> states = new ArrayList<>();
-
-        // TODO: fix
-        /*
-        // Fetch the states for the quiz
-        List<Long> stateIds = quiz.getStateIds();
-        if (stateIds == null) {
-            throw new IllegalStateException("Quiz state ids are null");
-        }
-        stateIds.forEach(id -> {
-            StateModel state = statesAccess.getById(id);
-            if (state != null) {
-                states.add(state);
-            }
-        });
-         */
-
-        return states;
-    }
-
-    /*
-    private IQuizLogic createQuizLogic(QuizModel quizModel, List<StateModel> states) {
-        QuizType quizType = quizModel.getQuizType();
-        // Initialize the quiz logic based on the quiz type
-        if (quizType == QuizType.CAPITAL_QUIZ) {
-            // TODO: return new CapitalsQuizLogic(quizModel, states, quizzesAccess);
-        }
-        // Implement similar logic for other quiz types
-        return null;
-    }
-     */
 }
 

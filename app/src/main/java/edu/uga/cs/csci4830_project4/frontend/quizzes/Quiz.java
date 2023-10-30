@@ -14,12 +14,12 @@ public class Quiz implements IQuiz {
 
     @Override
     public String getQuestionAt(int index) {
-        return quizDTO.questions().get(index);
+        return quizDTO.getQuestions().get(index);
     }
 
     @Override
     public List<String> getChoicesAt(int index) {
-        return quizDTO.choices().get(index);
+        return quizDTO.getChoices().get(index);
     }
 
     @Override
@@ -29,6 +29,6 @@ public class Quiz implements IQuiz {
 
     @Override
     public int getSizeOfQuiz() {
-        return quizDTO.questions().size();
+        return quizDTO.getQuestions().size();
     }
 }

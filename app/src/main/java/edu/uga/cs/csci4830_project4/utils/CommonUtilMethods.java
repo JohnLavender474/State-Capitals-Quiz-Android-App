@@ -7,12 +7,23 @@ import java.util.function.Function;
 public class CommonUtilMethods {
 
     /**
-     * Converts a string array to a comma-separated string.
+     * Converts a list to a semi-colon-separated string.
      *
-     * @param a The string array to convert.
-     * @return The comma-separated string.
+     * @param a   The list to convert.
+     * @param <T> The type of the list.
+     * @return The semi-colon-separated string.
      */
     public static <T> String listToString(List<T> a) {
+        return listToString(a, Object::toString);
+    }
+
+    /**
+     * Converts a list to a semi-colon-separated string.
+     *
+     * @param a The list to convert.
+     * @return The semi-colon-separated string.
+     */
+    public static <T> String listToString(List<T> a, Function<T, String> function) {
         if (a == null) {
             return null;
         }
@@ -20,7 +31,8 @@ public class CommonUtilMethods {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < a.size(); i++) {
-            sb.append(a.get(i));
+            String s = function.apply(a.get(i));
+            sb.append(s);
             if (i < a.size() - 1) {
                 sb.append(";");
             }

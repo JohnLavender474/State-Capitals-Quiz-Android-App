@@ -4,8 +4,10 @@ public class QuizTableValues {
 
     public static final String TABLE_NAME = "quizzes";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_QUIZ_TYPE = "quiz_type";
     public static final String COLUMN_QUESTIONS = "questions";
     public static final String COLUMN_RESPONSES = "responses";
     public static final String COLUMN_CHOICES = "choices";
     public static final String COLUMN_ANSWERS = "answers";
+    public static final String COLUMN_STATE_NAMES = "state_names";
 }

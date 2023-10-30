@@ -1,7 +1,5 @@
 package edu.uga.cs.csci4830_project4.frontend.dto;
 
-import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +16,20 @@ public class QuizDTO implements Serializable {
     private List<List<String>> choices;
     private List<String> responses;
     private List<String> answers;
+    private List<String> stateNames;
 
     public QuizDTO() {
         quizId = -1L;
     }
 
     public QuizDTO(long quizId, List<String> questions, List<List<String>> choices,
-                   List<String> responses, List<String> answers) {
+                   List<String> responses, List<String> answers, List<String> stateNames) {
         this.quizId = quizId;
         this.questions = questions;
         this.choices = choices;
         this.responses = responses;
         this.answers = answers;
+        this.stateNames = stateNames;
     }
 
     public long getQuizId() {
@@ -72,6 +72,14 @@ public class QuizDTO implements Serializable {
         this.answers = answers;
     }
 
+    public List<String> getStateNames() {
+        return stateNames;
+    }
+
+    public void setStateNames(List<String> stateNames) {
+        this.stateNames = stateNames;
+    }
+
     /**
      * Converts the given {@link QuizModel} to a {@link QuizDTO}.
      *
@@ -80,20 +88,12 @@ public class QuizDTO implements Serializable {
      */
     public static QuizDTO fromModel(QuizModel model) {
         long id = model.getId();
-
         List<String> questions = new ArrayList<>(model.getQuestions());
-
-        List<List<String>> choices = new ArrayList<>();
-        model.getChoices().forEach(choice -> {
-            String[] questionChoices = choice.split(",");
-            choices.add(java.util.List.of(questionChoices));
-        });
-
+        List<List<String>> choices = new ArrayList<>(model.getChoices());
         List<String> responses = new ArrayList<>(model.getResponses());
-
         List<String> answers = new ArrayList<>(model.getAnswers());
-
-        return new QuizDTO(id, questions, choices, responses, answers);
+        List<String> stateNames = new ArrayList<>(model.getStateNames());
+        return new QuizDTO(id, questions, choices, responses, answers, stateNames);
     }
 
     /**
@@ -103,22 +103,12 @@ public class QuizDTO implements Serializable {
      */
     public QuizModel toModel() {
         QuizModel model = new QuizModel();
-
         model.setId(quizId);
-
         model.setQuestions(new ArrayList<>(questions));
-
-        List<String> modelChoices = new ArrayList<>();
-        for (List<String> questionChoices : choices) {
-            String questionChoicesString = listToString(questionChoices);
-            modelChoices.add(questionChoicesString);
-        }
-        model.setChoices(modelChoices);
-
+        model.setChoices(new ArrayList<>(choices));
         model.setResponses(new ArrayList<>(responses));
-
         model.setAnswers(new ArrayList<>(answers));
-
+        model.setStateNames(new ArrayList<>(stateNames));
         return model;
     }
 
@@ -134,6 +124,5 @@ public class QuizDTO implements Serializable {
         responses.set(index, response);
         return response.equals(answers.get(index));
     }
-
 }
 
