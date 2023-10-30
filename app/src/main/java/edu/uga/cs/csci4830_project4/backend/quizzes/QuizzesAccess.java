@@ -132,7 +132,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         try (Cursor cursor = db.query(QuizTableValues.TABLE_NAME, columns, selection,
                 selectionArgs, groupBy, having, orderBy, limit)) {
             if (cursor != null && cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
+                do {
                     long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
                     String quizType = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_QUIZ_TYPE));
@@ -160,7 +160,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                     model.setStateNames(stringToList(stateNames, string -> string));
 
                     models.add(model);
-                }
+                } while (cursor.moveToNext());
             }
         }
 

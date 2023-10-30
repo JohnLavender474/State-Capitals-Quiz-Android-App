@@ -138,7 +138,7 @@ public class StatesAccess implements IAccess<StateModel> {
         try (Cursor cursor = db.query(TABLE_NAME, columns, selection, selectionArgs, groupBy,
                 having, orderBy, limit)) {
             if (cursor != null && cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
+                do {
                     long id = cursor.getLong(getColumnIndex(cursor, COLUMN_ID));
                     String state = cursor.getString(getColumnIndex(cursor, COLUMN_STATE_NAME));
                     String capitalCity = cursor.getString(getColumnIndex(cursor,
@@ -162,7 +162,7 @@ public class StatesAccess implements IAccess<StateModel> {
                     model.setSizeRank(sizeRank);
 
                     models.add(model);
-                }
+                } while (cursor.moveToNext());
             }
         }
 

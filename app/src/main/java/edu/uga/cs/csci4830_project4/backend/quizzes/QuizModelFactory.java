@@ -60,8 +60,8 @@ public class QuizModelFactory {
             String stateName = state.getStateName();
             stateNames.add(stateName);
 
-            // add empty response
-            responses.add("");
+            // add null response
+            responses.add("NULL");
 
             switch (quizType) {
                 case CAPITALS_QUIZ -> {

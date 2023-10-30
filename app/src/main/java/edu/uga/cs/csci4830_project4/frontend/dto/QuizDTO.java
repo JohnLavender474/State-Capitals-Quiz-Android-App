@@ -1,8 +1,11 @@
 package edu.uga.cs.csci4830_project4.frontend.dto;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.common.QuizType;
@@ -147,6 +150,24 @@ public class QuizDTO implements Serializable {
      */
     public void setResponse(int index, String response) {
         responses.set(index, response);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof QuizDTO q && quizId == q.quizId && quizType == q.quizType && Objects.equals(questions, q.questions) && Objects.equals(choices, q.choices) && Objects.equals(responses, q.responses) && Objects.equals(answers, q.answers) && Objects.equals(stateNames, q.stateNames);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(quizId, quizType, questions, choices, responses, answers, stateNames);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "QuizDTO{" + "quizId=" + quizId + ", quizType=" + quizType + ", questions=" +
+                questions + ", choices=" + choices + ", responses=" + responses + ", answers=" +
+                answers + ", stateNames=" + stateNames + '}';
     }
 }
 

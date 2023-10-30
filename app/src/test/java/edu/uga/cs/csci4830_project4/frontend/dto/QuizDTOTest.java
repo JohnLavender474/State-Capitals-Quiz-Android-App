@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uga.cs.csci4830_project4.common.QuizType;
+
 public class QuizDTOTest {
 
     private QuizDTO quizDTO;
@@ -37,7 +39,8 @@ public class QuizDTOTest {
         stateNames.add("State1");
         stateNames.add("State2");
 
-        quizDTO = new QuizDTO(quizId, questions, choices, responses, answers, stateNames);
+        quizDTO = new QuizDTO(quizId, QuizType.CAPITALS_QUIZ, questions, choices, responses,
+                answers, stateNames);
     }
 
     @Test

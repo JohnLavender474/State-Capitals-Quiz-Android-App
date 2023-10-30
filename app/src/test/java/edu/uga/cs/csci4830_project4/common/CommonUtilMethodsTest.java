@@ -19,12 +19,23 @@ import edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods;
 public class CommonUtilMethodsTest {
 
     @Test
-    public void testListToString() {
+    public void testListToString1() {
         List<String> inputList = new ArrayList<>();
         inputList.add("apple");
         inputList.add("banana");
         inputList.add("cherry");
         String expected = "[apple;banana;cherry]";
+        String result = listToString(inputList);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testListToString2() {
+        List<String> inputList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            inputList.add("");
+        }
+        String expected = "[;;]";
         String result = listToString(inputList);
         assertEquals(expected, result);
     }
@@ -57,13 +68,24 @@ public class CommonUtilMethodsTest {
     }
 
     @Test
-    public void testStringToList() {
+    public void testStringToList1() {
         String inputString = "[10;20;30]";
         List<Integer> expected = new ArrayList<>();
         expected.add(10);
         expected.add(20);
         expected.add(30);
         List<Integer> result = stringToList(inputString, Integer::parseInt);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testStringToList2() {
+        String inputString = "[ ; ; ]";
+        List<String> expected = new ArrayList<>();
+        expected.add(" ");
+        expected.add(" ");
+        expected.add(" ");
+        List<String> result = stringToList(inputString, string -> string);
         assertEquals(expected, result);
     }
 

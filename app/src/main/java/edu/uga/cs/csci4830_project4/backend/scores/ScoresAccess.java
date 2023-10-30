@@ -86,7 +86,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
         try (Cursor cursor = db.query(ScoreTableValues.TABLE_NAME, columns, selection,
                 selectionArgs, groupBy, having, orderBy, limit)) {
             if (cursor != null && cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
+                do {
                     long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
                     String score = cursor.getString(getColumnIndex(cursor,
                             ScoreTableValues.COLUMN_SCORE));
@@ -96,7 +96,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
                     model.setScore(score);
 
                     models.add(model);
-                }
+                } while (cursor.moveToNext());
             }
         }
 

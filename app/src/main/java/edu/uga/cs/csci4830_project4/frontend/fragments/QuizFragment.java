@@ -70,14 +70,26 @@ public class QuizFragment extends Fragment {
         List<String> choices = quiz.getChoicesAt(questionIndex);
         for (int i = 0; i < choices.size(); i++) {
             String choice = choices.get(i);
+
             final RadioButton choiceButton = choiceButtons.get(i);
             choiceButton.setText(choice);
+
+            String color;
+            if (choice.equals(quiz.getResponseAt(questionIndex))) {
+                color = "#008000";
+            } else {
+                color = "#808080";
+            }
+            choiceButton.setBackgroundColor(Color.parseColor(color));
+
             choiceButton.setOnClickListener(v -> {
                 // set all buttons to gray
                 choiceButtons.forEach(button -> button.setBackgroundColor(Color.parseColor(
                         "#808080")));
+
                 // set selected button to green
                 choiceButton.setBackgroundColor(Color.parseColor("#008000"));
+
                 // set response for question
                 quiz.setResponse(questionIndex, choice);
             });

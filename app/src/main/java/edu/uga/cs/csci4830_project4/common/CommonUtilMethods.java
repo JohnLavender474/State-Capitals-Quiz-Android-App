@@ -42,7 +42,7 @@ public class CommonUtilMethods {
     }
 
     /**
-     * Converts a string array to a comma-separated string.
+     * Converts a list to a comma-separated string.
      *
      * @param s The string array to convert.
      * @return The comma-separated string.

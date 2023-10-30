@@ -37,6 +37,14 @@ public interface IQuiz extends Serializable {
     List<String> getChoicesAt(int index);
 
     /**
+     * Get the response for the question at the index.
+     *
+     * @param index The index of the question to get the response for.
+     * @return The response for the question at the index.
+     */
+    String getResponseAt(int index);
+
+    /**
      * Submit the answer for the question at the index.
      *
      * @param index    The index of the question to submit the answer for.

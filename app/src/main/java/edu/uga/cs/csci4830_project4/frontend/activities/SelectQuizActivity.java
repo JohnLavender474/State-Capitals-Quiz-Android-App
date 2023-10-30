@@ -2,6 +2,7 @@ package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -16,6 +17,8 @@ import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
 public class SelectQuizActivity extends AppCompatActivity {
+
+    private static final String TAG = "SelectQuizActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class SelectQuizActivity extends AppCompatActivity {
             QuizModel selectedQuizModel = quizModels.get(position);
             // Convert the selected QuizModel to QuizDTO
             QuizDTO quizDTO = QuizDTO.fromModel(selectedQuizModel);
+
+            Log.d(TAG, "onCreate(): Selected quiz = " + quizDTO);
 
             // Start the QuizActivity with the selected quiz
             Intent intent = new Intent(SelectQuizActivity.this, QuizActivity.class);
