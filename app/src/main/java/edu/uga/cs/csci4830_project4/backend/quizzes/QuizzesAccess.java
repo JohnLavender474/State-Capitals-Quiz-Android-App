@@ -115,7 +115,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         Log.d(TAG, "getById(): id = " + id + ", selection criteria = " +
                 Arrays.toString(selectionCriteria));
 
-        List<QuizModel> models = retrieve(null, "id = ?", selectionCriteria,
+        List<QuizModel> models = retrieve(null, "_id = ?", selectionCriteria,
                 null, null, null, null);
         QuizModel model = models.isEmpty() ? null : models.get(0);
 
@@ -187,11 +187,15 @@ public class QuizzesAccess implements IAccess<QuizModel> {
 
     @Override
     public int delete(long id) {
+        Log.d(TAG, "delete(): _id = " + id);
+
+        int numDeleted;
         if (db == null) {
-            return -1;
+            numDeleted = -1;
+        } else {
+            numDeleted = db.delete(QuizTableValues.TABLE_NAME, "_id = ?",
+                    new String[]{String.valueOf(id)});
         }
-        int numDeleted = db.delete(QuizTableValues.TABLE_NAME, "_id = ?",
-                new String[]{String.valueOf(id)});
 
         Log.d(TAG, "delete(): numDeleted = " + numDeleted);
 

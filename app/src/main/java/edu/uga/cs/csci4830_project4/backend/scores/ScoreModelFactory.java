@@ -24,7 +24,7 @@ public class ScoreModelFactory {
      * @param score the score to store in the model.
      * @return the score model.
      */
-    public ScoreModel createScoreModel(String score) {
+    public ScoreModel createAndStore(String score) {
         ScoreModel model = new ScoreModel();
         model.setScore(score);
         return scoresAccess.store(model);

@@ -34,7 +34,7 @@ public class ScoreModelFactoryTest {
         });
 
         // Call the method to test
-        ScoreModel scoreModel = scoreModelFactory.createScoreModel(scoreValue);
+        ScoreModel scoreModel = scoreModelFactory.createAndStore(scoreValue);
 
         // Verify the behavior
         assertNotNull(scoreModel);

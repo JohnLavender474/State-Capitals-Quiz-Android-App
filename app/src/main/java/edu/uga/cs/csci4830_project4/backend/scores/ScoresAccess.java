@@ -73,7 +73,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
 
     @Override
     public ScoreModel getById(long id) {
-        List<ScoreModel> models = retrieve(null, "id = ?", new String[]{String.valueOf(id)}, null
+        List<ScoreModel> models = retrieve(null, "_id = ?", new String[]{String.valueOf(id)}, null
                 , null, null, null);
         return models.isEmpty() ? null : models.get(0);
     }
@@ -83,7 +83,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
                                      String groupBy, String having, String orderBy, String limit) {
         List<ScoreModel> models = new ArrayList<>();
 
-        try (Cursor cursor = db.query(QuizTableValues.TABLE_NAME, columns, selection,
+        try (Cursor cursor = db.query(ScoreTableValues.TABLE_NAME, columns, selection,
                 selectionArgs, groupBy, having, orderBy, limit)) {
             if (cursor != null && cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
@@ -111,7 +111,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
     @Override
     public int update(ScoreModel model) {
         Map<String, Object> values = getValues(model);
-        return db.update(QuizTableValues.TABLE_NAME, values, "id = ?",
+        return db.update(ScoreTableValues.TABLE_NAME, values, "_id = ?",
                 new String[]{String.valueOf(model.getId())});
     }
 
@@ -120,7 +120,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
         if (db == null) {
             return -1;
         }
-        return db.delete(QuizTableValues.TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+        return db.delete(ScoreTableValues.TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
     }
 
     @Override
@@ -128,6 +128,6 @@ public class ScoresAccess implements IAccess<ScoreModel> {
         if (db == null) {
             return;
         }
-        db.delete(QuizTableValues.TABLE_NAME, null, null);
+        db.delete(ScoreTableValues.TABLE_NAME, null, null);
     }
 }

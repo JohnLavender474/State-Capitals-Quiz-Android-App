@@ -15,10 +15,10 @@ import androidx.fragment.app.Fragment;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.R;
-import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
-import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
+import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModel;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModelFactory;
+import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
 import edu.uga.cs.csci4830_project4.frontend.activities.ScoreActivity;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.dto.ScoreDTO;
@@ -27,21 +27,15 @@ public class SubmitQuizFragment extends Fragment {
 
     private static final String TAG = "SubmitQuizFragment";
 
-    private ScoreModelFactory scoreModelFactory;
-    private IAccess<QuizModel> quizzesAccess;
-    private QuizDTO quizDTO;
-
     public SubmitQuizFragment() {
         // Required empty public constructor
     }
 
-    public static SubmitQuizFragment newInstance(QuizDTO quizDTO,
-                                                 IAccess<QuizModel> quizzesAccess,
-                                                 IAccess<ScoreModel> scoresAccess) {
+    public static SubmitQuizFragment newInstance(QuizDTO quizDTO) {
         SubmitQuizFragment fragment = new SubmitQuizFragment();
-        fragment.quizzesAccess = quizzesAccess;
-        fragment.scoreModelFactory = new ScoreModelFactory(scoresAccess);
-        fragment.quizDTO = quizDTO;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("quizDTO", quizDTO);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -53,6 +47,10 @@ public class SubmitQuizFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        if (getArguments() == null) {
+            throw new IllegalStateException("Arguments are null");
+        }
+        QuizDTO quizDTO = (QuizDTO) getArguments().getSerializable("quizDTO");
         if (quizDTO == null) {
             throw new IllegalStateException("Quiz dto is null");
         }
@@ -61,17 +59,20 @@ public class SubmitQuizFragment extends Fragment {
 
         // set listener for the submit quiz button
         Button submitQuizButton = view.findViewById(R.id.btnSubmitQuiz);
-        submitQuizButton.setOnClickListener(v -> submitQuiz());
+        submitQuizButton.setOnClickListener(v -> submitQuiz(quizDTO));
     }
 
-    private void submitQuiz() {
+    private void submitQuiz(QuizDTO quizDTO) {
         // TODO: do asynchronously
         Log.d(TAG, "Submitting quiz");
 
         // delete quiz model
         long quizId = quizDTO.getQuizId();
         Log.d(TAG, "Deleting quiz with id = " + quizId);
+        QuizzesAccess quizzesAccess = new QuizzesAccess(getContext());
+        quizzesAccess.open();
         quizzesAccess.delete(quizId);
+        quizzesAccess.close();
 
         // create score model
         List<String> questions = quizDTO.getQuestions();
@@ -82,8 +83,8 @@ public class SubmitQuizFragment extends Fragment {
             String response = responses.get(i);
             String answer = answers.get(i);
 
-            Log.d(TAG, "Question = " + questions.get(i) + ", response = " + response + ", answer " +
-                    "= " + answer);
+            Log.d(TAG, "Question = " + questions.get(i) + ", response = " + response +
+                    ", answer = " + answer);
 
             if (response.equalsIgnoreCase(answer)) {
                 points++;
@@ -91,15 +92,24 @@ public class SubmitQuizFragment extends Fragment {
         }
         String score = points + "/" + responses.size();
         Log.d(TAG, "Score = " + score);
-        ScoreModel scoreModel = scoreModelFactory.createScoreModel(score);
 
-        // start main activity with toast message
+        // TODO: should do asynchronously
+        ScoresAccess scoresAccess = new ScoresAccess(getContext());
+        ScoreModelFactory scoreModelFactory = new ScoreModelFactory(scoresAccess);
+        scoresAccess.open();
+        ScoreModel scoreModel = scoreModelFactory.createAndStore(score);
+        scoresAccess.close();
+        Log.d(TAG, "Created and stored score model = " + scoreModel);
+
+        // go to score activity
         Activity activity = getActivity();
         if (activity == null) {
             Log.e(TAG, "Activity is null");
             throw new IllegalStateException("Activity is null");
         }
+
         Log.d(TAG, "Finishing quiz activity, starting score activity");
+
         Intent intent = new Intent(activity, ScoreActivity.class);
         intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
         startActivity(intent);

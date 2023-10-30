@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 /**
  * DTO for a quiz.
@@ -12,6 +13,7 @@ import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 public class QuizDTO implements Serializable {
 
     private long quizId;
+    private QuizType quizType;
     private List<String> questions;
     private List<List<String>> choices;
     private List<String> responses;
@@ -35,9 +37,11 @@ public class QuizDTO implements Serializable {
      * @param answers    The answers.
      * @param stateNames The state names.
      */
-    public QuizDTO(long quizId, List<String> questions, List<List<String>> choices,
-                   List<String> responses, List<String> answers, List<String> stateNames) {
+    public QuizDTO(long quizId, QuizType quizType, List<String> questions,
+                   List<List<String>> choices, List<String> responses, List<String> answers,
+                   List<String> stateNames) {
         this.quizId = quizId;
+        this.quizType = quizType;
         this.questions = questions;
         this.choices = choices;
         this.responses = responses;
@@ -93,6 +97,14 @@ public class QuizDTO implements Serializable {
         this.stateNames = stateNames;
     }
 
+    public QuizType getQuizType() {
+        return quizType;
+    }
+
+    public void setQuizType(QuizType quizType) {
+        this.quizType = quizType;
+    }
+
     /**
      * Converts the given {@link QuizModel} to a {@link QuizDTO}.
      *
@@ -106,7 +118,8 @@ public class QuizDTO implements Serializable {
         List<String> responses = new ArrayList<>(model.getResponses());
         List<String> answers = new ArrayList<>(model.getAnswers());
         List<String> stateNames = new ArrayList<>(model.getStateNames());
-        return new QuizDTO(id, questions, choices, responses, answers, stateNames);
+        return new QuizDTO(id, model.getQuizType(), questions, choices, responses, answers,
+                stateNames);
     }
 
     /**
@@ -117,6 +130,7 @@ public class QuizDTO implements Serializable {
     public QuizModel toModel() {
         QuizModel model = new QuizModel();
         model.setId(quizId);
+        model.setQuizType(quizType);
         model.setQuestions(new ArrayList<>(questions));
         model.setChoices(new ArrayList<>(choices));
         model.setResponses(new ArrayList<>(responses));

@@ -1,14 +1,24 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import edu.uga.cs.csci4830_project4.R;
-import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
+import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
+import edu.uga.cs.csci4830_project4.backend.scores.ScoreModel;
+import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
 
 public class ViewScoresActivity extends AppCompatActivity {
+
+    private static final String TAG = "ViewScoresActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,36 +29,31 @@ public class ViewScoresActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // Access the completed quizzes and their scores from the database
-        // TODO: Use async task to fetch the completed quizzes
-        QuizzesAccess quizzesAccess = new QuizzesAccess(this);
-        quizzesAccess.open();
+        Log.d(TAG, "onCreate(): Creating ViewScoresActivity");
 
-        /*
-        List<QuizModel> completedQuizzes = quizzesAccess.retrieve(
-                null, QuizTableValues.COLUMN_FINISHED + " = 1", null,
-                null, null, null, null
-        );
-        quizzesAccess.close();
+        // TODO: Use async task to fetch the completed scores
+        IAccess<ScoreModel> scoresAccess = new ScoresAccess(this);
+        scoresAccess.open();
+        List<ScoreModel> allScoreModels = scoresAccess.retrieveAll();
+        scoresAccess.close();
+
+        Log.d(TAG, "onCreate(): Retrieved all score models = " + allScoreModels);
 
         // Get the TableLayout to display the quiz scores
         TableLayout tableLayout = findViewById(R.id.tableLayoutScores);
-
-        // Iterate through completed quizzes and add them to the table
-        for (QuizModel quiz : completedQuizzes) {
+        allScoreModels.forEach(scoreModel -> {
             TableRow row = new TableRow(this);
 
-            TextView quizIdTextView = new TextView(this);
-            quizIdTextView.setText(String.valueOf(quiz.getId()));
-            row.addView(quizIdTextView);
+            TextView scoreView = new TextView(this);
+            String score = scoreModel.getScore();
 
-            TextView scoreTextView = new TextView(this);
-            scoreTextView.setText(quiz.getScore());
-            row.addView(scoreTextView);
+            Log.d(TAG, "onCreate(): Adding row to table with score = " + score);
+
+            scoreView.setText(score);
+            row.addView(scoreView);
 
             tableLayout.addView(row);
-        }
-         */
+        });
     }
 }
 

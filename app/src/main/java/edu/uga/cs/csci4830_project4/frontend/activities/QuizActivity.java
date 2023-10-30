@@ -15,8 +15,6 @@ import java.util.Map;
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
-import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
-import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.fragments.QuizPagerAdapter;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
@@ -32,10 +30,6 @@ import edu.uga.cs.csci4830_project4.frontend.quizzes.Quiz;
 public final class QuizActivity extends AppCompatActivity {
 
     private static Map<String, Integer> stateImagesMap;
-    private QuizzesAccess quizzesAccess;
-    private StatesAccess statesAccess;
-    private ScoresAccess scoresAccess;
-    private QuizDTO quizDTO;
 
     /**
      * {@inheritDoc}
@@ -49,13 +43,8 @@ public final class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        // initialize the database access objects
-        quizzesAccess = new QuizzesAccess(this);
-        statesAccess = new StatesAccess(this);
-        scoresAccess = new ScoresAccess(this);
-
         // fetch the quiz dto from the intent
-        quizDTO = (QuizDTO) getIntent().getSerializableExtra("quizDTO");
+        QuizDTO quizDTO = (QuizDTO) getIntent().getSerializableExtra("quizDTO");
         if (quizDTO == null) {
             throw new IllegalStateException("Quiz dto is null");
         }
@@ -72,21 +61,24 @@ public final class QuizActivity extends AppCompatActivity {
         }
 
         // initialize the view pager
-        QuizPagerAdapter adapter = new QuizPagerAdapter(quizzesAccess, scoresAccess, quiz,
-                stateImages, getSupportFragmentManager(), getLifecycle());
+        QuizPagerAdapter adapter = new QuizPagerAdapter(quiz, stateImages,
+                getSupportFragmentManager(), getLifecycle());
         ViewPager2 pager = findViewById(R.id.viewPager);
         pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         pager.setAdapter(adapter);
 
         // set listener for the save and quit button
         Button saveAndQuitButton = findViewById(R.id.btnQuitAndSave);
-        saveAndQuitButton.setOnClickListener(v -> saveQuiz());
+        saveAndQuitButton.setOnClickListener(v -> saveQuiz(quizDTO));
     }
 
-    private void saveQuiz() {
-        // TODO: do asynchronously
+    private void saveQuiz(QuizDTO quizDTO) {
+        // TODO: should do asynchronously
+        QuizzesAccess quizzesAccess = new QuizzesAccess(this);
+        quizzesAccess.open();
         QuizModel model = quizDTO.toModel();
         quizzesAccess.update(model);
+        quizzesAccess.close();
 
         // start main activity with toast message
         Intent intent = new Intent(this, MainActivity.class);
@@ -95,34 +87,6 @@ public final class QuizActivity extends AppCompatActivity {
 
         // finish this quiz activity
         finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (quizzesAccess != null) {
-            quizzesAccess.open();
-        }
-        if (statesAccess != null) {
-            statesAccess.open();
-        }
-        if (scoresAccess != null) {
-            scoresAccess.open();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (quizzesAccess != null) {
-            quizzesAccess.close();
-        }
-        if (statesAccess != null) {
-            statesAccess.close();
-        }
-        if (scoresAccess != null) {
-            scoresAccess.close();
-        }
     }
 
     private Map<String, Integer> createStateImagesMap() {

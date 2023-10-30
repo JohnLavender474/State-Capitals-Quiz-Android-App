@@ -65,18 +65,18 @@ public class SQLiteDatabaseWrapper implements IDatabase {
     @Override
     public Cursor query(String table, String[] columns, String selection, String[] selectionArgs,
                         String groupBy, String having, String orderBy, String limit) {
-        return database.query(table, columns, selection, selectionArgs, groupBy,
-                having, orderBy, limit);
+        return database.query(table, columns, selection, selectionArgs, groupBy, having, orderBy,
+                limit);
     }
 
     @Override
     public int update(String table, Map<String, Object> values, String whereClause,
                       String[] whereArgs) {
-        return database.update(table, mapToContentValues(values), "id = ?", whereArgs);
+        return database.update(table, mapToContentValues(values), whereClause, whereArgs);
     }
 
     @Override
     public int delete(String table, String whereClause, String[] whereArgs) {
-        return database.delete(table, "id = ?", whereArgs);
+        return database.delete(table, whereClause, whereArgs);
     }
 }

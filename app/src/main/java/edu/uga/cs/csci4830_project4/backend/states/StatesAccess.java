@@ -108,7 +108,7 @@ public class StatesAccess implements IAccess<StateModel> {
 
     @Override
     public @Nullable StateModel getById(long id) {
-        List<StateModel> models = retrieve(null, "id = ?",
+        List<StateModel> models = retrieve(null, "_id = ?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         return models == null || models.isEmpty() ? null : models.get(0);
     }
@@ -189,7 +189,8 @@ public class StatesAccess implements IAccess<StateModel> {
         values.put(COLUMN_CAPITAL_SINCE, model.getCapitalSince());
         values.put(COLUMN_SIZE_RANK, model.getSizeRank());
 
-        return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(model.getId())});
+        return db.update(TABLE_NAME, values, "_id = ?",
+                new String[]{String.valueOf(model.getId())});
     }
 
     @Override
@@ -197,7 +198,7 @@ public class StatesAccess implements IAccess<StateModel> {
         if (db == null) {
             return -1;
         }
-        return db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+        return db.delete(TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
     }
 
     @Override
