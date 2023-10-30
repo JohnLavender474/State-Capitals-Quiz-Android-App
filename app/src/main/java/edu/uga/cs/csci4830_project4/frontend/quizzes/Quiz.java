@@ -28,7 +28,7 @@ public class Quiz implements IQuiz {
     }
 
     @Override
-    public boolean submitResponse(int index, String response) {
+    public boolean setResponse(int index, String response) {
         return quizDTO.setResponse(index, response);
     }
 

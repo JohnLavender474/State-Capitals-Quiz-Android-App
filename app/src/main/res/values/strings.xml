@@ -24,4 +24,5 @@
     <string name="quiz">Quiz</string>
     <string name="question">Question</string>
     <string name="question_0_0">Question 0/0</string>
+    <string name="submit_quiz">Submit Quiz</string>
 </resources>

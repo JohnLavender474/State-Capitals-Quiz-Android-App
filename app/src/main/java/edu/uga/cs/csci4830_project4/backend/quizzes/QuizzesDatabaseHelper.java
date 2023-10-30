@@ -33,10 +33,9 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseH
     }
 
     /**
-     * Fetches the singleton instance of the database helper. Throws an exception if the database
-     * helper is not initialized.
+     * Fetches the singleton instance of the database helper. T
      *
-     * @param context The application context, not used if this helper is already initialized.
+     * @param context The application context.
      * @return The singleton instance of the database helper.
      */
     static synchronized QuizzesDatabaseHelper getInstance(Context context) {
@@ -49,7 +48,7 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseH
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
-                "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, COLUMN_ID,
+                        "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, COLUMN_ID,
                 COLUMN_QUIZ_TYPE, COLUMN_QUESTIONS, COLUMN_RESPONSES, COLUMN_CHOICES,
                 COLUMN_ANSWERS, COLUMN_STATE_NAMES));
     }

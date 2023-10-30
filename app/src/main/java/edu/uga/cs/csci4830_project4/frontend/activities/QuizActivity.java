@@ -1,9 +1,9 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -15,60 +15,54 @@ import java.util.Map;
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
+import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
 import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.fragments.QuizPagerAdapter;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.Quiz;
-import edu.uga.cs.csci4830_project4.utils.ConstVals;
 
 /**
- * This activity is used to play a quiz. In the {@link #onCreate(Bundle)} method, the quiz model
- * is retrieved from the intent and the quiz logic is initialized. The quiz logic is then run
- * while the quiz model is used to display the quiz information to the user. When the quiz is
- * finished, the quiz model is updated to be finished and saved to the database. If this
- * activity is exited while the quiz logic is underway, then the user can continue the quiz
- * at a later time since it is automatically saved to the database every time a change is made
- * to the quiz model. The quiz model should saved and updated to the database from within the
- * {@link IQuiz}. See the implementations of quiz logic in the frontend quizzes package.
+ * This activity is responsible for displaying the quiz to the user. It uses a view pager to
+ * display the quiz questions and a submit button to submit the quiz. The "Submit Quiz" button will
+ * delete the quiz from the database, create and store a score model, and then return the user to
+ * the main activity. The user can also click the "Save and Quit" button which saves the quiz
+ * progress so the user can continue it at a later time.
  */
 public final class QuizActivity extends AppCompatActivity {
 
     private static Map<String, Integer> stateImagesMap;
     private QuizzesAccess quizzesAccess;
     private StatesAccess statesAccess;
+    private ScoresAccess scoresAccess;
     private QuizDTO quizDTO;
 
     /**
      * {@inheritDoc}
      * <p>
-     * Gets the quiz model from the intent. The quiz model is passed in the intent from the
-     * {@link SelectQuizActivity} when the user selects a quiz to play. If there is no quiz
-     * model in the intent, then a new one will be created and stored in the database. The
-     * new quiz will use {@link ConstVals#NUMBER_QUESTIONS} in its constructor, though if a
-     * custom number of questions is desired, then the developer should create and store a
-     * new quiz model and pass it into this activity's intent.
+     * Initializes the view pager and the save and quit button. The view pager is used to display
+     * the quiz questions. The save and quit button is used to save the quiz progress and return
+     * the user to the main activity.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         // initialize the database access objects
         quizzesAccess = new QuizzesAccess(this);
         statesAccess = new StatesAccess(this);
+        scoresAccess = new ScoresAccess(this);
 
-        QuizModel quizModel = (QuizModel) getIntent().getSerializableExtra("quizModel");
-        if (quizModel == null) {
-            throw new IllegalStateException("Quiz model not found in intent");
+        // fetch the quiz dto from the intent
+        quizDTO = (QuizDTO) getIntent().getSerializableExtra("quizDTO");
+        if (quizDTO == null) {
+            throw new IllegalStateException("Quiz dto is null");
         }
-        quizDTO = QuizDTO.fromModel(quizModel);
+        // initialize the quiz logic
         IQuiz quiz = new Quiz(quizDTO);
 
+        // create the list of state images
         if (stateImagesMap == null) {
             stateImagesMap = createStateImagesMap();
         }
@@ -77,16 +71,58 @@ public final class QuizActivity extends AppCompatActivity {
             stateImages.add(stateImagesMap.get(stateName));
         }
 
-        QuizPagerAdapter adapter = new QuizPagerAdapter(quiz, stateImages,
-                getSupportFragmentManager(), getLifecycle());
+        // initialize the view pager
+        QuizPagerAdapter adapter = new QuizPagerAdapter(quizzesAccess, scoresAccess, quiz,
+                stateImages, getSupportFragmentManager(), getLifecycle());
         ViewPager2 pager = findViewById(R.id.viewPager);
         pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         pager.setAdapter(adapter);
 
+        // set listener for the save and quit button
         Button saveAndQuitButton = findViewById(R.id.btnQuitAndSave);
-        saveAndQuitButton.setOnClickListener(view -> {
+        saveAndQuitButton.setOnClickListener(v -> saveQuiz());
+    }
 
-        });
+    private void saveQuiz() {
+        // TODO: do asynchronously
+        QuizModel model = quizDTO.toModel();
+        quizzesAccess.update(model);
+
+        // start main activity with toast message
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("message", "Quiz saved!");
+        startActivity(intent);
+
+        // finish this quiz activity
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (quizzesAccess != null) {
+            quizzesAccess.open();
+        }
+        if (statesAccess != null) {
+            statesAccess.open();
+        }
+        if (scoresAccess != null) {
+            scoresAccess.open();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (quizzesAccess != null) {
+            quizzesAccess.close();
+        }
+        if (statesAccess != null) {
+            statesAccess.close();
+        }
+        if (scoresAccess != null) {
+            scoresAccess.close();
+        }
     }
 
     private Map<String, Integer> createStateImagesMap() {
@@ -142,28 +178,6 @@ public final class QuizActivity extends AppCompatActivity {
         stateImages.put("Wisconsin", R.drawable.state_wisconsin);
         stateImages.put("Wyoming", R.drawable.state_wyoming);
         return stateImages;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (quizzesAccess != null) {
-            quizzesAccess.open();
-        }
-        if (statesAccess != null) {
-            statesAccess.open();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (quizzesAccess != null) {
-            quizzesAccess.close();
-        }
-        if (statesAccess != null) {
-            statesAccess.close();
-        }
     }
 }
 

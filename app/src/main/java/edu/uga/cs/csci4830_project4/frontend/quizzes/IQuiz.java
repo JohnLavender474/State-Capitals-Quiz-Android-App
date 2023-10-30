@@ -43,7 +43,7 @@ public interface IQuiz extends Serializable {
      * @param response The answer to the question.
      * @return True if the answer is correct, false otherwise.
      */
-    boolean submitResponse(int index, String response);
+    boolean setResponse(int index, String response);
 
     /**
      * Get the size of the quiz.
