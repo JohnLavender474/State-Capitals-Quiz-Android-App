@@ -69,8 +69,6 @@ public final class QuizActivity extends AppCompatActivity {
         quizDTO = QuizDTO.fromModel(quizModel);
         IQuiz quiz = new Quiz(quizDTO);
 
-        ViewPager2 pager = findViewById(R.id.viewPager);
-
         if (stateImagesMap == null) {
             stateImagesMap = createStateImagesMap();
         }
@@ -78,11 +76,11 @@ public final class QuizActivity extends AppCompatActivity {
         for (String stateName : quizDTO.getStateNames()) {
             stateImages.add(stateImagesMap.get(stateName));
         }
+
         QuizPagerAdapter adapter = new QuizPagerAdapter(quiz, stateImages,
                 getSupportFragmentManager(), getLifecycle());
-
-        pager.setOrientation(
-                ViewPager2.ORIENTATION_HORIZONTAL);
+        ViewPager2 pager = findViewById(R.id.viewPager);
+        pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         pager.setAdapter(adapter);
 
         Button saveAndQuitButton = findViewById(R.id.btnQuitAndSave);

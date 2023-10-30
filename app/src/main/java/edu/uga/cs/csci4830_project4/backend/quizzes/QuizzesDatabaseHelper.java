@@ -2,7 +2,6 @@ package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_ANSWERS;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_CHOICES;
-import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_FINISHED;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_ID;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_QUESTIONS;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_QUIZ_TYPE;
@@ -50,9 +49,9 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseH
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
-                "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME,
-                COLUMN_ID, COLUMN_QUIZ_TYPE, COLUMN_QUESTIONS, COLUMN_RESPONSES, COLUMN_CHOICES,
-                COLUMN_ANSWERS, COLUMN_STATE_NAMES, COLUMN_FINISHED));
+                "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, COLUMN_ID,
+                COLUMN_QUIZ_TYPE, COLUMN_QUESTIONS, COLUMN_RESPONSES, COLUMN_CHOICES,
+                COLUMN_ANSWERS, COLUMN_STATE_NAMES));
     }
 
     @Override

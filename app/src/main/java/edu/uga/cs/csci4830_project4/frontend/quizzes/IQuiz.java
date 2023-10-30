@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
+import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
 /**
  * This interface represents the logic for a quiz. It is used by the QuizActivity to interact with
@@ -11,6 +12,13 @@ import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
  * to interact with it.
  */
 public interface IQuiz extends Serializable {
+
+    /**
+     * Get the quiz DTO used for this quiz.
+     *
+     * @return The quiz DTO used for this quiz.
+     */
+    QuizDTO getQuizDTO();
 
     /**
      * Get the question at the index.

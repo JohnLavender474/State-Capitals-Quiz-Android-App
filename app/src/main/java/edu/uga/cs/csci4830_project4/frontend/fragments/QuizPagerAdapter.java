@@ -26,7 +26,17 @@ public class QuizPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return QuizFragment.newInstance(quiz, position, imageSources.get(position));
+        if (position < 0) {
+            throw new IllegalArgumentException("Position cannot be less than 0");
+        }
+
+        if (position < quiz.getSizeOfQuiz()) {
+            return QuizFragment.newInstance(quiz, position, imageSources.get(position));
+        } else if (position == quiz.getSizeOfQuiz()) {
+            return SubmitQuizFragment.newInstance(quiz.getQuizDTO());
+        }
+
+        throw new IllegalArgumentException("Position cannot be greater than the size of the quiz");
     }
 
     @Override

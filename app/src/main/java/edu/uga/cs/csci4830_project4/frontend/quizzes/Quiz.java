@@ -13,6 +13,11 @@ public class Quiz implements IQuiz {
     }
 
     @Override
+    public QuizDTO getQuizDTO() {
+        return quizDTO;
+    }
+
+    @Override
     public String getQuestionAt(int index) {
         return quizDTO.getQuestions().get(index);
     }
