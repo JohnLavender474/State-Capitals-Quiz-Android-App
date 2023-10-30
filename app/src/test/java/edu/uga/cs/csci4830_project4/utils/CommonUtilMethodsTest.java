@@ -1,7 +1,10 @@
-package edu.uga.cs.csci4830_project4.backend.utils;
+package edu.uga.cs.csci4830_project4.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
 
 import android.database.Cursor;
 
@@ -11,7 +14,9 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtilMethodsTest {
+import edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods;
+
+public class CommonUtilMethodsTest {
 
     @Test
     public void testListToString() {
@@ -20,7 +25,7 @@ public class UtilMethodsTest {
         inputList.add("banana");
         inputList.add("cherry");
         String expected = "[apple;banana;cherry]";
-        String result = UtilMethods.listToString(inputList);
+        String result = listToString(inputList);
         assertEquals(expected, result);
     }
 
@@ -28,7 +33,7 @@ public class UtilMethodsTest {
     public void testListToStringWithEmptyList() {
         List<String> inputList = new ArrayList<>(); // An empty list.
         String expected = "[]"; // The expected string for an empty list.
-        String result = UtilMethods.listToString(inputList);
+        String result = listToString(inputList);
         assertEquals(expected, result);
     }
 
@@ -39,7 +44,7 @@ public class UtilMethodsTest {
         expected.add(true);
         expected.add(false);
         expected.add(true);
-        List<Boolean> result = UtilMethods.stringToList(inputString, Boolean::parseBoolean);
+        List<Boolean> result = stringToList(inputString, Boolean::parseBoolean);
         assertEquals(expected, result);
     }
 
@@ -47,7 +52,7 @@ public class UtilMethodsTest {
     public void testStringToBooleanListWithEmptyString() {
         String inputString = "[]"; // An empty string.
         List<Boolean> expected = new ArrayList<>(); // An empty list.
-        List<Boolean> result = UtilMethods.stringToList(inputString, Boolean::parseBoolean);
+        List<Boolean> result = stringToList(inputString, Boolean::parseBoolean);
         assertEquals(expected, result);
     }
 
@@ -58,7 +63,7 @@ public class UtilMethodsTest {
         expected.add(10);
         expected.add(20);
         expected.add(30);
-        List<Integer> result = UtilMethods.stringToList(inputString, Integer::parseInt);
+        List<Integer> result = stringToList(inputString, Integer::parseInt);
         assertEquals(expected, result);
     }
 
@@ -66,7 +71,7 @@ public class UtilMethodsTest {
     public void testStringToListWithEmptyString() {
         String inputString = "[]"; // An empty string.
         List<Integer> expected = new ArrayList<>(); // An empty list.
-        List<Integer> result = UtilMethods.stringToList(inputString, Integer::parseInt);
+        List<Integer> result = stringToList(inputString, Integer::parseInt);
         assertEquals(expected, result);
     }
 
@@ -74,7 +79,7 @@ public class UtilMethodsTest {
     public void testGetColumnIndex() {
         Cursor cursor = Mockito.mock(Cursor.class);
         Mockito.when(cursor.getColumnIndex("test_column")).thenReturn(3);
-        int result = UtilMethods.getColumnIndex(cursor, "test_column");
+        int result = BackendUtilMethods.getColumnIndex(cursor, "test_column");
         assertEquals(3, result);
     }
 
@@ -82,25 +87,25 @@ public class UtilMethodsTest {
     public void testGetColumnIndexWithNonExistentColumn() {
         Cursor cursor = Mockito.mock(Cursor.class);
         Mockito.when(cursor.getColumnIndex("non_existent_column")).thenReturn(-1);
-        int result = UtilMethods.getColumnIndex(cursor, "non_existent_column");
+        int result = BackendUtilMethods.getColumnIndex(cursor, "non_existent_column");
         assertEquals(-1, result);
     }
 
     @Test
     public void testListToStringWithNullList() {
-        assertNull(UtilMethods.listToString(null));
+        assertNull(listToString(null));
     }
 
     @Test
     public void testStringToListWithEmptyStringAndParser() {
         String inputString = "[]"; // An empty string.
         List<Integer> expected = new ArrayList<>(); // An empty list.
-        List<Integer> result = UtilMethods.stringToList(inputString, Integer::parseInt);
+        List<Integer> result = stringToList(inputString, Integer::parseInt);
         assertEquals(expected, result);
     }
 
     @Test
     public void testStringToListWithNullStringAndParser() {
-        assertNull(UtilMethods.stringToList(null, Integer::parseInt));
+        assertNull(stringToList(null, Integer::parseInt));
     }
 }

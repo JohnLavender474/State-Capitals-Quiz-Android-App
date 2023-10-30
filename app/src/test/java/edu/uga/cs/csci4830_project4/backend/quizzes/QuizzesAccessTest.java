@@ -2,7 +2,7 @@ package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
 
 import android.database.Cursor;
 
@@ -11,10 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
 import edu.uga.cs.csci4830_project4.backend.mock.MockCursor;
@@ -52,15 +48,12 @@ public class QuizzesAccessTest {
 
     @Test
     public void testStore() {
-        QuizModel model = new QuizModel(2);
-        model.setQuizType(QuizType.CAPITAL_QUIZ);
-        model.setStateIds(Arrays.asList(1L, 2L));
-        model.setCurrentQuestion(0);
-        model.setChoices(Arrays.asList("Atlanta,Montgomery,New York City", null));
-        model.setResponses(Arrays.asList("Atlanta", null));
-        model.setAnsweredCorrectly(Arrays.asList(true, false));
-        model.setFinished(true);
-        model.setScore(100);
+        QuizModel model = new QuizModel();
+        model.setQuestions(stringToList("Question 1;Question 2", s -> s));
+        model.setResponses(stringToList("Response 1;Response 2", s -> s));
+        model.setChoices(stringToList("Choice a1,Choice a2,Choice a3;Choice b1,Choice b2," +
+                "Choice b3", s -> s));
+        model.setAnswers(stringToList("Answer1,Answer2", s -> s));
 
         long expectedId = 1L;
         mockDb.setMockIdToReturnOnInsert(1L);
@@ -69,46 +62,23 @@ public class QuizzesAccessTest {
 
         assertNotNull(storedModel);
         assertEquals(expectedId, storedModel.getId());
-        assertEquals(storedModel.getChoices(),
-                Arrays.asList("Atlanta,Montgomery,New York City", null));
-        assertEquals(2, storedModel.getNumberOfQuestions());
-        assertEquals(QuizType.CAPITAL_QUIZ, storedModel.getQuizType());
-        assertEquals(storedModel.getStateIds(), Arrays.asList(1L, 2L));
-        assertEquals(storedModel.getResponses(), Arrays.asList("Atlanta", null));
-        assertEquals(storedModel.getAnsweredCorrectly(), Arrays.asList(true, false));
-        assertTrue(storedModel.isFinished());
-        assertEquals(100, storedModel.getScore());
+        assertEquals(stringToList("Question 1;Question 2", s -> s), storedModel.getQuestions());
+        assertEquals(stringToList("Response 1;Response 2", s -> s), storedModel.getResponses());
+        assertEquals(stringToList("Choice a1,Choice a2,Choice a3;Choice b1,Choice b2,Choice b3",
+                s -> s), storedModel.getChoices());
+        assertEquals(stringToList("Answer1,Answer2", s -> s), storedModel.getAnswers());
     }
 
     @Test
     public void testGetById() {
         long quizId = 1L;
-        List<Long> stateIds = new ArrayList<>() {{
-            add(1L);
-            add(2L);
-        }};
-        List<String> choices = new ArrayList<>() {{
-            add("Atlanta,Montgomery,New York City");
-            add(null);
-        }};
-        List<String> responses = new ArrayList<>() {{
-            add("response1");
-            add("response2");
-        }};
-        List<Boolean> answeredCorrectly = new ArrayList<>() {{
-            add(true);
-            add(false);
-        }};
-        QuizModel expectedModel = new QuizModel(2);
+        QuizModel expectedModel = new QuizModel();
         expectedModel.setId(quizId);
-        expectedModel.setQuizType(QuizType.CAPITAL_QUIZ);
-        expectedModel.setCurrentQuestion(0);
-        expectedModel.setChoices(choices);
-        expectedModel.setStateIds(stateIds);
-        expectedModel.setResponses(responses);
-        expectedModel.setAnsweredCorrectly(answeredCorrectly);
-        expectedModel.setFinished(true);
-        expectedModel.setScore(100);
+        expectedModel.setQuestions(stringToList("Question 1;Question 2", s -> s));
+        expectedModel.setResponses(stringToList("Response 1;Response 2", s -> s));
+        expectedModel.setChoices(stringToList("Choice a1,Choice a2,Choice a3;Choice b1,Choice b2,"
+                + "Choice b3", s -> s));
+        expectedModel.setAnswers(stringToList("Answer1,Answer2", s -> s));
 
         Cursor mockCursor = new MockCursor() {
 
@@ -130,28 +100,22 @@ public class QuizzesAccessTest {
             public int getColumnIndex(String column) {
                 return switch (column) {
                     case QuizTableValues.COLUMN_ID -> 0;
-                    case QuizTableValues.COLUMN_QUIZ_TYPE -> 1;
-                    case QuizTableValues.COLUMN_STATE_IDS -> 2;
-                    case QuizTableValues.COLUMN_RESPONSES -> 3;
-                    case QuizTableValues.COLUMN_ANSWERED_CORRECTLY -> 4;
-                    case QuizTableValues.COLUMN_FINISHED -> 5;
-                    case QuizTableValues.COLUMN_SCORE -> 6;
-                    case QuizTableValues.COLUMN_NUMBER_QUESTIONS -> 7;
-                    case QuizTableValues.COLUMN_CHOICES -> 8;
-                    case QuizTableValues.COLUMN_CURRENT_QUESTION -> 9;
-                    default -> throw new IllegalStateException("Unexpected value: " + column);
+                    case QuizTableValues.COLUMN_QUESTIONS -> 1;
+                    case QuizTableValues.COLUMN_RESPONSES -> 2;
+                    case QuizTableValues.COLUMN_CHOICES -> 3;
+                    case QuizTableValues.COLUMN_ANSWERS -> 4;
+                    default -> -1;
                 };
             }
 
             @Override
             public String getString(int columnIndex) {
                 return switch (columnIndex) {
-                    case 1 -> QuizType.CAPITAL_QUIZ.name();
-                    case 2 -> "[1;2]";
-                    case 3 -> "[response1;response2]";
-                    case 4 -> "[true;false]";
-                    case 8 -> "[Atlanta;null]";
-                    default -> throw new IllegalStateException("Unexpected value: " + columnIndex);
+                    case 1 -> "Question 1;Question 2";
+                    case 2 -> "Response 1;Response 2";
+                    case 3 -> "Choice a1,Choice a2,Choice a3;Choice b1,Choice b2,Choice b3";
+                    case 4 -> "Answer1,Answer2";
+                    default -> null;
                 };
             }
 
@@ -160,18 +124,7 @@ public class QuizzesAccessTest {
                 if (columnIndex == 0) {
                     return quizId;
                 }
-                throw new IllegalStateException("Unexpected value: " + columnIndex);
-            }
-
-            @Override
-            public int getInt(int columnIndex) {
-                return switch (columnIndex) {
-                    case 5 -> 1;
-                    case 6 -> 100;
-                    case 7 -> 2;
-                    case 9 -> 0;
-                    default -> throw new IllegalStateException("Unexpected value: " + columnIndex);
-                };
+                return -1;
             }
         };
         mockDb.setMockCursor(mockCursor);
@@ -181,3 +134,4 @@ public class QuizzesAccessTest {
         assertEquals(expectedModel, retrievedModel);
     }
 }
+

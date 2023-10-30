@@ -1,18 +1,11 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
 import android.os.Bundle;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
-
 import edu.uga.cs.csci4830_project4.R;
-import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
-import edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
 
 public class ViewScoresActivity extends AppCompatActivity {
@@ -30,6 +23,8 @@ public class ViewScoresActivity extends AppCompatActivity {
         // TODO: Use async task to fetch the completed quizzes
         QuizzesAccess quizzesAccess = new QuizzesAccess(this);
         quizzesAccess.open();
+
+        /*
         List<QuizModel> completedQuizzes = quizzesAccess.retrieve(
                 null, QuizTableValues.COLUMN_FINISHED + " = 1", null,
                 null, null, null, null
@@ -53,6 +48,7 @@ public class ViewScoresActivity extends AppCompatActivity {
 
             tableLayout.addView(row);
         }
+         */
     }
 }
 

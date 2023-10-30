@@ -1,11 +1,139 @@
 package edu.uga.cs.csci4830_project4.frontend.dto;
 
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import edu.uga.cs.csci4830_project4.frontend.quizzes.QuizQuestion;
+import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 
-public record QuizDTO(long quizId, List<QuizQuestion> questions,
-                      List<String> userResponses) implements Serializable {
+/**
+ * DTO for a quiz.
+ */
+public class QuizDTO implements Serializable {
+
+    private long quizId;
+    private List<String> questions;
+    private List<List<String>> choices;
+    private List<String> responses;
+    private List<String> answers;
+
+    public QuizDTO() {
+        quizId = -1L;
+    }
+
+    public QuizDTO(long quizId, List<String> questions, List<List<String>> choices,
+                   List<String> responses, List<String> answers) {
+        this.quizId = quizId;
+        this.questions = questions;
+        this.choices = choices;
+        this.responses = responses;
+        this.answers = answers;
+    }
+
+    public long getQuizId() {
+        return quizId;
+    }
+
+    public void setQuizId(long quizId) {
+        this.quizId = quizId;
+    }
+
+    public List<String> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<String> questions) {
+        this.questions = questions;
+    }
+
+    public List<List<String>> getChoices() {
+        return choices;
+    }
+
+    public void setChoices(List<List<String>> choices) {
+        this.choices = choices;
+    }
+
+    public List<String> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<String> responses) {
+        this.responses = responses;
+    }
+
+    public List<String> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<String> answers) {
+        this.answers = answers;
+    }
+
+    /**
+     * Converts the given {@link QuizModel} to a {@link QuizDTO}.
+     *
+     * @param model The {@link QuizModel} to convert.
+     * @return The {@link QuizDTO} representation of the given {@link QuizModel}.
+     */
+    public static QuizDTO fromModel(QuizModel model) {
+        long id = model.getId();
+
+        List<String> questions = new ArrayList<>(model.getQuestions());
+
+        List<List<String>> choices = new ArrayList<>();
+        model.getChoices().forEach(choice -> {
+            String[] questionChoices = choice.split(",");
+            choices.add(java.util.List.of(questionChoices));
+        });
+
+        List<String> responses = new ArrayList<>(model.getResponses());
+
+        List<String> answers = new ArrayList<>(model.getAnswers());
+
+        return new QuizDTO(id, questions, choices, responses, answers);
+    }
+
+    /**
+     * Converts this DTO to a {@link QuizModel}.
+     *
+     * @return The {@link QuizModel} representation of this DTO.
+     */
+    public QuizModel toModel() {
+        QuizModel model = new QuizModel();
+
+        model.setId(quizId);
+
+        model.setQuestions(new ArrayList<>(questions));
+
+        List<String> modelChoices = new ArrayList<>();
+        for (List<String> questionChoices : choices) {
+            String questionChoicesString = listToString(questionChoices);
+            modelChoices.add(questionChoicesString);
+        }
+        model.setChoices(modelChoices);
+
+        model.setResponses(new ArrayList<>(responses));
+
+        model.setAnswers(new ArrayList<>(answers));
+
+        return model;
+    }
+
+    /**
+     * Sets the response for the question at the given index. Returns true if the response is
+     * correct, false otherwise.
+     *
+     * @param index    The index of the question to set the response for.
+     * @param response The response to set.
+     * @return True if the response is correct, false otherwise.
+     */
+    public boolean setResponse(int index, String response) {
+        responses.set(index, response);
+        return response.equals(answers.get(index));
+    }
+
 }
 

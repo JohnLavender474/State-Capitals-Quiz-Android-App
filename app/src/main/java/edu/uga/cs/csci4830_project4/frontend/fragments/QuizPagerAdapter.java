@@ -6,27 +6,27 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuizLogic;
+import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
 
 public class QuizPagerAdapter extends FragmentStateAdapter {
 
-    private final IQuizLogic quizLogic;
+    private final IQuiz quiz;
 
-    public QuizPagerAdapter(IQuizLogic quizLogic,
+    public QuizPagerAdapter(IQuiz quiz,
                             @NonNull FragmentManager fragmentManager,
                             @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        this.quizLogic = quizLogic;
+        this.quiz = quiz;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return null;
+        return QuizFragment.newInstance(quiz, position);
     }
 
     @Override
     public int getItemCount() {
-        return quizLogic.getSizeOfQuiz();
+        return quiz.getSizeOfQuiz();
     }
 }

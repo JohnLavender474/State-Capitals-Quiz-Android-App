@@ -1,15 +1,10 @@
-package edu.uga.cs.csci4830_project4.backend.utils;
-
-import android.database.Cursor;
+package edu.uga.cs.csci4830_project4.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * This class provides utility methods for the database package.
- */
-public class UtilMethods {
+public class CommonUtilMethods {
 
     /**
      * Converts a string array to a comma-separated string.
@@ -55,17 +50,6 @@ public class UtilMethods {
         }
 
         return list;
-    }
-
-    /**
-     * Retrieves the column index for the given column name in a cursor.
-     *
-     * @param cursor The cursor from which to retrieve the column index.
-     * @param column The name of the column for which to find the index.
-     * @return The column index within the cursor.
-     */
-    public static int getColumnIndex(Cursor cursor, String column) {
-        return cursor.getColumnIndex(column);
     }
 
 }

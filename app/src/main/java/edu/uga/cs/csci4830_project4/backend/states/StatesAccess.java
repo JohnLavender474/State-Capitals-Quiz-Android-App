@@ -9,7 +9,7 @@ import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUM
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATE_NAME;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_THIRD_CITY;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.TABLE_NAME;
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIndex;
+import static edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods.getColumnIndex;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -55,12 +55,12 @@ public class StatesAccess implements IAccess<StateModel> {
     }
 
     /**
-     * Returns a list of unique random state ids from the database. The amount of ids returned
+     * Returns a list of unique random states from the database.
      *
-     * @param amount the amount of ids to return.
-     * @return a list of unique random state ids from the database.
+     * @param amount the amount of states to return.
+     * @return a list of unique random states from the database.
      */
-    public List<Long> getRandomStateIds(int amount) {
+    public List<StateModel> getRandomStates(int amount) {
         List<StateModel> states = retrieveAll();
         if (states == null || amount > states.size()) {
             int size = states == null ? 0 : states.size();
@@ -69,15 +69,8 @@ public class StatesAccess implements IAccess<StateModel> {
                     "database.", amount, size);
             throw new IllegalStateException(message);
         }
-
         Collections.shuffle(states);
-        List<StateModel> randomStates = states.subList(0, amount);
-
-        List<Long> ids = new ArrayList<>();
-        for (StateModel state : randomStates) {
-            ids.add(state.getId());
-        }
-        return ids;
+        return states.subList(0, amount);
     }
 
     @Override
@@ -122,9 +115,8 @@ public class StatesAccess implements IAccess<StateModel> {
 
     @Override
     public @Nullable List<StateModel> retrieve(String[] columns, String selection,
-                                               String[] selectionArgs,
-                                               String groupBy, String having, String orderBy,
-                                               String limit) {
+                                               String[] selectionArgs, String groupBy,
+                                               String having, String orderBy, String limit) {
         if (db == null) {
             return null;
         }

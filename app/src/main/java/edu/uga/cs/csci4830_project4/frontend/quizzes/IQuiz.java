@@ -1,5 +1,6 @@
 package edu.uga.cs.csci4830_project4.frontend.quizzes;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
@@ -9,7 +10,7 @@ import edu.uga.cs.csci4830_project4.frontend.activities.QuizActivity;
  * the quiz. The {@link QuizActivity} should not know the details of how the quiz works, only how
  * to interact with it.
  */
-public interface IQuiz {
+public interface IQuiz extends Serializable {
 
     /**
      * Get the question at the index.
@@ -28,12 +29,13 @@ public interface IQuiz {
     List<String> getChoicesAt(int index);
 
     /**
-     * Get the answer for the question at the index.
+     * Submit the answer for the question at the index.
      *
-     * @param index The index of the question to get the answer for.
-     * @return The answer for the question at the index.
+     * @param index    The index of the question to submit the answer for.
+     * @param response The answer to the question.
+     * @return True if the answer is correct, false otherwise.
      */
-    String getAnswerAt(int index);
+    boolean submitResponse(int index, String response);
 
     /**
      * Get the size of the quiz.

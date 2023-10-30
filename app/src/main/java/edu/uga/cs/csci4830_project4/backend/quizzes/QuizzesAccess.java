@@ -1,8 +1,8 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.getColumnIndex;
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.listToString;
-import static edu.uga.cs.csci4830_project4.backend.utils.UtilMethods.stringToList;
+import static edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods.getColumnIndex;
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.listToString;
+import static edu.uga.cs.csci4830_project4.utils.CommonUtilMethods.stringToList;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -59,27 +59,17 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     public QuizModel store(QuizModel model) {
         Map<String, Object> values = new HashMap<>();
 
-        int numberQuestions = model.getNumberOfQuestions();
-        values.put(QuizTableValues.COLUMN_NUMBER_QUESTIONS, numberQuestions);
-
-        String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
-        values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
-
-        String choices = listToString(model.getChoices());
-        values.put(QuizTableValues.COLUMN_CHOICES, choices);
-
-        String stateIds = listToString(model.getStateIds());
-        values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
+        String questions = listToString(model.getQuestions());
+        values.put(QuizTableValues.COLUMN_QUESTIONS, questions);
 
         String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
 
-        String answeredCorrectly = listToString(model.getAnsweredCorrectly());
-        values.put(QuizTableValues.COLUMN_ANSWERED_CORRECTLY, answeredCorrectly);
+        String choices = listToString(model.getChoices());
+        values.put(QuizTableValues.COLUMN_CHOICES, choices);
 
-        values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
-
-        values.put(QuizTableValues.COLUMN_SCORE, model.getScore());
+        String answers = listToString(model.getAnswers());
+        values.put(QuizTableValues.COLUMN_ANSWERS, answers);
 
         long id = db.insert(QuizTableValues.TABLE_NAME, null, values);
         model.setId(id);
@@ -104,44 +94,21 @@ public class QuizzesAccess implements IAccess<QuizModel> {
             if (cursor != null && cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
                     long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
-
-                    int numberQuestions = cursor.getInt(getColumnIndex(
-                            cursor, QuizTableValues.COLUMN_NUMBER_QUESTIONS));
-
-                    int currentQuestion = cursor.getInt(getColumnIndex(
-                            cursor, QuizTableValues.COLUMN_CURRENT_QUESTION));
-
-                    String choices = cursor.getString(getColumnIndex(cursor,
-                            QuizTableValues.COLUMN_CHOICES));
-
-                    String quizType = cursor.getString(getColumnIndex(cursor,
-                            QuizTableValues.COLUMN_QUIZ_TYPE));
-
-                    String stateIds = cursor.getString(getColumnIndex(cursor,
-                            QuizTableValues.COLUMN_STATE_IDS));
-
+                    String questions = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_QUESTIONS));
                     String responses = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_RESPONSES));
+                    String choices = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_CHOICES));
+                    String answers = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_ANSWERS));
 
-                    String answeredCorrectly = cursor.getString(getColumnIndex(cursor,
-                            QuizTableValues.COLUMN_ANSWERED_CORRECTLY));
-
-                    boolean finished = cursor.getInt(getColumnIndex(cursor,
-                            QuizTableValues.COLUMN_FINISHED)) == 1;
-
-                    int score = cursor.getInt(getColumnIndex(cursor, QuizTableValues.COLUMN_SCORE));
-
-                    QuizModel model = new QuizModel(numberQuestions);
+                    QuizModel model = new QuizModel();
                     model.setId(id);
-                    model.setChoices(stringToList(choices, string -> string));
-                    model.setCurrentQuestion(currentQuestion);
-                    model.setQuizType(quizType == null ? null : QuizType.valueOf(quizType));
-                    model.setStateIds(stringToList(stateIds, Long::parseLong));
+                    model.setQuestions(stringToList(questions, string -> string));
                     model.setResponses(stringToList(responses, string -> string));
-                    model.setAnsweredCorrectly(stringToList(answeredCorrectly,
-                            Boolean::parseBoolean));
-                    model.setFinished(finished);
-                    model.setScore(score);
+                    model.setChoices(stringToList(choices, string -> string));
+                    model.setAnswers(stringToList(answers, string -> string));
 
                     models.add(model);
                 }
@@ -160,27 +127,17 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     public int update(QuizModel model) {
         Map<String, Object> values = new HashMap<>();
 
-        int numberQuestions = model.getNumberOfQuestions();
-        values.put(QuizTableValues.COLUMN_NUMBER_QUESTIONS, numberQuestions);
-
-        int currentQuestion = model.getCurrentQuestion();
-        values.put(QuizTableValues.COLUMN_CURRENT_QUESTION, currentQuestion);
-
-        String quizType = model.getQuizType() == null ? null : model.getQuizType().name();
-        values.put(QuizTableValues.COLUMN_QUIZ_TYPE, quizType);
-
-        String stateIds = listToString(model.getStateIds());
-        values.put(QuizTableValues.COLUMN_STATE_IDS, stateIds);
+        String questions = listToString(model.getQuestions());
+        values.put(QuizTableValues.COLUMN_QUESTIONS, questions);
 
         String responses = listToString(model.getResponses());
         values.put(QuizTableValues.COLUMN_RESPONSES, responses);
 
-        String answeredCorrectly = listToString(model.getAnsweredCorrectly());
-        values.put(QuizTableValues.COLUMN_ANSWERED_CORRECTLY, answeredCorrectly);
+        String choices = listToString(model.getChoices());
+        values.put(QuizTableValues.COLUMN_CHOICES, choices);
 
-        values.put(QuizTableValues.COLUMN_FINISHED, model.isFinished() ? 1 : 0);
-
-        values.put(QuizTableValues.COLUMN_SCORE, model.getScore());
+        String answers = listToString(model.getAnswers());
+        values.put(QuizTableValues.COLUMN_ANSWERS, answers);
 
         return db.update(QuizTableValues.TABLE_NAME, values, "id = ?",
                 new String[]{String.valueOf(model.getId())});

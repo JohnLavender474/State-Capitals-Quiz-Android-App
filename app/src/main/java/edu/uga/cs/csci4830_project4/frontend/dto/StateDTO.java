@@ -20,8 +20,7 @@ public class StateDTO implements Serializable {
     }
 
     public StateDTO(long id, String stateName, String capitalCity, String secondCity,
-                    String thirdCity,
-                    String statehood, String capitalSince, String sizeRank) {
+                    String thirdCity, String statehood, String capitalSince, String sizeRank) {
         this.id = id;
         this.stateName = stateName;
         this.capitalCity = capitalCity;
@@ -96,17 +95,11 @@ public class StateDTO implements Serializable {
         this.sizeRank = sizeRank;
     }
 
-    public static StateDTO fromStateModel(StateModel stateModel) {
-        return new StateDTO(
-                stateModel.getId(),
-                stateModel.getStateName(),
-                stateModel.getCapitalCity(),
-                stateModel.getSecondCity(),
-                stateModel.getThirdCity(),
-                stateModel.getStatehood(),
-                stateModel.getCapitalSince(),
-                stateModel.getSizeRank()
-        );
+    public static StateDTO fromModel(StateModel stateModel) {
+        return new StateDTO(stateModel.getId(), stateModel.getStateName(),
+                stateModel.getCapitalCity(), stateModel.getSecondCity(),
+                stateModel.getThirdCity(), stateModel.getStatehood(),
+                stateModel.getCapitalSince(), stateModel.getSizeRank());
     }
 }
 
