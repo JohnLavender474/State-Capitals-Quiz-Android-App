@@ -26,17 +26,6 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvQuestionNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text=""
-        android:textColor="#0A65C7"
-        android:background="#ffffff"
-        android:textSize="22sp" />
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_marginTop="10dp"

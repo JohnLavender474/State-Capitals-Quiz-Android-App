@@ -62,6 +62,7 @@ public class QuizzesAccessTest {
         }));
         model.setAnswers(stringToList("Answer1;Answer2", s -> s));
         model.setStateNames(stringToList("Georgia;New York", s -> s));
+        model.setFinished(false);
 
         long expectedId = 1L;
         mockDb.setMockIdToReturnOnInsert(1L);
@@ -80,6 +81,7 @@ public class QuizzesAccessTest {
         }), storedModel.getChoices());
         assertEquals(stringToList("Answer1;Answer2", s -> s), storedModel.getAnswers());
         assertEquals(stringToList("Georgia;New York", s -> s), storedModel.getStateNames());
+        assertEquals(false, storedModel.isFinished());
 
         System.out.println("Test store: model = " + model);
     }
@@ -99,6 +101,7 @@ public class QuizzesAccessTest {
         }));
         expectedModel.setAnswers(stringToList("Answer1;Answer2", s -> s));
         expectedModel.setStateNames(stringToList("1;2", s -> s));
+        expectedModel.setFinished(true);
 
         Cursor mockCursor = new MockCursor() {
 
@@ -126,6 +129,7 @@ public class QuizzesAccessTest {
                     case QuizTableValues.COLUMN_ANSWERS -> 4;
                     case QuizTableValues.COLUMN_STATE_NAMES -> 5;
                     case QuizTableValues.COLUMN_QUIZ_TYPE -> 6;
+                    case QuizTableValues.COLUMN_FINISHED -> 7;
                     default -> -1;
                 };
             }
@@ -141,6 +145,7 @@ public class QuizzesAccessTest {
                     case 4 -> listToString(List.of("Answer1", "Answer2"));
                     case 5 -> listToString(List.of("Georgia", "New York"));
                     case 6 -> "CAPITALS_QUIZ";
+                    case 7 -> "true";
                     default -> null;
                 };
             }

@@ -85,6 +85,9 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String stateNames = listToString(model.getStateNames());
         values.put(QuizTableValues.COLUMN_STATE_NAMES, stateNames);
 
+        boolean finished = model.isFinished();
+        values.put(QuizTableValues.COLUMN_FINISHED, finished ? "true" : "false");
+
         return values;
     }
 
@@ -125,6 +128,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                             QuizTableValues.COLUMN_ANSWERS));
                     String stateNames = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_STATE_NAMES));
+                    String finished = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_FINISHED));
 
                     QuizModel model = new QuizModel();
                     model.setId(id);
@@ -137,6 +142,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                     }));
                     model.setAnswers(stringToList(answers, string -> string));
                     model.setStateNames(stringToList(stateNames, string -> string));
+                    model.setFinished(finished.equals("true"));
 
                     models.add(model);
                 }

@@ -10,4 +10,5 @@ public class QuizTableValues {
     public static final String COLUMN_CHOICES = "choices";
     public static final String COLUMN_ANSWERS = "answers";
     public static final String COLUMN_STATE_NAMES = "state_names";
+    public static final String COLUMN_FINISHED = "finished";
 }

@@ -21,6 +21,7 @@ public class QuizModel implements IModel {
     private List<List<String>> choices;
     private List<String> responses;
     private List<String> answers;
+    private boolean finished;
 
     public QuizModel() {
         id = -1;
@@ -28,6 +29,7 @@ public class QuizModel implements IModel {
         choices = null;
         responses = null;
         answers = null;
+        finished = false;
     }
 
     @Override
@@ -86,6 +88,14 @@ public class QuizModel implements IModel {
 
     public void setQuizType(QuizType quizType) {
         this.quizType = quizType;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
     @Override
