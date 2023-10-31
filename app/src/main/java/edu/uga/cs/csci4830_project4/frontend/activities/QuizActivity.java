@@ -15,6 +15,7 @@ import java.util.Map;
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
+import edu.uga.cs.csci4830_project4.frontend.async.UpdateModelTask;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.fragments.QuizPagerAdapter;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
@@ -73,12 +74,10 @@ public final class QuizActivity extends AppCompatActivity {
     }
 
     private void saveQuiz(QuizDTO quizDTO) {
-        // TODO: should do asynchronously
-        QuizzesAccess quizzesAccess = new QuizzesAccess(this);
-        quizzesAccess.open();
-        QuizModel model = quizDTO.toModel();
-        quizzesAccess.update(model);
-        quizzesAccess.close();
+        // Fetch the quiz models from the database asynchronously
+        UpdateModelTask<QuizModel> updateModelTask = new UpdateModelTask<>(
+                new QuizzesAccess(this));
+        updateModelTask.execute(quizDTO.toModel());
 
         // start main activity with toast message
         Intent intent = new Intent(this, MainActivity.class);

@@ -43,7 +43,9 @@ public class StartNewQuizActivity extends AppCompatActivity {
         // Create and store a new quiz based on the selected QuizType
         QuizModelFactory quizModelFactory = new QuizModelFactory(quizzesAccess, statesAccess);
         int numberOfQuestions = ConstVals.NUMBER_QUESTIONS;
-        QuizModel quizModel = quizModelFactory.createAndStore(quizType, numberOfQuestions);
+        QuizModelFactory.QuizModelFactoryParams params =
+                new QuizModelFactory.QuizModelFactoryParams(quizType, numberOfQuestions);
+        QuizModel quizModel = quizModelFactory.createAndStore(params);
 
         // Convert the quiz model to a QuizDTO
         QuizDTO quizDTO = QuizDTO.fromModel(quizModel);

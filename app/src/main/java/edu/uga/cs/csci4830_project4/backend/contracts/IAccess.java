@@ -70,7 +70,7 @@ public interface IAccess<T extends IModel> {
      *
      * @return The number of rows affected.
      */
-    int delete(long id);
+    int deleteById(long id);
 
     /**
      * Deletes all models from the database.

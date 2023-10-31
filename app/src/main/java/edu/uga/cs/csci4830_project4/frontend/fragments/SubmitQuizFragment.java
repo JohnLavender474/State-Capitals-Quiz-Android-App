@@ -20,6 +20,8 @@ import edu.uga.cs.csci4830_project4.backend.scores.ScoreModel;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModelFactory;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
 import edu.uga.cs.csci4830_project4.frontend.activities.ScoreActivity;
+import edu.uga.cs.csci4830_project4.frontend.async.CreateAndStoreFactoryTask;
+import edu.uga.cs.csci4830_project4.frontend.async.DeleteModelByIdTask;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.dto.ScoreDTO;
 
@@ -63,16 +65,14 @@ public class SubmitQuizFragment extends Fragment {
     }
 
     private void submitQuiz(QuizDTO quizDTO) {
-        // TODO: do asynchronously
         Log.d(TAG, "Submitting quiz");
 
-        // delete quiz model
+        // delete quiz model by id
         long quizId = quizDTO.getQuizId();
         Log.d(TAG, "Deleting quiz with id = " + quizId);
-        QuizzesAccess quizzesAccess = new QuizzesAccess(getContext());
-        quizzesAccess.open();
-        quizzesAccess.delete(quizId);
-        quizzesAccess.close();
+        DeleteModelByIdTask deleteModelByIdTask =
+                new DeleteModelByIdTask(new QuizzesAccess(getContext()));
+        deleteModelByIdTask.execute(quizId);
 
         // create score model
         List<String> questions = quizDTO.getQuestions();
@@ -83,8 +83,8 @@ public class SubmitQuizFragment extends Fragment {
             String response = responses.get(i);
             String answer = answers.get(i);
 
-            Log.d(TAG, "Question = " + questions.get(i) + ", response = " + response +
-                    ", answer = " + answer);
+            Log.d(TAG, "Question = " + questions.get(i) + ", response = " + response + ", answer "
+                    + "= " + answer);
 
             if (response.equalsIgnoreCase(answer)) {
                 points++;
@@ -93,29 +93,27 @@ public class SubmitQuizFragment extends Fragment {
         String score = points + "/" + responses.size();
         Log.d(TAG, "Score = " + score);
 
-        // TODO: should do asynchronously
-        ScoresAccess scoresAccess = new ScoresAccess(getContext());
-        ScoreModelFactory scoreModelFactory = new ScoreModelFactory(scoresAccess);
-        scoresAccess.open();
-        ScoreModel scoreModel = scoreModelFactory.createAndStore(score);
-        scoresAccess.close();
-        Log.d(TAG, "Created and stored score model = " + scoreModel);
+        CreateAndStoreFactoryTask<String, ScoreModel> createAndStoreFactoryTask =
+                new CreateAndStoreFactoryTask<>(new ScoreModelFactory(new ScoresAccess(getContext())), scoreModel -> {
+            Log.d(TAG, "Created and stored score model = " + scoreModel);
 
-        // go to score activity
-        Activity activity = getActivity();
-        if (activity == null) {
-            Log.e(TAG, "Activity is null");
-            throw new IllegalStateException("Activity is null");
-        }
+            // go to score activity
+            Activity activity = getActivity();
+            if (activity == null) {
+                Log.e(TAG, "Activity is null");
+                throw new IllegalStateException("Activity is null");
+            }
 
-        Log.d(TAG, "Finishing quiz activity, starting score activity");
+            Log.d(TAG, "Finishing quiz activity, starting score activity");
 
-        Intent intent = new Intent(activity, ScoreActivity.class);
-        intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
-        startActivity(intent);
+            Intent intent = new Intent(activity, ScoreActivity.class);
+            intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
+            startActivity(intent);
 
-        // finish the quiz activity
-        activity.finish();
+            // finish the quiz activity
+            activity.finish();
+        });
+        createAndStoreFactoryTask.execute(score);
     }
 
 }

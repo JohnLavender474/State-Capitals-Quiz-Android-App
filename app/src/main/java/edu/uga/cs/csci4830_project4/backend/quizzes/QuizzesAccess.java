@@ -186,7 +186,7 @@ public class QuizzesAccess implements IAccess<QuizModel> {
     }
 
     @Override
-    public int delete(long id) {
+    public int deleteById(long id) {
         Log.d(TAG, "delete(): _id = " + id);
 
         int numDeleted;

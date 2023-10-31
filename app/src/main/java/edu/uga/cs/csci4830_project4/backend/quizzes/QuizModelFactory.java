@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import edu.uga.cs.csci4830_project4.backend.contracts.IModelFactory;
 import edu.uga.cs.csci4830_project4.backend.states.StateModel;
 import edu.uga.cs.csci4830_project4.backend.states.StatesAccess;
 import edu.uga.cs.csci4830_project4.common.QuizType;
@@ -13,7 +14,17 @@ import edu.uga.cs.csci4830_project4.common.QuizType;
 /**
  * Factory for creating new quiz models.
  */
-public class QuizModelFactory {
+public class QuizModelFactory implements IModelFactory<QuizModel,
+        QuizModelFactory.QuizModelFactoryParams> {
+
+    /**
+     * Parameters for creating a quiz model.
+     *
+     * @param quizType          the quiz type.
+     * @param numberOfQuestions the number of questions.
+     */
+    public record QuizModelFactoryParams(QuizType quizType, int numberOfQuestions) {
+    }
 
     private static final String TAG = "QuizModelFactory";
 
@@ -36,13 +47,14 @@ public class QuizModelFactory {
      * Creates a new quiz model, stores it in the database, and then returns the model. The
      * questions are generated randomly using random U.S. states.
      *
-     * @param quizType          the type of quiz to create.
-     * @param numberOfQuestions the number of questions to include in the quiz.
+     * @param params the parameters to use for creating the quiz model.
      * @return the quiz model.
      */
-    public QuizModel createAndStore(QuizType quizType, int numberOfQuestions) {
-        QuizModel quiz = new QuizModel();
+    public QuizModel createAndStore(QuizModelFactoryParams params) {
+        QuizType quizType = params.quizType();
+        int numberOfQuestions = params.numberOfQuestions();
 
+        QuizModel quiz = new QuizModel();
         // set quiz type
         quiz.setQuizType(quizType);
 

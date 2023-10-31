@@ -116,7 +116,7 @@ public class ScoresAccess implements IAccess<ScoreModel> {
     }
 
     @Override
-    public int delete(long id) {
+    public int deleteById(long id) {
         if (db == null) {
             return -1;
         }

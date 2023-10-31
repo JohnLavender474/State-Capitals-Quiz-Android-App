@@ -9,12 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
-
 import edu.uga.cs.csci4830_project4.R;
-import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModel;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
+import edu.uga.cs.csci4830_project4.frontend.async.RetrieveAllModelsTask;
 
 public class ViewScoresActivity extends AppCompatActivity {
 
@@ -31,29 +29,28 @@ public class ViewScoresActivity extends AppCompatActivity {
 
         Log.d(TAG, "onCreate(): Creating ViewScoresActivity");
 
-        // TODO: Use async task to fetch the completed scores
-        IAccess<ScoreModel> scoresAccess = new ScoresAccess(this);
-        scoresAccess.open();
-        List<ScoreModel> allScoreModels = scoresAccess.retrieveAll();
-        scoresAccess.close();
+        // Retrieve all score models and display the scores in a table
+        RetrieveAllModelsTask<ScoreModel> retrieveAllModelsTask =
+                new RetrieveAllModelsTask<>(new ScoresAccess(this), scoreModels -> {
+            Log.d(TAG, "onCreate(): Retrieved all score models = " + scoreModels);
 
-        Log.d(TAG, "onCreate(): Retrieved all score models = " + allScoreModels);
+            // Get the TableLayout to display the quiz scores
+            TableLayout tableLayout = findViewById(R.id.tableLayoutScores);
+            scoreModels.forEach(scoreModel -> {
+                TableRow row = new TableRow(this);
 
-        // Get the TableLayout to display the quiz scores
-        TableLayout tableLayout = findViewById(R.id.tableLayoutScores);
-        allScoreModels.forEach(scoreModel -> {
-            TableRow row = new TableRow(this);
+                TextView scoreView = new TextView(this);
+                String score = scoreModel.getScore();
 
-            TextView scoreView = new TextView(this);
-            String score = scoreModel.getScore();
+                Log.d(TAG, "onCreate(): Adding row to table with score = " + score);
 
-            Log.d(TAG, "onCreate(): Adding row to table with score = " + score);
+                scoreView.setText(score);
+                row.addView(scoreView);
 
-            scoreView.setText(score);
-            row.addView(scoreView);
-
-            tableLayout.addView(row);
+                tableLayout.addView(row);
+            });
         });
+        retrieveAllModelsTask.execute();
     }
 }
 

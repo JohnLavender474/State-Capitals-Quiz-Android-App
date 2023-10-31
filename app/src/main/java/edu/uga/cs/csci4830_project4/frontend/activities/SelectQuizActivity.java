@@ -8,17 +8,19 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
+import edu.uga.cs.csci4830_project4.frontend.async.RetrieveAllModelsTask;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
 public class SelectQuizActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectQuizActivity";
+
+    private List<QuizModel> quizModels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +30,9 @@ public class SelectQuizActivity extends AppCompatActivity {
         // Initialize the ListView
         ListView lvQuizList = findViewById(R.id.lvQuizList);
 
-        // Fetch the list of quiz models from the database
-        List<QuizModel> quizModels = getQuizModelsFromDatabase();
-
-        // Create an array of quiz types
-        List<String> quizTypes = new ArrayList<>();
-        for (QuizModel quizModel : quizModels) {
-            String quizType = quizModel.getQuizType().name().replace("_", " ");
-            quizTypes.add(quizType);
-        }
-
-        // Create an ArrayAdapter to populate the ListView
+        // Create an ArrayAdapter for the quiz types
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, quizTypes);
+                android.R.layout.simple_list_item_1);
 
         // Set the adapter for the ListView
         lvQuizList.setAdapter(adapter);
@@ -48,27 +40,44 @@ public class SelectQuizActivity extends AppCompatActivity {
         // Set an item click listener for the ListView
         lvQuizList.setOnItemClickListener((parent, view, position, id) -> {
             // Handle the item click
-            QuizModel selectedQuizModel = quizModels.get(position);
-            // Convert the selected QuizModel to QuizDTO
-            QuizDTO quizDTO = QuizDTO.fromModel(selectedQuizModel);
+            // Get the selected QuizModel from the adapter
+            QuizModel selectedQuizModel = getSelectedQuizModel(position);
 
-            Log.d(TAG, "onCreate(): Selected quiz = " + quizDTO);
+            if (selectedQuizModel != null) {
+                // Convert the selected QuizModel to QuizDTO
+                QuizDTO quizDTO = QuizDTO.fromModel(selectedQuizModel);
 
-            // Start the QuizActivity with the selected quiz
-            Intent intent = new Intent(SelectQuizActivity.this, QuizActivity.class);
-            intent.putExtra("quizDTO", quizDTO);
-            startActivity(intent);
+                Log.d(TAG, "onCreate(): Selected quiz = " + quizDTO);
 
-            finish();
+                // Start the QuizActivity with the selected quiz
+                Intent intent = new Intent(SelectQuizActivity.this, QuizActivity.class);
+                intent.putExtra("quizDTO", quizDTO);
+                startActivity(intent);
+
+                finish();
+            }
         });
+
+        // Fetch quiz models from the database asynchronously
+        fetchQuizModelsAsync(adapter);
     }
 
-    private List<QuizModel> getQuizModelsFromDatabase() {
-        QuizzesAccess quizzesAccess = new QuizzesAccess(this);
-        quizzesAccess.open();
-        List<QuizModel> quizModels = quizzesAccess.retrieveAll();
-        quizzesAccess.close();
-        return quizModels;
+    private void fetchQuizModelsAsync(ArrayAdapter<String> adapter) {
+        RetrieveAllModelsTask<QuizModel> fetchQuizModelsTask =
+                new RetrieveAllModelsTask<>(new QuizzesAccess(this), quizModels -> {
+                    // Update the adapter with quiz types
+                    for (QuizModel quizModel : quizModels) {
+                        String quizType = quizModel.getQuizType().name().replace("_", " ");
+                        adapter.add(quizType + " - " + quizModel.getId());
+                        this.quizModels = quizModels;
+                    }
+                });
+        fetchQuizModelsTask.execute();
     }
+
+    private QuizModel getSelectedQuizModel(int position) {
+        return quizModels != null ? quizModels.get(position) : null;
+    }
+
 }
 

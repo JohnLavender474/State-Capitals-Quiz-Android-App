@@ -53,7 +53,10 @@ public class QuizModelFactoryTest {
         });
 
         // Call the method to test
-        QuizModel quiz = quizModelFactory.createAndStore(QuizType.CAPITALS_QUIZ, numberOfQuestions);
+        QuizModelFactory.QuizModelFactoryParams params =
+                new QuizModelFactory.QuizModelFactoryParams(QuizType.CAPITALS_QUIZ,
+                        numberOfQuestions);
+        QuizModel quiz = quizModelFactory.createAndStore(params);
 
         // Verify the behavior
         assertNotNull(quiz);
