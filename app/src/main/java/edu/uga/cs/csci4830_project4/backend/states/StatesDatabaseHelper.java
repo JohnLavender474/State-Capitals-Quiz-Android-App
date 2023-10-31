@@ -1,8 +1,8 @@
 package edu.uga.cs.csci4830_project4.backend.states;
 
-import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.*;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_CAPITAL_CITY;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_CAPITAL_SINCE;
+import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_ID;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_SECOND_CITY;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_SIZE_RANK;
 import static edu.uga.cs.csci4830_project4.backend.states.StateTableValues.COLUMN_STATEHOOD;
