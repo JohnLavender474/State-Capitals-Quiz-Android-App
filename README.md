@@ -39,7 +39,7 @@ there is only one quiz type supported: Capitals Quiz. This type of quiz tests th
 of the capital city of each state. The app is designed in such a way so that more quiz types can be
 easily implemented.
 
-<img src="images/Choose_Quiz_Type" width="150">
+<img src="images/Choose_Quiz_Type.png" width="150">
 
 After the user selects a quiz type, they are presented with the quiz. The quiz consists of six
 questions. Each question is a multiple choice question with four possible answers. The user can
