@@ -25,14 +25,28 @@ import edu.uga.cs.csci4830_project4.frontend.async.DeleteModelByIdTask;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 import edu.uga.cs.csci4830_project4.frontend.dto.ScoreDTO;
 
+/**
+ * This fragment is responsible for displaying the submit quiz button. When the submit quiz button
+ * is clicked, the quiz is deleted from the database, a score model is created and stored, and the
+ * user is taken to the score activity.
+ */
 public class SubmitQuizFragment extends Fragment {
 
     private static final String TAG = "SubmitQuizFragment";
 
+    /**
+     * Required empty public constructor
+     */
     public SubmitQuizFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Creates a new instance of this fragment
+     *
+     * @param quizDTO the quiz dto to use for submitting the quiz.
+     * @return a new instance of this fragment.
+     */
     public static SubmitQuizFragment newInstance(QuizDTO quizDTO) {
         SubmitQuizFragment fragment = new SubmitQuizFragment();
         Bundle bundle = new Bundle();
@@ -95,24 +109,24 @@ public class SubmitQuizFragment extends Fragment {
 
         CreateAndStoreFactoryTask<String, ScoreModel> createAndStoreFactoryTask =
                 new CreateAndStoreFactoryTask<>(new ScoreModelFactory(new ScoresAccess(getContext())), scoreModel -> {
-            Log.d(TAG, "Created and stored score model = " + scoreModel);
+                    Log.d(TAG, "Created and stored score model = " + scoreModel);
 
-            // go to score activity
-            Activity activity = getActivity();
-            if (activity == null) {
-                Log.e(TAG, "Activity is null");
-                throw new IllegalStateException("Activity is null");
-            }
+                    // go to score activity
+                    Activity activity = getActivity();
+                    if (activity == null) {
+                        Log.e(TAG, "Activity is null");
+                        throw new IllegalStateException("Activity is null");
+                    }
 
-            Log.d(TAG, "Finishing quiz activity, starting score activity");
+                    Log.d(TAG, "Finishing quiz activity, starting score activity");
 
-            Intent intent = new Intent(activity, ScoreActivity.class);
-            intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
-            startActivity(intent);
+                    Intent intent = new Intent(activity, ScoreActivity.class);
+                    intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
+                    startActivity(intent);
 
-            // finish the quiz activity
-            activity.finish();
-        });
+                    // finish the quiz activity
+                    activity.finish();
+                });
         createAndStoreFactoryTask.execute(score);
     }
 

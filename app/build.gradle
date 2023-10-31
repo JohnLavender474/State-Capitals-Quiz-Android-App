@@ -6,6 +6,10 @@ android {
     namespace 'edu.uga.cs.csci4830_project4'
     compileSdk 34
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     defaultConfig {
         applicationId "edu.uga.cs.csci4830_project4"
         minSdk 24

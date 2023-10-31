@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import edu.uga.cs.csci4830_project4.backend.states.StateModel;
 
+/**
+ * DTO for a state.
+ */
 public class StateDTO implements Serializable {
 
     private long id;
@@ -15,10 +18,25 @@ public class StateDTO implements Serializable {
     private String capitalSince;
     private String sizeRank;
 
+    /**
+     * Default constructor.
+     */
     public StateDTO() {
         id = -1L;
     }
 
+    /**
+     * Constructor for this DTO.
+     *
+     * @param id           the ID of the state.
+     * @param stateName    the state name.
+     * @param capitalCity  the capital city.
+     * @param secondCity   the second city.
+     * @param thirdCity    the third city.
+     * @param statehood    the statehood.
+     * @param capitalSince the capital since.
+     * @param sizeRank     the size rank.
+     */
     public StateDTO(long id, String stateName, String capitalCity, String secondCity,
                     String thirdCity, String statehood, String capitalSince, String sizeRank) {
         this.id = id;
@@ -95,6 +113,12 @@ public class StateDTO implements Serializable {
         this.sizeRank = sizeRank;
     }
 
+    /**
+     * Converts a state model to a state DTO.
+     *
+     * @param stateModel the state model to convert.
+     * @return the state DTO.
+     */
     public static StateDTO fromModel(StateModel stateModel) {
         return new StateDTO(stateModel.getId(), stateModel.getStateName(),
                 stateModel.getCapitalCity(), stateModel.getSecondCity(),

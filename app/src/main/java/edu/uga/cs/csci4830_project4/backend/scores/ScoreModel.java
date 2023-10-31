@@ -6,15 +6,27 @@ import java.util.Objects;
 
 import edu.uga.cs.csci4830_project4.backend.contracts.IModel;
 
+/**
+ * This class represents a row in the scores table.
+ */
 public class ScoreModel implements IModel {
 
     private long id;
     private String score;
 
+    /**
+     * Constructs a new ScoreModel with an id of -1.
+     */
     public ScoreModel() {
         id = -1;
     }
 
+    /**
+     * Constructs a new ScoreModel with the given id and score.
+     *
+     * @param id    The id.
+     * @param score The score.
+     */
     public ScoreModel(long id, String score) {
         this.id = id;
         this.score = score;

@@ -1,5 +1,8 @@
 package edu.uga.cs.csci4830_project4.backend.states;
 
+/**
+ * This class contains constants for the states table.
+ */
 public class StateTableValues {
     public static final String TABLE_NAME = "states";
     public static final String COLUMN_ID = "_id";

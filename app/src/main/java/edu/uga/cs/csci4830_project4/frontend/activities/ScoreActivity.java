@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.frontend.dto.ScoreDTO;
 
+/**
+ * This activity is responsible for displaying the user's score after they have completed a quiz.
+ * The user can click the "Go Back Home" button to return to the main activity.
+ */
 public class ScoreActivity extends AppCompatActivity {
 
     private static final String TAG = "ScoreActivity";

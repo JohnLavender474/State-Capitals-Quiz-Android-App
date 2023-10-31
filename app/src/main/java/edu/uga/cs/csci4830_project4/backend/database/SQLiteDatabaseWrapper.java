@@ -18,6 +18,11 @@ public class SQLiteDatabaseWrapper implements IDatabase {
 
     private final SQLiteDatabase database;
 
+    /**
+     * Constructs a new SQLiteDatabaseWrapper instance with the provided SQLiteDatabase.
+     *
+     * @param database The SQLiteDatabase instance to be wrapped.
+     */
     public SQLiteDatabaseWrapper(SQLiteDatabase database) {
         this.database = database;
     }

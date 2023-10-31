@@ -1,5 +1,8 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
+/**
+ * This class contains constants for the quizzes table.
+ */
 public class QuizTableValues {
 
     public static final String TABLE_NAME = "quizzes";

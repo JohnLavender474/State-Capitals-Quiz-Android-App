@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import edu.uga.cs.csci4830_project4.R;
 
+/**
+ * This activity is the main activity for the application. It allows the user to start a new quiz,
+ * continue a quiz, or view past results.
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override

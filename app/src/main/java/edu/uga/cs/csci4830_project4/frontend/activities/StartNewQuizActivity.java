@@ -16,6 +16,10 @@ import edu.uga.cs.csci4830_project4.common.ConstVals;
 import edu.uga.cs.csci4830_project4.common.QuizType;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
+/**
+ * This activity is responsible for starting a new quiz. It allows the user to select the type of
+ * quiz they want to take. The user can select the "Capitals Quiz" button to start a capitals quiz.
+ */
 public class StartNewQuizActivity extends AppCompatActivity {
 
     @Override

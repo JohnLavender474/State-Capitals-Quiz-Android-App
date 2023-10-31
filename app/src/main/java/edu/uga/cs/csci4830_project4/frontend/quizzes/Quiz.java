@@ -6,12 +6,20 @@ import java.util.List;
 
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
+/**
+ * This class represents a quiz.
+ */
 public class Quiz implements IQuiz {
 
     private static final String TAG = "Quiz";
 
     private final QuizDTO quizDTO;
 
+    /**
+     * Constructor for this quiz.
+     *
+     * @param quizDTO The quiz DTO to use for this quiz.
+     */
     public Quiz(QuizDTO quizDTO) {
         this.quizDTO = quizDTO;
         Log.d(TAG, "Create quiz with quiz dto = " + quizDTO);

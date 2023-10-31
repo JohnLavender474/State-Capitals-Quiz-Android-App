@@ -18,16 +18,30 @@ import java.util.Locale;
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.frontend.quizzes.IQuiz;
 
+/**
+ * This class provides a fragment for a quiz.
+ */
 public class QuizFragment extends Fragment {
 
     private IQuiz quiz;
     private int questionIndex;
     private int imageSource;
 
+    /**
+     * Constructs a new {@link QuizFragment} instance.
+     */
     public QuizFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Constructs a new {@link QuizFragment} instance.
+     *
+     * @param quiz          the quiz.
+     * @param questionIndex the index of the question.
+     * @param imageSource   the image source.
+     * @return the new {@link QuizFragment} instance.
+     */
     public static QuizFragment newInstance(IQuiz quiz, int questionIndex, int imageSource) {
         QuizFragment fragment = new QuizFragment();
         fragment.quiz = quiz;

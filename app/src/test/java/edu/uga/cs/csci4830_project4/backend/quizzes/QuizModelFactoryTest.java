@@ -97,7 +97,7 @@ public class QuizModelFactoryTest {
         assertNotNull(responses);
         assertEquals(numberOfQuestions, responses.size());
         for (int i = 0; i < numberOfQuestions; i++) {
-            assertEquals("", responses.get(i));
+            assertEquals("NULL", responses.get(i));
         }
 
         // Assertions for Answers

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This class contains methods for getting unique random numbers.
+ */
 public class UniqueRandomNumbers {
 
     /**

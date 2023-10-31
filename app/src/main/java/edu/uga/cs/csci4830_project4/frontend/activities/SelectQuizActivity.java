@@ -16,6 +16,10 @@ import edu.uga.cs.csci4830_project4.backend.quizzes.QuizzesAccess;
 import edu.uga.cs.csci4830_project4.frontend.async.RetrieveAllModelsTask;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
+/**
+ * This activity is responsible for displaying the list of quizzes that the user can take. The user
+ * can select a quiz from the list and continue the quiz.
+ */
 public class SelectQuizActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectQuizActivity";
