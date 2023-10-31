@@ -28,14 +28,17 @@
 
         <activity
             android:name=".frontend.activities.SelectQuizActivity"
+            android:parentActivityName=".frontend.activities.MainActivity"
             android:label="Select Quiz" />
 
         <activity
             android:name=".frontend.activities.StartNewQuizActivity"
+            android:parentActivityName=".frontend.activities.MainActivity"
             android:label="Start New Quiz" />
 
         <activity
             android:name=".frontend.activities.ViewScoresActivity"
+            android:parentActivityName=".frontend.activities.MainActivity"
             android:label="View Scores" />
 
     </application>
