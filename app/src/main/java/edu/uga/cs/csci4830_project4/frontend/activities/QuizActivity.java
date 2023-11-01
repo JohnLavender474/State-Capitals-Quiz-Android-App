@@ -33,6 +33,8 @@ public final class QuizActivity extends AppCompatActivity {
 
     private static Map<String, Integer> stateImagesMap;
 
+    private QuizDTO quizDTO;
+
     /**
      * {@inheritDoc}
      * <p>
@@ -46,7 +48,7 @@ public final class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         // fetch the quiz dto from the intent
-        QuizDTO quizDTO = (QuizDTO) getIntent().getSerializableExtra("quizDTO");
+        quizDTO = (QuizDTO) getIntent().getSerializableExtra("quizDTO");
         if (quizDTO == null) {
             throw new IllegalStateException("Quiz dto is null");
         }
@@ -71,24 +73,32 @@ public final class QuizActivity extends AppCompatActivity {
 
         // set listener for the save and quit button
         Button saveAndQuitButton = findViewById(R.id.btnQuitAndSave);
-        saveAndQuitButton.setOnClickListener(v -> saveQuiz(quizDTO));
+        saveAndQuitButton.setOnClickListener(v -> {
+            // save the quiz
+            saveQuiz();
+
+            // start main activity with toast message
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("message", "Quiz saved!");
+            startActivity(intent);
+
+            // finish this quiz activity
+            finish();
+        });
     }
 
-    private void saveQuiz(QuizDTO quizDTO) {
-        quizDTO.setTimeUpdated(LocalDateTime.now());
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveQuiz();
+    }
 
+    private void saveQuiz() {
+        quizDTO.setTimeUpdated(LocalDateTime.now());
         // Fetch the quiz models from the database asynchronously
         UpdateModelTask<QuizModel> updateModelTask = new UpdateModelTask<>(
                 new QuizzesAccess(this));
         updateModelTask.execute(quizDTO.toModel());
-
-        // start main activity with toast message
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("message", "Quiz saved!");
-        startActivity(intent);
-
-        // finish this quiz activity
-        finish();
     }
 
     private Map<String, Integer> createStateImagesMap() {
