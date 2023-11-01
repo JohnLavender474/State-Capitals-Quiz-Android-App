@@ -40,8 +40,9 @@ final class ScoresDatabaseHelper extends SQLiteOpenHelper implements IDatabaseHe
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT)"
-                , TABLE_NAME, COLUMN_ID, COLUMN_SCORE));
+        db.execSQL(String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT,"
+                + " %s TEXT, %s TEXT)", TABLE_NAME, COLUMN_ID, COLUMN_QUIZ_TYPE, COLUMN_SCORE,
+                COLUMN_TIME_COMPLETED));
     }
 
     @Override

@@ -1,6 +1,8 @@
 package edu.uga.cs.csci4830_project4.backend.scores;
 
 import static edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods.getColumnIndex;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.dateToString;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToDate;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ import edu.uga.cs.csci4830_project4.backend.contracts.IAccess;
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabase;
 import edu.uga.cs.csci4830_project4.backend.contracts.IDatabaseHelper;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues;
+import edu.uga.cs.csci4830_project4.common.QuizType;
 
 /**
  * This class provides access to the scores table in the database and encapsulates the
@@ -60,6 +63,12 @@ public class ScoresAccess implements IAccess<ScoreModel> {
         String score = String.valueOf(scoreModel.getScore());
         values.put(ScoreTableValues.COLUMN_SCORE, score);
 
+        String timeCompleted = dateToString(scoreModel.getTimeCompleted());
+        values.put(ScoreTableValues.COLUMN_TIME_COMPLETED, timeCompleted);
+
+        String quizType = scoreModel.getQuizType().name();
+        values.put(ScoreTableValues.COLUMN_QUIZ_TYPE, quizType);
+
         return values;
     }
 
@@ -73,8 +82,8 @@ public class ScoresAccess implements IAccess<ScoreModel> {
 
     @Override
     public ScoreModel getById(long id) {
-        List<ScoreModel> models = retrieve(null, "_id = ?", new String[]{String.valueOf(id)}, null
-                , null, null, null);
+        List<ScoreModel> models = retrieve(null, "_id = ?", new String[]{String.valueOf(id)},
+                null, null, null, null);
         return models.isEmpty() ? null : models.get(0);
     }
 
@@ -90,10 +99,16 @@ public class ScoresAccess implements IAccess<ScoreModel> {
                     long id = cursor.getLong(getColumnIndex(cursor, QuizTableValues.COLUMN_ID));
                     String score = cursor.getString(getColumnIndex(cursor,
                             ScoreTableValues.COLUMN_SCORE));
+                    String dateCompleted = cursor.getString(getColumnIndex(cursor,
+                            ScoreTableValues.COLUMN_TIME_COMPLETED));
+                    String quizType = cursor.getString(getColumnIndex(cursor,
+                            ScoreTableValues.COLUMN_QUIZ_TYPE));
 
                     ScoreModel model = new ScoreModel();
                     model.setId(id);
                     model.setScore(score);
+                    model.setQuizType(QuizType.valueOf(quizType));
+                    model.setTimeCompleted(stringToDate(dateCompleted));
 
                     models.add(model);
                 } while (cursor.moveToNext());

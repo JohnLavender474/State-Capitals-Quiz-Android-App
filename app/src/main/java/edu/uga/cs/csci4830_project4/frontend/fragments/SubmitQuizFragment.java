@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.frontend.fragments;
 
+import static edu.uga.cs.csci4830_project4.backend.scores.ScoreModelFactory.*;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -104,30 +106,34 @@ public class SubmitQuizFragment extends Fragment {
                 points++;
             }
         }
+
         String score = points + "/" + responses.size();
         Log.d(TAG, "Score = " + score);
+        ScoreModelFactoryParams params = new ScoreModelFactoryParams(score, quizDTO.getQuizType());
 
-        CreateAndStoreFactoryTask<String, ScoreModel> createAndStoreFactoryTask =
-                new CreateAndStoreFactoryTask<>(new ScoreModelFactory(new ScoresAccess(getContext())), scoreModel -> {
-                    Log.d(TAG, "Created and stored score model = " + scoreModel);
+        CreateAndStoreFactoryTask<ScoreModelFactoryParams, ScoreModel> createAndStoreFactoryTask =
+                new CreateAndStoreFactoryTask<>(
+                        new ScoreModelFactory(new ScoresAccess(getContext())),
+                        scoreModel -> {
+                            Log.d(TAG, "Created and stored score model = " + scoreModel);
 
-                    // go to score activity
-                    Activity activity = getActivity();
-                    if (activity == null) {
-                        Log.e(TAG, "Activity is null");
-                        throw new IllegalStateException("Activity is null");
-                    }
+                            // go to score activity
+                            Activity activity = getActivity();
+                            if (activity == null) {
+                                Log.e(TAG, "Activity is null");
+                                throw new IllegalStateException("Activity is null");
+                            }
 
-                    Log.d(TAG, "Finishing quiz activity, starting score activity");
+                            Log.d(TAG, "Finishing quiz activity, starting score activity");
 
-                    Intent intent = new Intent(activity, ScoreActivity.class);
-                    intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
-                    startActivity(intent);
+                            Intent intent = new Intent(activity, ScoreActivity.class);
+                            intent.putExtra("scoreDTO", ScoreDTO.fromModel(scoreModel));
+                            startActivity(intent);
 
-                    // finish the quiz activity
-                    activity.finish();
-                });
-        createAndStoreFactoryTask.execute(score);
+                            // finish the quiz activity
+                            activity.finish();
+                        });
+        createAndStoreFactoryTask.execute(params);
     }
 
 }

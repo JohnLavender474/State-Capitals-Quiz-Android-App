@@ -2,6 +2,7 @@ package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import android.util.Log;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -101,6 +102,11 @@ public class QuizModelFactory implements IModelFactory<QuizModel,
         quiz.setAnswers(answers);
         quiz.setChoices(choices);
         quiz.setResponses(responses);
+
+        // set time created and updated
+        LocalDateTime timeCreated = LocalDateTime.now();
+        quiz.setTimeCreated(timeCreated);
+        quiz.setTimeUpdated(timeCreated);
 
         Log.d(TAG, "createAndStore(): quiz before storing = " + quiz);
 

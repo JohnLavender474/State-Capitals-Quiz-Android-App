@@ -1,10 +1,37 @@
 package edu.uga.cs.csci4830_project4.common;
 
+import static java.time.format.DateTimeFormatter.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 public class CommonUtilMethods {
+
+    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+    private static final DateTimeFormatter formatter = ofPattern(DATE_PATTERN);
+
+    /**
+     * Converts a LocalDateTime to a string.
+     *
+     * @param date The LocalDateTime to convert.
+     * @return The string.
+     */
+    public static String dateToString(LocalDateTime date) {
+        return date.format(formatter);
+    }
+
+    /**
+     * Converts a string to a LocalDateTime.
+     *
+     * @param date The string to convert.
+     * @return The LocalDateTime.
+     */
+    public static LocalDateTime stringToDate(String date) {
+        return LocalDateTime.parse(date, formatter);
+    }
 
     /**
      * Converts a list to a semi-colon-separated string.

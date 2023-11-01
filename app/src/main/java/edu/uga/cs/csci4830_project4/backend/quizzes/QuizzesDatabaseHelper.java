@@ -7,6 +7,8 @@ import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUM
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_QUIZ_TYPE;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_RESPONSES;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_STATE_NAMES;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_TIME_CREATED;
+import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.COLUMN_TIME_UPDATED;
 import static edu.uga.cs.csci4830_project4.backend.quizzes.QuizTableValues.TABLE_NAME;
 
 import android.content.Context;
@@ -50,10 +52,12 @@ final class QuizzesDatabaseHelper extends SQLiteOpenHelper implements IDatabaseH
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
-                        "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, COLUMN_ID,
-                COLUMN_QUIZ_TYPE, COLUMN_QUESTIONS, COLUMN_RESPONSES, COLUMN_CHOICES,
-                COLUMN_ANSWERS, COLUMN_STATE_NAMES);
+        String sql =
+                String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s " +
+                        "TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)",
+                        TABLE_NAME, COLUMN_ID, COLUMN_QUIZ_TYPE, COLUMN_QUESTIONS,
+                        COLUMN_RESPONSES, COLUMN_CHOICES, COLUMN_ANSWERS, COLUMN_STATE_NAMES,
+                        COLUMN_TIME_CREATED, COLUMN_TIME_UPDATED);
 
         Log.d(TAG, "onCreate(): sql=" + sql);
 

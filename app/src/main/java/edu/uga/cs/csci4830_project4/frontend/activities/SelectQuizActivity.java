@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.dateToString;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.quizzes.QuizModel;
@@ -74,13 +77,19 @@ public class SelectQuizActivity extends AppCompatActivity {
     private void fetchQuizModelsAsync(ArrayAdapter<String> adapter) {
         RetrieveAllModelsTask<QuizModel> fetchQuizModelsTask =
                 new RetrieveAllModelsTask<>(new QuizzesAccess(this), quizModels -> {
-                    // Update the adapter with quiz types
-                    for (QuizModel quizModel : quizModels) {
-                        String quizType = quizModel.getQuizType().name().replace("_", " ");
-                        adapter.add(quizType + " - " + quizModel.getId());
-                        this.quizModels = quizModels;
-                    }
-                });
+            // Update the adapter with quiz types
+            for (QuizModel quizModel : quizModels) {
+                String quizType = quizModel.getQuizType().name().replace("_", " ");
+                String timeUpdated = dateToString(quizModel.getTimeUpdated());
+                String timeCreated = dateToString(quizModel.getTimeCreated());
+                adapter.add(String.format(Locale.getDefault(), """
+                        %s - %d.
+                        Created: %s.
+                        Updated: %s.""", quizType, quizModel.getId(), timeCreated, timeUpdated));
+
+                this.quizModels = quizModels;
+            }
+        });
         fetchQuizModelsTask.execute();
     }
 

@@ -7,6 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +75,8 @@ public final class QuizActivity extends AppCompatActivity {
     }
 
     private void saveQuiz(QuizDTO quizDTO) {
+        quizDTO.setTimeUpdated(LocalDateTime.now());
+
         // Fetch the quiz models from the database asynchronously
         UpdateModelTask<QuizModel> updateModelTask = new UpdateModelTask<>(
                 new QuizzesAccess(this));

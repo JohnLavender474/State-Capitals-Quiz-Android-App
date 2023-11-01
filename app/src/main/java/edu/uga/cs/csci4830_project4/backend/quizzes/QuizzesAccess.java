@@ -1,7 +1,9 @@
 package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import static edu.uga.cs.csci4830_project4.backend.utils.BackendUtilMethods.getColumnIndex;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.dateToString;
 import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.listToString;
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToDate;
 import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToList;
 
 import android.content.Context;
@@ -92,6 +94,12 @@ public class QuizzesAccess implements IAccess<QuizModel> {
         String stateNames = listToString(model.getStateNames());
         values.put(QuizTableValues.COLUMN_STATE_NAMES, stateNames);
 
+        String timeCreated = dateToString(model.getTimeCreated());
+        values.put(QuizTableValues.COLUMN_TIME_CREATED, timeCreated);
+
+        String timeUpdated = dateToString(model.getTimeUpdated());
+        values.put(QuizTableValues.COLUMN_TIME_UPDATED, timeUpdated);
+
         Log.d(TAG, "getValues(): values = " + values);
 
         return values;
@@ -146,6 +154,10 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                             QuizTableValues.COLUMN_ANSWERS));
                     String stateNames = cursor.getString(getColumnIndex(cursor,
                             QuizTableValues.COLUMN_STATE_NAMES));
+                    String timeCreated = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_TIME_CREATED));
+                    String timeUpdated = cursor.getString(getColumnIndex(cursor,
+                            QuizTableValues.COLUMN_TIME_UPDATED));
 
                     QuizModel model = new QuizModel();
                     model.setId(id);
@@ -158,6 +170,8 @@ public class QuizzesAccess implements IAccess<QuizModel> {
                     }));
                     model.setAnswers(stringToList(answers, string -> string));
                     model.setStateNames(stringToList(stateNames, string -> string));
+                    model.setTimeCreated(stringToDate(timeCreated));
+                    model.setTimeUpdated(stringToDate(timeUpdated));
 
                     models.add(model);
                 } while (cursor.moveToNext());

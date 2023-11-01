@@ -1,5 +1,7 @@
 package edu.uga.cs.csci4830_project4.frontend.activities;
 
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.dateToString;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Locale;
 
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.frontend.dto.ScoreDTO;
@@ -35,13 +39,17 @@ public class ScoreActivity extends AppCompatActivity {
 
         // Display the user's score
         TextView tvScore = findViewById(R.id.tvScore);
-        String scoreText = "Your Score: " + scoreDTO.getScore();
+        String scoreText = String.format(Locale.getDefault(), """
+                Your score: %s.
+                Time completed: %s.
+                Quiz type: %s.""", scoreDTO.getScore(), dateToString(scoreDTO.getTimeCompleted()),
+                scoreDTO.getQuizType().name().replace("_", " "));
         tvScore.setText(scoreText);
 
         Button btnGoBackHome = findViewById(R.id.btnGoBackHome);
         btnGoBackHome.setOnClickListener(v -> {
-            Log.d(TAG, "Go back home button clicked. Navigating back to MainActivity and closing "
-                    + "the ScoreActivity");
+            Log.d(TAG, "Go back home button clicked. Navigating back to MainActivity and " +
+                    "closing the ScoreActivity");
 
             // Navigate back to the main activity
             Intent intent = new Intent(ScoreActivity.this, MainActivity.class);

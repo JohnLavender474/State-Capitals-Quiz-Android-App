@@ -3,6 +3,7 @@ package edu.uga.cs.csci4830_project4.frontend.dto;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,8 @@ public class QuizDTO implements Serializable {
     private List<String> responses;
     private List<String> answers;
     private List<String> stateNames;
+    private LocalDateTime timeCreated;
+    private LocalDateTime timeUpdated;
 
     /**
      * Default constructor.
@@ -42,7 +45,7 @@ public class QuizDTO implements Serializable {
      */
     public QuizDTO(long quizId, QuizType quizType, List<String> questions,
                    List<List<String>> choices, List<String> responses, List<String> answers,
-                   List<String> stateNames) {
+                   List<String> stateNames, LocalDateTime timeCreated, LocalDateTime timeUpdated) {
         this.quizId = quizId;
         this.quizType = quizType;
         this.questions = questions;
@@ -50,6 +53,8 @@ public class QuizDTO implements Serializable {
         this.responses = responses;
         this.answers = answers;
         this.stateNames = stateNames;
+        this.timeCreated = timeCreated;
+        this.timeUpdated = timeUpdated;
     }
 
     public long getQuizId() {
@@ -108,6 +113,22 @@ public class QuizDTO implements Serializable {
         this.quizType = quizType;
     }
 
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public LocalDateTime getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(LocalDateTime timeUpdated) {
+        this.timeUpdated = timeUpdated;
+    }
+
     /**
      * Converts the given {@link QuizModel} to a {@link QuizDTO}.
      *
@@ -122,7 +143,7 @@ public class QuizDTO implements Serializable {
         List<String> answers = new ArrayList<>(model.getAnswers());
         List<String> stateNames = new ArrayList<>(model.getStateNames());
         return new QuizDTO(id, model.getQuizType(), questions, choices, responses, answers,
-                stateNames);
+                stateNames, model.getTimeCreated(), model.getTimeUpdated());
     }
 
     /**
@@ -139,6 +160,8 @@ public class QuizDTO implements Serializable {
         model.setResponses(new ArrayList<>(responses));
         model.setAnswers(new ArrayList<>(answers));
         model.setStateNames(new ArrayList<>(stateNames));
+        model.setTimeCreated(timeCreated);
+        model.setTimeUpdated(timeUpdated);
         return model;
     }
 

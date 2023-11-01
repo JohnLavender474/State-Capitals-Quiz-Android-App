@@ -2,6 +2,7 @@ package edu.uga.cs.csci4830_project4.backend.quizzes;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,8 @@ public class QuizModel implements IModel {
     private List<List<String>> choices;
     private List<String> responses;
     private List<String> answers;
+    private LocalDateTime timeCreated;
+    private LocalDateTime timeUpdated;
 
     public QuizModel() {
         id = -1;
@@ -87,6 +90,22 @@ public class QuizModel implements IModel {
 
     public void setQuizType(QuizType quizType) {
         this.quizType = quizType;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public LocalDateTime getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(LocalDateTime timeUpdated) {
+        this.timeUpdated = timeUpdated;
     }
 
     @Override

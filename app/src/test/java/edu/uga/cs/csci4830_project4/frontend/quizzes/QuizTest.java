@@ -3,9 +3,12 @@ package edu.uga.cs.csci4830_project4.frontend.quizzes;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToDate;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,9 @@ import edu.uga.cs.csci4830_project4.common.QuizType;
 import edu.uga.cs.csci4830_project4.frontend.dto.QuizDTO;
 
 public class QuizTest {
+
+    private static final String TIME_CREATED = "2023-10-30 12:00";
+    private static final String TIME_UPDATED = "2023-10-31 05:00";
 
     private Quiz quiz;
     private QuizDTO quizDTO;
@@ -41,8 +47,11 @@ public class QuizTest {
         stateNames.add("State1");
         stateNames.add("State2");
 
+        LocalDateTime timeCreated = stringToDate(TIME_CREATED);
+        LocalDateTime timeUpdated = stringToDate(TIME_UPDATED);
+
         quizDTO = new QuizDTO(quizId, QuizType.CAPITALS_QUIZ, questions, choices, responses,
-                answers, stateNames);
+                answers, stateNames, timeCreated, timeUpdated);
         quiz = new Quiz(quizDTO);
     }
 

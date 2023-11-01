@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 import edu.uga.cs.csci4830_project4.R;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoreModel;
 import edu.uga.cs.csci4830_project4.backend.scores.ScoresAccess;
@@ -35,24 +37,29 @@ public class ViewScoresActivity extends AppCompatActivity {
         // Retrieve all score models and display the scores in a table
         RetrieveAllModelsTask<ScoreModel> retrieveAllModelsTask =
                 new RetrieveAllModelsTask<>(new ScoresAccess(this), scoreModels -> {
-                    Log.d(TAG, "onCreate(): Retrieved all score models = " + scoreModels);
+            Log.d(TAG, "onCreate(): Retrieved all score models = " + scoreModels);
 
-                    // Get the TableLayout to display the quiz scores
-                    TableLayout tableLayout = findViewById(R.id.tableLayoutScores);
-                    scoreModels.forEach(scoreModel -> {
-                        TableRow row = new TableRow(this);
+            // Get the TableLayout to display the quiz scores
+            TableLayout tableLayout = findViewById(R.id.tableLayoutScores);
+            scoreModels.forEach(scoreModel -> {
+                TableRow row = new TableRow(this);
 
-                        TextView scoreView = new TextView(this);
-                        String score = scoreModel.getScore();
+                TextView scoreView = new TextView(this);
+                String score = String.format(Locale.getDefault(), """
+                                Score: %s.
+                                Quiz type: %s.
+                                Time completed: %s.""", scoreModel.getScore(),
+                        scoreModel.getQuizType().name().replace("_", " "),
+                        scoreModel.getTimeCompleted());
 
-                        Log.d(TAG, "onCreate(): Adding row to table with score = " + score);
+                Log.d(TAG, "onCreate(): Adding row to table with score = " + score);
 
-                        scoreView.setText(score);
-                        row.addView(scoreView);
+                scoreView.setText(score);
+                row.addView(scoreView);
 
-                        tableLayout.addView(row);
-                    });
-                });
+                tableLayout.addView(row);
+            });
+        });
         retrieveAllModelsTask.execute();
     }
 }

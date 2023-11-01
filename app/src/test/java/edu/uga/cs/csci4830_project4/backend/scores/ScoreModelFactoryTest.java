@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import edu.uga.cs.csci4830_project4.common.QuizType;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ScoreModelFactoryTest {
 
@@ -34,11 +36,15 @@ public class ScoreModelFactoryTest {
         });
 
         // Call the method to test
-        ScoreModel scoreModel = scoreModelFactory.createAndStore(scoreValue);
+        ScoreModelFactory.ScoreModelFactoryParams params =
+                new ScoreModelFactory.ScoreModelFactoryParams(scoreValue, QuizType.CAPITALS_QUIZ);
+        ScoreModel scoreModel = scoreModelFactory.createAndStore(params);
 
         // Verify the behavior
         assertNotNull(scoreModel);
         assertEquals(scoreValue, scoreModel.getScore());
         assertEquals(1L, scoreModel.getId());
+        assertEquals(QuizType.CAPITALS_QUIZ, scoreModel.getQuizType());
+        assertNotNull(scoreModel.getTimeCompleted());
     }
 }

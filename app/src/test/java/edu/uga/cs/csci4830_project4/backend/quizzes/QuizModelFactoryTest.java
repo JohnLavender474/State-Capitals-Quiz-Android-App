@@ -107,6 +107,9 @@ public class QuizModelFactoryTest {
         for (int i = 0; i < numberOfQuestions; i++) {
             assertEquals("TestCapital" + i, answers.get(i));
         }
+
+        assertNotNull(quiz.getTimeCreated());
+        assertNotNull(quiz.getTimeUpdated());
     }
 
 }

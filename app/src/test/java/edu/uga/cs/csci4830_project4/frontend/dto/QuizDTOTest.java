@@ -3,15 +3,21 @@ package edu.uga.cs.csci4830_project4.frontend.dto;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import static edu.uga.cs.csci4830_project4.common.CommonUtilMethods.stringToDate;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.uga.cs.csci4830_project4.common.QuizType;
 
 public class QuizDTOTest {
+
+    private static final String TIME_CREATED = "2023-10-30 12:00";
+    private static final String TIME_UPDATED = "2023-10-31 05:00";
 
     private QuizDTO quizDTO;
 
@@ -39,8 +45,11 @@ public class QuizDTOTest {
         stateNames.add("State1");
         stateNames.add("State2");
 
+        LocalDateTime timeCreated = stringToDate(TIME_CREATED);
+        LocalDateTime timeUpdated = stringToDate(TIME_UPDATED);
+
         quizDTO = new QuizDTO(quizId, QuizType.CAPITALS_QUIZ, questions, choices, responses,
-                answers, stateNames);
+                answers, stateNames, timeCreated, timeUpdated);
     }
 
     @Test
@@ -51,6 +60,8 @@ public class QuizDTOTest {
         assertNotNull(quizDTO.getResponses());
         assertNotNull(quizDTO.getAnswers());
         assertNotNull(quizDTO.getStateNames());
+        assertNotNull(quizDTO.getTimeCreated());
+        assertNotNull(quizDTO.getTimeUpdated());
 
         quizDTO.setQuizId(2L);
         assertEquals(2L, quizDTO.getQuizId());
@@ -79,6 +90,14 @@ public class QuizDTOTest {
         newStateNames.add("New State");
         quizDTO.setStateNames(newStateNames);
         assertEquals(newStateNames, quizDTO.getStateNames());
+
+        LocalDateTime newTimeCreated = stringToDate("2023-10-30 12:00");
+        quizDTO.setTimeCreated(newTimeCreated);
+        assertEquals(newTimeCreated, quizDTO.getTimeCreated());
+
+        LocalDateTime newTimeUpdated = stringToDate("2023-10-31 05:00");
+        quizDTO.setTimeUpdated(newTimeUpdated);
+        assertEquals(newTimeUpdated, quizDTO.getTimeUpdated());
     }
 
     @Test
